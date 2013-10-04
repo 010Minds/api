@@ -1,0 +1,24 @@
+<?php
+$title = 'Adcionar novo usuário';
+$this->headTitle($title);
+?>
+<h1><?= $this->escapeHtml($title);?></h1>
+
+<p>
+	<a href="<?= $this->url('user', array('action'=>'index')); ?>">Listar usuários</a>
+</p>
+
+<?php
+$form->setAttribute('action', $this->url('user', array('action' => 'add')));
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo $this->formHidden($form->get('id'));
+echo $this->formRow($form->get('name'));
+echo $this->formRow($form->get('mail'));
+echo $this->formRow($form->get('reais'));
+echo $this->formRow($form->get('dollars'));
+echo $this->formRow($form->get('user'));
+echo $this->formRow($form->get('password'));
+echo $this->formSubmit($form->get('submit'));
+echo $this->form()->closeTag();

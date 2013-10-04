@@ -1,0 +1,38 @@
+<?php
+$title = "Lista de usuários";
+$this->headTitle($title);
+?>
+
+<h1><?php echo $this->escapeHtml($title);?></h1>
+<p>
+	<a href="<?php echo $this->url('user', array('action'=>'add')); ?>">Adicionar novo usuário</a>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	( <a href="<?php echo $this->url('user-rest'); ?>">UsersRest</a> )
+</p>
+
+<table class="table">
+	<tr>
+		<th>Nome</th>
+		<th>Email</th>
+		<th>Reais</th>
+		<th>Dolares</th>
+		<th>Usuário</th>
+		<th>Senha</th>
+		<th>&nbsp;</th>
+	</tr>
+	<?php foreach($users as $user): ?>
+	<tr>
+		<td><?= $this->escapeHtml($user->name); ?></td>
+		<td><?= $this->escapeHtml($user->mail); ?></td>
+		<td><?= $this->escapeHtml($user->password); ?></td>
+		<td><?= $this->escapeHtml($user->reais); ?></td>
+		<td><?= $this->escapeHtml($user->user); ?></td>
+		<td><?= $this->escapeHtml($user->dollars); ?></td>
+		<td>
+			<a href="<?php echo $this->url('user', array('action'=>'edit', 'id'=>$user->id)) ; ?>">Editar</a>
+			&nbsp;&nbsp;&nbsp;
+			<a href="<?php echo $this->url('user', array('action'=>'delete', 'id'=>$user->id)) ; ?>">Excluir</a>
+		</td>
+	</tr>
+	<?php endforeach; ?>
+</table>

@@ -1,0 +1,25 @@
+<?php
+$title = 'Excluir usuário';
+$this->headTitle($title);
+?>
+
+<h1><?= $this->escapeHtml($title); ?></h1>
+
+<p>Are you sure that want to delete
+	'<?= $this->escapeHtml($user->name); ?>'?
+</p>
+
+<?php
+$url = $this->url('user', array(
+	'action' 	=> 'delete',
+	'id'		=> $this->id,
+));
+?>
+
+<form action="<?php echo $url; ?>" method="post">
+	<div>
+		<input type="hidden" name="id" value="<?php echo (int)$user->id; ?>" />
+		<input type="submit" name="del" value="Yes" />
+		<input type="submit" name="del" value="No" />
+	</div>
+</form>

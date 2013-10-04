@@ -1,0 +1,27 @@
+<?php
+$title = "Lista de Stocks de todos os usuários";
+$this->headTitle($title);
+?>
+
+<h1><?php echo $this->escapeHtml($title);?></h1>
+
+<table class="table">
+	<tr>
+		<th>User</th>
+		<th>Stock</th>
+		<th>QtdCorrrente</th>
+		<th>Value</th>
+		<th>Dt. Create</th>
+		<th> </th>
+	</tr>
+	<?php foreach($userStocks as $stock): ?>
+	<tr>
+		<td><?= $this->escapeHtml($stock->userId); ?></td>
+		<td><?= $this->escapeHtml($stock->stockId); ?></td>
+		<td><?= $this->escapeHtml($stock->qtd); ?></td>
+		<td><?= $this->escapeHtml($stock->value); ?></td>
+		<td><?= $this->escapeHtml($stock->createDate); ?></td>
+		<td><a href="<?php echo $this->url('user-stock-rest', array('id' => $stock->userId)); ?>">StocksRest</a></td>
+	</tr>
+	<?php endforeach; ?>
+</table>
