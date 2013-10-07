@@ -5,10 +5,11 @@ return array(
     # definir controllers
     'controllers' => array(
         'invokables' => array(
-            'Stock\Controller\Stock' => 'Stock\Controller\StockController',
-            'Stock\Controller\StockRest' => 'Stock\Controller\StockRestController',
-            'UserStock\Controller\UserStock' => 'UserStock\Controller\UserStockController',
+            'Stock\Controller\Stock'             => 'Stock\Controller\StockController',
+            'Stock\Controller\StockRest'         => 'Stock\Controller\StockRestController',
+            'UserStock\Controller\UserStock'     => 'UserStock\Controller\UserStockController',
             'UserStock\Controller\UserStockRest' => 'UserStock\Controller\UserStockRestController',
+            'Exchange\Controller\ExchangeRest'   => 'Exchange\Controller\ExchangeRestController',
         ),
     ),
 
@@ -64,6 +65,18 @@ return array(
                     ),
                     'defaults' => array(
                         'controller' => 'UserStock\Controller\UserStockRest',
+                    ),
+                ),
+            ),
+            'exchange-rest' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/api/exchange/:id/stocks',
+                    'constraints' => array(
+                        'id'     => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Exchange\Controller\ExchangeRest',
                     ),
                 ),
             ),

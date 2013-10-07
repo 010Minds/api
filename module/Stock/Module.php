@@ -21,6 +21,7 @@ class Module
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
                     'UserStock' => __DIR__ . '/src/' . 'UserStock',
                     'Operation' => __DIR__ . '/src/' . 'Operation',
+                    'Exchange'  => __DIR__ . '/src/' . 'Exchange',
                 ),
             ),
         );
