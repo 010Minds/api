@@ -80,6 +80,18 @@ return array(
                     ),
                 ),
             ),
+            'exchange-stock-rest' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/api/exchange/:id/:stock',
+                    'constraints' => array(
+                        'id'     => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Stock\Controller\StockRest',
+                    ),
+                ),
+            ),
         ),
     ),
 

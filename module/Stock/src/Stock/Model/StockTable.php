@@ -32,6 +32,12 @@ class StockTable
 		return $row;
 	}
 
+	public function getStockExchange($id){
+		$id = (int) $id;
+		$resultSet = $this->tableGateway->select(array('stock_exchange_id' => $id ));
+		return $resultSet;
+	}
+
 	public function saveStock(Stock $stock)
 	{
 		$data = array(

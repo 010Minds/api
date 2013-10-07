@@ -5,21 +5,26 @@ use Zend\Mvc\Controller\AbstractRestfulController;
 
 use Stock\Model\Stock;
 use Stock\Model\StockTable;
+use Exchange\Model\ExchangeTable;
 use Zend\View\Model\JsonModel;
 
 class StockRestController extends AbstractRestfulController
 {
 	protected $stockTable;
+	protected $exchangeTable;
 
 	public function getList()
 	{
-		$results = $this->getStockTable()->fetchAll();
-		$data = array();
+
+		$results       = $this->getStockTable()->fetchAll();
+		$data          = array();
+		$exchangeData  = array();
 		foreach ($results as $result) {
+			$exchangeData = $this->getExchangeTable()->getExchange($result->stockExchangeId);
+			$result->exchange = $exchangeData->getArrayCopy();
 			$data[] = $result;
 		}
 
-		// return array('data' => $result);
 		return new JsonModel(array(
             'data' => $data,
         ));
@@ -27,12 +32,40 @@ class StockRestController extends AbstractRestfulController
 
 	public function get($id)
 	{
-		$stock = $this->getStockTable()->getStock($id);
+		
+		$requestParams = $this->params()->fromRoute(); 
+		
+		if($requestParams['stock'] == 'stock'){
+			$results 	   = $this->getStockTable()->getStockExchange($id);
+			$data   	   = array();
+			$exchangeData  = array();
+			foreach ($results as $result) {
+				$exchangeData = $this->getExchangeTable()->getExchange($result->stockExchangeId);
+				$result->exchange = $exchangeData->getArrayCopy();
+				$data[] = $result;
+			}
 
-		// return array("data" => $stock);
+			return new JsonModel(array(
+				'data' => $data,
+			));
+		}
+
+		$stock = $this->getStockTable()->getStock($id);
+		$exchangeData = $this->getExchangeTable()->getExchange($stock->stockExchangeId);
+		$stock->exchange = $exchangeData->getArrayCopy();
 
         return new JsonModel(array(
             'data' => $stock,
+        ));
+	}
+
+	public function getListExchangeStock(){
+		$stock = $this->getStockTable()->getStock($id);
+		$exchangeData = $this->getExchangeTable()->getExchange($stock->stockExchangeId);
+		$stock->exchange = $exchangeData->getArrayCopy();
+
+        return new JsonModel(array(
+            'datas' => $stock,
         ));
 	}
 
@@ -86,5 +119,13 @@ class StockRestController extends AbstractRestfulController
 			$this->stockTable = $sm->get('Stock\Model\StockTable');
 		}
 		return $this->stockTable;
+	}
+
+	public function getExchangeTable(){
+		if(!$this->exchangeTable){
+			$sm = $this->getServiceLocator();
+			$this->exchangeTable = $sm->get('Exchange\Model\ExchangeTable');
+		}
+		return $this->exchangeTable;
 	}
 }
