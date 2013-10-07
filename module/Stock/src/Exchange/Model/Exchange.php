@@ -17,7 +17,9 @@ class Exchange implements InputFilterAwareInterface{
 	}
 
 	public function getArrayCopy(){
-		return get_object_vars($this);
+		$_this = get_object_vars($this);
+		unset($_this['inputFilter']);
+		return $_this;
 	}
 
 	public function setInputFilter(InputFilterInterface $inputFilter){

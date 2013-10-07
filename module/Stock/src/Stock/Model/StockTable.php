@@ -6,6 +6,7 @@ use Zend\Db\TableGateway\TableGateway;
 class StockTable
 {
 	protected $tableGateway;
+	protected $select;
 
 	public function __construct(TableGateway $tableGateway)
 	{
@@ -15,8 +16,7 @@ class StockTable
 	public function fetchAll()
 	{
 		$resultSet = $this->tableGateway->select();
-
-        return $resultSet;
+		return $resultSet;
 	}
 
 	public function getStock($id)
