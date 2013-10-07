@@ -9,12 +9,14 @@ return array(
             'Stock\Controller\StockRest' => 'Stock\Controller\StockRestController',
             'UserStock\Controller\UserStock' => 'UserStock\Controller\UserStockController',
             'UserStock\Controller\UserStockRest' => 'UserStock\Controller\UserStockRestController',
+            'Operation\Controller\OperationRest' => 'Operation\Controller\OperationRestController',
         ),
     ),
 
     # definir rotas
     'router' => array(
         'routes' => array(
+            // Route Stock
             'stock' => array(
                 'type'      => 'segment',
                 'options'   => array(
@@ -41,6 +43,7 @@ return array(
                     ),
                 ),
             ),
+            // Route UserStock
             'user-stock' => array(
                 'type'    => 'segment',
                 'options' => array(
@@ -64,6 +67,21 @@ return array(
                     ),
                     'defaults' => array(
                         'controller' => 'UserStock\Controller\UserStockRest',
+                    ),
+                ),
+            ),
+            // Route Operation
+            'operation-rest' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/api/user/:idUser/operation/:option[/:type]',
+                    'constraints' => array(
+                        'idUser' => '[0-9]+',
+                        'option' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'type' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Operation\Controller\OperationRest',
                     ),
                 ),
             ),
