@@ -5,6 +5,8 @@ use Stock\Model\Stock;
 use Stock\Model\StockTable;
 use UserStock\Model\UserStock;
 use UserStock\Model\UserStockTable;
+use Exchange\Model\Exchange;
+use Exchange\Model\ExchangeTable;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 
@@ -59,7 +61,17 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new UserStock());
                     return new TableGateway('user_stock', $dbAdapter, null, $resultSetPrototype);
                 },
-
+                'Exchange\Model\ExchangeTable' => function($sm){
+                    $tableGateway = $sm->get('ExchangeTableGateway');
+                    $table = new ExchangeTable($tableGateway);
+                    return $table;
+                },
+                'ExchangeTableGateway' => function($sm){
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Exchange());
+                    return new TableGateway('stock_exchange', $dbAdapter, null, $resultSetPrototype);
+                },
             ),
         );
     }

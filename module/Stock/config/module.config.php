@@ -71,7 +71,7 @@ return array(
             'exchange-rest' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/api/exchange/:id/stocks',
+                    'route'    => '/api/exchange[/:id]',
                     'constraints' => array(
                         'id'     => '[0-9]+',
                     ),
