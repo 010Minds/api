@@ -14,7 +14,7 @@ class UserStockRestController extends AbstractRestfulController
 	protected $stockTable;
 
 	/**
-     * O método getList pega a url /api/exchange/:id/:stock e api/stock
+     * O método getList pega a url /api/user/:uid/:my-stock 
      * @api 
      * @return array json_encode
      */
@@ -46,14 +46,29 @@ class UserStockRestController extends AbstractRestfulController
         ));
 	}
 
+	/**
+     * O método get pega a url /api/user/:uid/:my-stock/:id
+     *  
+     * @api 
+     * @return array json_encode
+     */
 	public function get($id)
 	{
 
-		$userStock = $this->getUserStockTable()->getUserStock($id);
-
-		$data = array();
-		foreach ($userStock as $result) {
-			$data[] = $result;
+		$requestParams = $this->params()->fromRoute(); 
+		
+		//verifica se a url my-stock está setada e se a variavel uid não está vazio
+		if(!empty($requestParams['my-stock']) && $requestParams['my-stock'] == 'my-stock' && !empty($requestParams['uid'])){
+			$results = $this->getUserStockTable()->getStockUser($requestParams['uid']);
+		} 
+		$data       = array();
+		$stockData  = array();
+		foreach ($results as $result) {
+			if($result->stockId == $id){
+				$stockData = $this->getStockTable()->getStock($id);
+				$result->stock = $stockData->getArrayCopy();
+				$data[] = $result;	
+			}
 		}
         return new JsonModel(array(
             'data' => $data,
@@ -84,6 +99,28 @@ class UserStockRestController extends AbstractRestfulController
 			$this->stockTable = $sm->get('Stock\Model\StockTable');
 		}
 		return $this->stockTable;
+	}
+
+	/**
+     * O método getStockTable faz a selecão da classe table com o banco de dados.
+     * @return objeto table
+     */
+	public function delete($id)
+	{
+		$requestParams = $this->params()->fromRoute(); 
+		//verifica se a url my-stock está setada e se a variavel uid não está vazio
+		if(!empty($requestParams['my-stock']) && $requestParams['my-stock'] == 'my-stock' && !empty($requestParams['uid'])){
+			//$requestParams['uid'] do user_id
+			$this->getUserStockTable()->deleteUserStock($id,$requestParams['uid']);
+
+			return new JsonModel(array(
+				'data' => 'deleted',
+			));
+		}
+		else{
+			$this->response->setStatusCode(404);
+			return new JsonModel();
+		}
 	}
 
 	public function create($data)
@@ -120,14 +157,7 @@ class UserStockRestController extends AbstractRestfulController
 	    ));*/
 	}
 
-	public function delete($id)
-	{
-/*		$this->getUserStockTable()->deleteUserStock($id);
 
-		return new JsonModel(array(
-			'data' => 'deleted',
-		));*/
-	}
 
 	public function getUserStockTable()
 	{
