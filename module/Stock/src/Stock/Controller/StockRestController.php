@@ -7,18 +7,31 @@ use Stock\Model\Stock;
 use Stock\Model\StockTable;
 use Exchange\Model\ExchangeTable;
 use Zend\View\Model\JsonModel;
-
+/**
+ * example of @abstract usage in a class
+ *
+ * if even one method is declared abstract,
+ * then the class itself should be also
+ * @abstract
+ */
 class StockRestController extends AbstractRestfulController
 {
 	protected $stockTable;
 	protected $exchangeTable;
 
+	/**
+     * O método getList pega a url /api/exchange/:id/:stock e api/stock
+     * Nesta url /api/exchange/:id/:stock for final stock ele irá mostrar todas as ações da bolsa.
+     * @return array Json
+     * @version 0.2
+     * @author Ezequiel Godoy
+     */
 	public function getList()
 	{
 
 		$requestParams = $this->params()->fromRoute(); 
 		
-		if($requestParams['stock'] == 'stock'){
+		if(!empty($requestParams['stock']) && $requestParams['stock'] == 'stock'){
 			$results 	   = $this->getStockTable()->getStockExchange($requestParams['uid']);
 			$data   	   = array();
 			$exchangeData  = array();
@@ -46,7 +59,13 @@ class StockRestController extends AbstractRestfulController
             'data' => $data,
         ));
 	}
-
+	/**
+     * O método get pega a url api/stock/:id
+     * Retorna os dados da bolsa selecionada
+     * @return array Json
+     * @version 0.1
+     * @author Ezequiel Godoy
+     */
 	public function get($id)
 	{
 		$stock = $this->getStockTable()->getStock($id);
@@ -57,7 +76,12 @@ class StockRestController extends AbstractRestfulController
             'data' => $stock,
         ));
 	}
-
+	/**
+     * O método getListExchangeStock faz o relacionamento com a table stock
+     * @return array Json
+     * @version 0.1
+     * @author Alexsandro André
+     */
 	public function getListExchangeStock(){
 		$stock = $this->getStockTable()->getStock($id);
 		$exchangeData = $this->getExchangeTable()->getExchange($stock->stockExchangeId);
@@ -110,7 +134,12 @@ class StockRestController extends AbstractRestfulController
 			'data' => 'deleted',
 		));*/
 	}
-
+	/**
+     * O método getStockTable faz a selecão da classe table com o banco de dados.
+     * @return objeto table
+     * @version 0.1
+     * @author Ezequiel Godoy
+     */
 	public function getStockTable()
 	{
 		if(!$this->stockTable){
@@ -119,7 +148,12 @@ class StockRestController extends AbstractRestfulController
 		}
 		return $this->stockTable;
 	}
-
+	/**
+     * O método getExchangeTable faz a selecão da classe table com o banco de dados.
+     * @return objeto table
+     * @version 0.1
+     * @author Alexsandro André
+     */
 	public function getExchangeTable(){
 		if(!$this->exchangeTable){
 			$sm = $this->getServiceLocator();
