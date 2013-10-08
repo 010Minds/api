@@ -30,33 +30,45 @@ class OperationRestController extends AbstractRestfulController
         ));
     }
 
-  /*  public function get($id)
+    public function get($id)
     {
-        $stock = $this->getOperationTable()->getOperation($id);
+        $this->response->setStatusCode(404);
 
         return new JsonModel(array(
-            'data' => $operation,
+            'data' => 'not-implemented',
         ));
     }
-
+/*
     public function setIdentifierName($name)
     {
         $this->identifierName = (string) $name;
         //return $this;
         print($this); exit();
     }
-
+*/
     public function create($data)
     {
-    }
+        $operation = new Operation;
+        $operation->exchangeArray($data);
+        $id = $this->getOperationTable()->saveOperation($operation);
 
+        return new JsonModel(array(
+            'data' => $this->getOperationTable()->get($id),
+        ));
+    }
+/*
     public function update($id, $data)
     {
     }
-
+*/
     public function delete($id)
     {
-    }*/
+        $this->getOperationTable()->deleteOperation($id);
+
+        return new JsonModel(array(
+            'data' => 'deleted',
+        ));
+    }
 
     public function getOperationTable()
     {

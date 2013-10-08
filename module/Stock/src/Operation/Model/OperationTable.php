@@ -38,7 +38,7 @@ class OperationTable
 		return $resultSet;
 	}
 
-/*	public function getOperation($id)
+	public function get($id)
 	{
 		$id = (int) $id;
 		$rowset = $this->tableGateway->select(array('id' => $id));
@@ -51,21 +51,43 @@ class OperationTable
 		return $row;
 	}
 
-	public function saveOperation(Operation $stock)
+	public function saveOperation(Operation $operation)
 	{
 		$data = array(
-			'user_id' 			=> $stock->userId,
-			'stock_id' 			=> $stock->stockID,
-			'qtd' 				=> $stock->qtd,
-			'value' 			=> $stock->value,
-			'type'				=> $stock->type,
-			'action' 			=> $stock->action,
+			'user_id' 			=> $operation->userId,
+			'stock_id'			=> $operation->stockId,
+			'qtd' 				=> $operation->qtd,
+			'value' 			=> $operation->value,
+			'type'				=> $operation->type,
 		);
+
+
+		$id = (int) $operation->id;
+
+		if($id == 0){
+
+
+	        // add date
+	        $dataAtual = date('Y/m/d H:i:s');
+	        $data['create_date'] = $dataAtual;
+
+	        // action default in save
+	        $data['action'] = 'pending';
+
+			$this->tableGateway->insert($data);
+			$id = $this->tableGateway->getLastInsertValue();
+		}else{
+			# update
+			throw new \Exception("Error Processing Request", 1);
+
+		}
+
+		return $id;
 
 	}
 
-	public function deleteStock($id)
+	public function deleteOperation($id)
 	{
 		$this->tableGateway->delete(array('id'=>$id));
-	}*/
+	}
 }

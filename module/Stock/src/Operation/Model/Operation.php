@@ -10,22 +10,24 @@ class Operation implements InputFilterAwareInterface
 
 	public $id;
 	public $userId;
-	public $stockID;
+	public $stockId;
 	public $qtd;
 	public $value;
 	public $type;
 	public $action;
+	public $createDate;
 	protected $inputFilter;
 
 	public function exchangeArray($data)
 	{
-		$this->id 		= (!empty($data['id'])) ? $data['id'] : null;
-		$this->userID 	= (!empty($data['user_id'])) ? $data['user_id'] : null;
-		$this->stockID 	= (!empty($data['stock_id'])) ? $data['stock_id'] : null;
-		$this->qtd 		= (!empty($data['qtd'])) ? $data['qtd'] : null;
-		$this->value 	= (!empty($data['value'])) ? $data['value'] : null;
-		$this->type 	= (!empty($data['type'])) ? $data['type'] : null;
-		$this->action 	= (!empty($data['action'])) ? $data['action'] : null;
+		$this->id 			= (!empty($data['id'])) ? $data['id'] : null;
+		$this->userId 		= (!empty($data['user_id'])) ? $data['user_id'] : null;
+		$this->stockId 		= (!empty($data['stock_id'])) ? $data['stock_id'] : null;
+		$this->qtd 			= (!empty($data['qtd'])) ? $data['qtd'] : null;
+		$this->value 		= (!empty($data['value'])) ? $data['value'] : null;
+		$this->type 		= (!empty($data['type'])) ? $data['type'] : null;
+		$this->action 		= (!empty($data['action'])) ? $data['action'] : null;
+		$this->createDate 	= (!empty($data['create_date'])) ? $data['create_date'] : null;
 	}
 
 	public function getArrayCopy()
