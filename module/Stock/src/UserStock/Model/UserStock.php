@@ -8,7 +8,7 @@ use Zend\InputFilter\InputFilterInterface;
 class UserStock implements InputFilterAwareInterface
 {
 
-	public $userId;
+	public $id;
 	public $stockId;
 	public $qtd;
 	public $value;
@@ -17,6 +17,7 @@ class UserStock implements InputFilterAwareInterface
 
 	public function exchangeArray($data)
 	{
+		$this->id		    = (!empty($data['id'])) ? $data['id'] : null;
 		$this->userId		= (!empty($data['user_id'])) ? $data['user_id'] : null;
 		$this->stockId 		= (!empty($data['stock_id'])) ? $data['stock_id'] : null;
 		$this->qtd 			= (!empty($data['qtd'])) ? $data['qtd'] : null;

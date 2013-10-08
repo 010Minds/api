@@ -36,6 +36,7 @@ class UserStockTable
 	public function saveUserStock(UserStock $userStock)
 	{
 		$data = array(
+			'id' 		    => $userStock->id,
 			'stock_id' 		=> $userStock->stockId,
 			'qtd' 			=> $userStock->qtd,
 			'value' 		=> $userStock->value,
@@ -58,9 +59,18 @@ class UserStockTable
 		return $id;*/
 	}
 
-	public function deleteUserStock($id)
+	/**
+	 * Método que faz a consulta do stock do user
+	 * @param int $id id do user_stock.
+	 * @param int $user_id id do stock_id.
+	 * @return void void()
+	 */
+	public function deleteUserStock($id,$user_id)
 	{
-		$this->tableGateway->delete(array('user_id'=>$id));
+		$this->tableGateway->delete(array(
+			'user_id' => $user_id,
+			'id'      => $id
+		));
 	}
 
 	/**
