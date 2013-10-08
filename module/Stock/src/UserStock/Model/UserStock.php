@@ -21,12 +21,15 @@ class UserStock implements InputFilterAwareInterface
 		$this->stockId 		= (!empty($data['stock_id'])) ? $data['stock_id'] : null;
 		$this->qtd 			= (!empty($data['qtd'])) ? $data['qtd'] : null;
 		$this->value 		= (!empty($data['value'])) ? $data['value'] : null;
+		$this->stock 		= (!empty($data['stock'])) ? $data['stock'] : null;
 		$this->createDate	= (!empty($data['create_date'])) ? $data['create_date'] : null;
 	}
 
 	public function getArrayCopy()
 	{
-		return get_object_vars($this);
+		$_this = get_object_vars($this);
+		unset($_this['inputFilter']);
+		return $_this;
 	}
 
 	public function setInputFilter(InputFilterInterface $inputFilter)

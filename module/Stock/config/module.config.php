@@ -62,9 +62,9 @@ return array(
             'user-stock-rest' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/api/user/:id/stocks[/]',
+                    'route'    => '/api/user/:uid/:my-stock[/]',
                     'constraints' => array(
-                        'id'     => '[0-9]+',
+                        'uid'     => '[0-9]+',
                     ),
                     'defaults' => array(
                         'controller' => 'UserStock\Controller\UserStockRest',

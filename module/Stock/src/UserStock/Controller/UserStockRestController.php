@@ -5,21 +5,42 @@ use Zend\Mvc\Controller\AbstractRestfulController;
 
 use UserStock\Model\UserStock;
 use UserStock\Model\UserStockTable;
+use Stock\Model\StockTable;
 use Zend\View\Model\JsonModel;
 
 class UserStockRestController extends AbstractRestfulController
 {
 	protected $userStockTable;
+	protected $stockTable;
 
+	/**
+     * O método getList pega a url /api/exchange/:id/:stock e api/stock
+     * @api 
+     * @return array json_encode
+     */
 	public function getList()
 	{
-		$results = $this->getUserStockTable()->fetchAll();
-		$data = array();
+
+		$requestParams = $this->params()->fromRoute(); 
+
+		if(!empty($requestParams['my-stock']) && $requestParams['my-stock'] == 'my-stock'){ 
+			$results 	   = $this->getUserStockTable()->getStockUser($requestParams['uid']);
+		}
+		else if(empty($requestParams['my-stock'])) { 
+			$results       = $this->getStockTable()->fetchAll();
+		} else {
+			$this->response->setStatusCode(404);
+			return new JsonModel();
+		}
+
+		$data       = array();
+		$stockData  = array();
 		foreach ($results as $result) {
+			$stockData = $this->getStockTable()->getStock($result->stockId);
+			$result->stock = $stockData->getArrayCopy();
 			$data[] = $result;
 		}
 
-		// return array('data' => $result);
 		return new JsonModel(array(
             'data' => $data,
         ));
@@ -27,6 +48,7 @@ class UserStockRestController extends AbstractRestfulController
 
 	public function get($id)
 	{
+
 		$userStock = $this->getUserStockTable()->getUserStock($id);
 
 		$data = array();
@@ -50,6 +72,18 @@ class UserStockRestController extends AbstractRestfulController
 		return new JsonModel(array(
             'data' => $data,
         ));
+	}
+
+	/**
+     * O método getStockTable faz a selecão da classe table com o banco de dados.
+     * @return objeto table
+     */
+	public function getStockTable(){
+		if(!$this->stockTable){
+			$sm = $this->getServiceLocator();
+			$this->stockTable = $sm->get('Stock\Model\StockTable');
+		}
+		return $this->stockTable;
 	}
 
 	public function create($data)
