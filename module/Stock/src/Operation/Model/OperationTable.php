@@ -24,11 +24,13 @@ class OperationTable
 		$idUser = (int)$idUser;
 
 		$where= array();
+		if($option){
+			$where['action'] = $option;
+		}
 		if($type){
 			$where['type'] = $type;
 		}
 		$where['user_id'] = $idUser;
-		$where['action']  =$option;
 
 		$resultSet = $this->tableGateway->select($where);
 
