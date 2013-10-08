@@ -71,7 +71,7 @@ return array(
             'exchange-rest' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/api/exchange[/:id]',
+                    'route'    => '/api/exchange[/:id][/]',
                     'constraints' => array(
                         'id'     => '[0-9]+',
                     ),
@@ -83,9 +83,9 @@ return array(
             'exchange-stock-rest' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/api/exchange/:id/:stock',
+                    'route'    => '/api/exchange/:uid/:stock[/]',
                     'constraints' => array(
-                        'id'     => '[0-9]+',
+                        'uid'     => '[0-9]+',
                     ),
                     'defaults' => array(
                         'controller' => 'Stock\Controller\StockRest',

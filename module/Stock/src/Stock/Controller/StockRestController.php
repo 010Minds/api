@@ -16,6 +16,23 @@ class StockRestController extends AbstractRestfulController
 	public function getList()
 	{
 
+		$requestParams = $this->params()->fromRoute(); 
+		
+		if($requestParams['stock'] == 'stock'){
+			$results 	   = $this->getStockTable()->getStockExchange($requestParams['uid']);
+			$data   	   = array();
+			$exchangeData  = array();
+			foreach ($results as $result) {
+				$exchangeData = $this->getExchangeTable()->getExchange($result->stockExchangeId);
+				$result->exchange = $exchangeData->getArrayCopy();
+				$data[] = $result;
+			}
+
+			return new JsonModel(array(
+				'data' => $data,
+			));
+		}
+
 		$results       = $this->getStockTable()->fetchAll();
 		$data          = array();
 		$exchangeData  = array();
@@ -32,24 +49,6 @@ class StockRestController extends AbstractRestfulController
 
 	public function get($id)
 	{
-		
-		$requestParams = $this->params()->fromRoute(); 
-		
-		if($requestParams['stock'] == 'stock'){
-			$results 	   = $this->getStockTable()->getStockExchange($id);
-			$data   	   = array();
-			$exchangeData  = array();
-			foreach ($results as $result) {
-				$exchangeData = $this->getExchangeTable()->getExchange($result->stockExchangeId);
-				$result->exchange = $exchangeData->getArrayCopy();
-				$data[] = $result;
-			}
-
-			return new JsonModel(array(
-				'data' => $data,
-			));
-		}
-
 		$stock = $this->getStockTable()->getStock($id);
 		$exchangeData = $this->getExchangeTable()->getExchange($stock->stockExchangeId);
 		$stock->exchange = $exchangeData->getArrayCopy();
