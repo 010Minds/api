@@ -7,12 +7,12 @@ use Stock\Model\Stock;
 use Stock\Model\StockTable;
 use Exchange\Model\ExchangeTable;
 use Zend\View\Model\JsonModel;
+
 /**
- * example of @abstract usage in a class
+ * StockRestController classe que gerencia as ações
  *
- * if even one method is declared abstract,
- * then the class itself should be also
- * @abstract
+ * @author Alexsandro André <andre@010minds.com>
+ * 
  */
 class StockRestController extends AbstractRestfulController
 {
@@ -21,10 +21,8 @@ class StockRestController extends AbstractRestfulController
 
 	/**
      * O método getList pega a url /api/exchange/:id/:stock e api/stock
-     * Nesta url /api/exchange/:id/:stock for final stock ele irá mostrar todas as ações da bolsa.
-     * @return array Json
-     * @version 0.2
-     * @author Ezequiel Godoy
+     * @api 
+     * @return array json_encode
      */
 	public function getList()
 	{
@@ -33,20 +31,13 @@ class StockRestController extends AbstractRestfulController
 		
 		if(!empty($requestParams['stock']) && $requestParams['stock'] == 'stock'){
 			$results 	   = $this->getStockTable()->getStockExchange($requestParams['uid']);
-			$data   	   = array();
-			$exchangeData  = array();
-			foreach ($results as $result) {
-				$exchangeData = $this->getExchangeTable()->getExchange($result->stockExchangeId);
-				$result->exchange = $exchangeData->getArrayCopy();
-				$data[] = $result;
-			}
-
-			return new JsonModel(array(
-				'data' => $data,
-			));
 		}
-
-		$results       = $this->getStockTable()->fetchAll();
+		else if(empty($requestParams['stock'])) {
+			$results       = $this->getStockTable()->fetchAll();
+		} else {
+			$this->response->setStatusCode(404);
+			return new JsonModel();
+		}
 		$data          = array();
 		$exchangeData  = array();
 		foreach ($results as $result) {
@@ -62,9 +53,9 @@ class StockRestController extends AbstractRestfulController
 	/**
      * O método get pega a url api/stock/:id
      * Retorna os dados da bolsa selecionada
+     * @param int $id do stock.
      * @return array Json
-     * @version 0.1
-     * @author Ezequiel Godoy
+     * 
      */
 	public function get($id)
 	{
@@ -79,8 +70,6 @@ class StockRestController extends AbstractRestfulController
 	/**
      * O método getListExchangeStock faz o relacionamento com a table stock
      * @return array Json
-     * @version 0.1
-     * @author Alexsandro André
      */
 	public function getListExchangeStock(){
 		$stock = $this->getStockTable()->getStock($id);
@@ -90,6 +79,31 @@ class StockRestController extends AbstractRestfulController
         return new JsonModel(array(
             'datas' => $stock,
         ));
+	}
+
+	
+	/**
+     * O método getStockTable faz a selecão da classe table com o banco de dados.
+     * @return objeto table
+     */
+	public function getStockTable()
+	{
+		if(!$this->stockTable){
+			$sm = $this->getServiceLocator();
+			$this->stockTable = $sm->get('Stock\Model\StockTable');
+		}
+		return $this->stockTable;
+	}
+	/**
+     * O método getExchangeTable faz a selecão da classe table com o banco de dados.
+     * @return objeto table
+     */
+	public function getExchangeTable(){
+		if(!$this->exchangeTable){
+			$sm = $this->getServiceLocator();
+			$this->exchangeTable = $sm->get('Exchange\Model\ExchangeTable');
+		}
+		return $this->exchangeTable;
 	}
 
 	public function create($data)
@@ -133,32 +147,5 @@ class StockRestController extends AbstractRestfulController
 		return new JsonModel(array(
 			'data' => 'deleted',
 		));*/
-	}
-	/**
-     * O método getStockTable faz a selecão da classe table com o banco de dados.
-     * @return objeto table
-     * @version 0.1
-     * @author Ezequiel Godoy
-     */
-	public function getStockTable()
-	{
-		if(!$this->stockTable){
-			$sm = $this->getServiceLocator();
-			$this->stockTable = $sm->get('Stock\Model\StockTable');
-		}
-		return $this->stockTable;
-	}
-	/**
-     * O método getExchangeTable faz a selecão da classe table com o banco de dados.
-     * @return objeto table
-     * @version 0.1
-     * @author Alexsandro André
-     */
-	public function getExchangeTable(){
-		if(!$this->exchangeTable){
-			$sm = $this->getServiceLocator();
-			$this->exchangeTable = $sm->get('Exchange\Model\ExchangeTable');
-		}
-		return $this->exchangeTable;
 	}
 }
