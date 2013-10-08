@@ -10,12 +10,14 @@ return array(
             'UserStock\Controller\UserStock'     => 'UserStock\Controller\UserStockController',
             'UserStock\Controller\UserStockRest' => 'UserStock\Controller\UserStockRestController',
             'Exchange\Controller\ExchangeRest'   => 'Exchange\Controller\ExchangeRestController',
+            'Operation\Controller\OperationRest' => 'Operation\Controller\OperationRestController',
         ),
     ),
 
     # definir rotas
     'router' => array(
         'routes' => array(
+            // Route Stock
             'stock' => array(
                 'type'      => 'segment',
                 'options'   => array(
@@ -33,7 +35,7 @@ return array(
             'stock-rest' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/api/stock[/:id]',
+                    'route'    => '/api/stock[/:id][/]',
                     'constraints' => array(
                         'id'     => '[0-9]+',
                     ),
@@ -42,6 +44,7 @@ return array(
                     ),
                 ),
             ),
+            // Route UserStock
             'user-stock' => array(
                 'type'    => 'segment',
                 'options' => array(
@@ -59,7 +62,7 @@ return array(
             'user-stock-rest' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/api/user/:id/stocks',
+                    'route'    => '/api/user/:id/stocks[/]',
                     'constraints' => array(
                         'id'     => '[0-9]+',
                     ),
@@ -89,6 +92,21 @@ return array(
                     ),
                     'defaults' => array(
                         'controller' => 'Stock\Controller\StockRest',
+                    ),
+                ),
+            ),
+            // Route Operation
+            'operation-rest' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/api/user/:idUser/operation[/:option][/:type][/]',
+                    'constraints' => array(
+                        'idUser' => '[0-9]+',
+                        'type' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'option' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Operation\Controller\OperationRest',
                     ),
                 ),
             ),

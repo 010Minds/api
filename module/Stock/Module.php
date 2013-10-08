@@ -5,8 +5,11 @@ use Stock\Model\Stock;
 use Stock\Model\StockTable;
 use UserStock\Model\UserStock;
 use UserStock\Model\UserStockTable;
+
 use Exchange\Model\Exchange;
 use Exchange\Model\ExchangeTable;
+use Operation\Model\Operation;
+use Operation\Model\OperationTable;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 
@@ -38,6 +41,7 @@ class Module
     {
         return array(
             'factories' => array(
+                # ----
                 'Stock\Model\StockTable' => function($sm){
                     $tableGateway = $sm->get('StockTableGateway');
                     $table = new StockTable($tableGateway);
@@ -49,7 +53,7 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Stock());
                     return new TableGateway('stock', $dbAdapter, null, $resultSetPrototype);
                 },
-
+                # ----
                 'UserStock\Model\UserStockTable' => function($sm){
                     $tableGateway = $sm->get('UserStockTableGateway');
                     $table = new UserStockTable($tableGateway);
@@ -61,6 +65,7 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new UserStock());
                     return new TableGateway('user_stock', $dbAdapter, null, $resultSetPrototype);
                 },
+
                 'Exchange\Model\ExchangeTable' => function($sm){
                     $tableGateway = $sm->get('ExchangeTableGateway');
                     $table = new ExchangeTable($tableGateway);
@@ -71,6 +76,18 @@ class Module
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Exchange());
                     return new TableGateway('stock_exchange', $dbAdapter, null, $resultSetPrototype);
+                },
+                # ----
+                'Operation\Model\OperationTable' => function($sm){
+                    $tableGateway = $sm->get('OperationTableGateway');
+                    $table = new OperationTable($tableGateway);
+                    return $table;
+                },
+                'OperationTableGateway' => function($sm){
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Operation());
+                    return new TableGateway('operation', $dbAdapter, null, $resultSetPrototype);
                 },
             ),
         );
