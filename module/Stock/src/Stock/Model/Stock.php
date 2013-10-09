@@ -21,6 +21,7 @@ class Stock implements InputFilterAwareInterface
 	public $updatedDate;
 	public $stockExchangeId;
 	public $volume;
+	public $exchange;
 	protected $inputFilter;
 
 	public function exchangeArray($data)
@@ -37,12 +38,15 @@ class Stock implements InputFilterAwareInterface
 		$this->country 			= (!empty($data['country'])) ? $data['country'] : null;
 		$this->updatedDate 		= (!empty($data['updated_date'])) ? $data['updated_date'] : null;
 		$this->stockExchangeId 	= (!empty($data['stock_exchange_id'])) ? $data['stock_exchange_id'] : null;
+		$this->exchange 	    = (!empty($data['exchange'])) ? $data['exchange'] : null;
 		$this->volume 			= (!empty($data['volume'])) ? $data['volume'] : null;
 	}
 
 	public function getArrayCopy()
 	{
-		return get_object_vars($this);
+		$_this = get_object_vars($this);
+		unset($_this['inputFilter']);
+		return $_this;
 	}
 
 	public function setInputFilter(InputFilterInterface $inputFilter)
