@@ -5,6 +5,9 @@ use Stock\Model\Stock;
 use Stock\Model\StockTable;
 use UserStock\Model\UserStock;
 use UserStock\Model\UserStockTable;
+
+use Exchange\Model\Exchange;
+use Exchange\Model\ExchangeTable;
 use Operation\Model\Operation;
 use Operation\Model\OperationTable;
 use Zend\Db\ResultSet\ResultSet;
@@ -23,6 +26,7 @@ class Module
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
                     'UserStock' => __DIR__ . '/src/' . 'UserStock',
                     'Operation' => __DIR__ . '/src/' . 'Operation',
+                    'Exchange'  => __DIR__ . '/src/' . 'Exchange',
                 ),
             ),
         );
@@ -60,6 +64,18 @@ class Module
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new UserStock());
                     return new TableGateway('user_stock', $dbAdapter, null, $resultSetPrototype);
+                },
+
+                'Exchange\Model\ExchangeTable' => function($sm){
+                    $tableGateway = $sm->get('ExchangeTableGateway');
+                    $table = new ExchangeTable($tableGateway);
+                    return $table;
+                },
+                'ExchangeTableGateway' => function($sm){
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Exchange());
+                    return new TableGateway('stock_exchange', $dbAdapter, null, $resultSetPrototype);
                 },
                 # ----
                 'Operation\Model\OperationTable' => function($sm){
