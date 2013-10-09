@@ -65,7 +65,7 @@ return array(
                     'route'    => '/api/user/:uid/:my-stock[/:id][/]',
                     'constraints' => array(
                         'uid'     => '[0-9]+',
-                        'id'     => '[0-9]+',
+                        'id'      => '[0-9]+',
                     ),
                     'defaults' => array(
                         'controller' => 'UserStock\Controller\UserStockRest',
