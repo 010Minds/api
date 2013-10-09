@@ -24,11 +24,24 @@ class ExchangeRestController extends AbstractRestfulController{
 	}
 
 	public function get($id){
+		
 		$exchange = $this->getExchangeTable()->getExchange($id);
 
-		return new JsonModel(array(
-            'data' => $exchange,
-        ));
+			return new JsonModel(array(
+	            'data' => $exchange,
+	        ));
+		/*try{
+			$exchange = $this->getExchangeTable()->getExchange($id);
+
+			return new JsonModel(array(
+	            'data' => $exchange,
+	        ));
+		}
+		catch(\Exception $e){
+			return new JsonModel(array(
+				'error' => $e->getMessage(),
+			));
+		}*/
 	}
 
 	public function getExchangeTable(){
