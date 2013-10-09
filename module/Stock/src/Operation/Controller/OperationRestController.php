@@ -16,7 +16,7 @@ class OperationRestController extends AbstractRestfulController
         $userId = $this->params()->fromRoute('userId', false);
         $option = $this->params()->fromRoute('option', false);
         $type   = $this->params()->fromRoute('type', false);
-var_dump($userId); exit();
+
         $results = $this->getOperationTable()->getOperations($userId, $option, $type);
 
         $data = array();
