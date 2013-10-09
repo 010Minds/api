@@ -16,7 +16,9 @@ use Zend\Db\TableGateway\TableGateway;
 use Zend\ModuleManager;
 use Zend\View\Model\JsonModel;
 use Zend\Mvc\ModuleRouteListener;
-use Zend\Mvc\MvcEvent; 
+use Zend\Mvc\MvcEvent;
+use Zend\Http\Request as HttpRequest;
+//use Zend\Feed\PubSubHubbub\HttpResponse; 
 
 class Module
 {
@@ -118,21 +120,36 @@ class Module
      * Trata as excessões
      * @return json_encode
      */
-    public function moduleError($event){ //var_dump($event->getParam('exception') instanceOf \Exception); 
+    public function moduleError($event){ 
+        //var_dump($event->getParam('exception') instanceOf \Exception); 
+        //create a JsonModel api json
+        $model = new JsonModel(array( 
+            'success'      => FALSE, 
+            'errorMessage' => $event->getError(),
+        ));
+
+
         if($event->isError() && $event->getError() == 'error-exception'){ 
-            $jsonModel = new JsonModel(array( 
-                'success'      => FALSE, 
-                'errorMessage' => $event->getError(),
-                'exception'    => $event->getParam('exception')->getMessage(),
-                'code'         => $event->getParam('exception')->getCode(),
-                'file'         => $event->getParam('exception')->getFile()  
-            )); 
-            $event->setViewModel($jsonModel); 
-            $event->stopPropagation(); 
-            return $jsonModel;  
+            $model->exception = $event->getParam('exception')->getMessage();
+            $model->code      = $event->getParam('exception')->getCode();
+            $model->file      = $event->getParam('exception')->getFile() ;
+        }
+        elseif($event->isError() && $event->getError() == 'error-router-no-match'){
+            $response  = $event->getResponse();
+            $exception = $event->getResult();
+
+            $event->getResponse()->setStatusCode(404);
+
+            $model->httpStatus = $event->getResponse()->getStatusCode();
+            $model->title      = $event->getResponse()->getReasonPhrase();
         }
         else{
-            return;
+            $model->errorMessageDesconhecido = $event->getError();
         }
+
+        $event->setViewModel($model); 
+        $event->stopPropagation();
+
+        return $model; 
     } 
 }
