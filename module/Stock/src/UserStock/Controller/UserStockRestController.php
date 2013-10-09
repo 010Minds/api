@@ -23,12 +23,13 @@ class UserStockRestController extends AbstractRestfulController
 
 		$requestParams = $this->params()->fromRoute(); 
 
+
 		if(!empty($requestParams['my-stock']) && $requestParams['my-stock'] == 'my-stock'){ 
-			$results 	   = $this->getUserStockTable()->getStockUser($requestParams['uid']);
+			$results 	   = $this->getUserStockTable()->getStockUser($requestParams['uid'],'');
 		}
 		else if(empty($requestParams['my-stock'])) { 
 			$results       = $this->getStockTable()->fetchAll();
-		} else {
+		} else { 
 			$this->response->setStatusCode(404);
 			return new JsonModel();
 		}
@@ -59,16 +60,14 @@ class UserStockRestController extends AbstractRestfulController
 		
 		//verifica se a url my-stock está setada e se a variavel uid não está vazio
 		if(!empty($requestParams['my-stock']) && $requestParams['my-stock'] == 'my-stock' && !empty($requestParams['uid'])){
-			$results = $this->getUserStockTable()->getStockUser($requestParams['uid']);
+			$results = $this->getUserStockTable()->getStockUser($requestParams['uid'],$requestParams['id']);
 		} 
 		$data       = array();
 		$stockData  = array();
 		foreach ($results as $result) {
-			if($result->stockId == $id){
-				$stockData = $this->getStockTable()->getStock($id);
-				$result->stock = $stockData->getArrayCopy();
-				$data[] = $result;	
-			}
+			$stockData = $this->getStockTable()->getStock($result->stockId);
+			$result->stock = $stockData->getArrayCopy();
+			$data[] = $result;	
 		}
         return new JsonModel(array(
             'data' => $data,

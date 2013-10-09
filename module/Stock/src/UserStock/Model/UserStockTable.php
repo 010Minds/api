@@ -61,8 +61,8 @@ class UserStockTable
 
 	/**
 	 * Método que faz a consulta do stock do user
-	 * @param int $id id do user_stock.
-	 * @param int $user_id id do stock_id.
+	 * @param int $id id do user_stock. 
+	 * @param int $user_id id do user_id.
 	 * @return void void()
 	 */
 	public function deleteUserStock($id,$user_id)
@@ -75,12 +75,24 @@ class UserStockTable
 
 	/**
 	 * Método que faz a consulta do stock do user
-	 * @param int $id id do user.
+	 * @param int $id id do user. No método getList da Classe UserStockRest ele pode ser nulo
 	 * @return mixed[] array
 	 */
-	public function getStockUser($id){
+	public function getStockUser($uid, $id = null){
 		$id = (int) $id;
-		$resultSet = $this->tableGateway->select(array('user_id' => $id ));
+		$uid = (int) $uid;
+		
+
+		if(!empty($id)){
+			$resultSet = $this->tableGateway->select(array(
+				'user_id' => $uid ,
+				'id'      => $id
+			));
+		}
+		else{
+			$resultSet = $this->tableGateway->select(array('user_id' => $uid));	
+		}
+		
 		return $resultSet;
 	}
 
