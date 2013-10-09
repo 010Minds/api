@@ -25,6 +25,7 @@ class UserTable
 		$rowset = $this->tableGateway->select(array('id' => $id));
 		$row = $rowset->current();
 
+
 		if(!$row){
 			throw new \Exception("Could not find row $id");
 		}

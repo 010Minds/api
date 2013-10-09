@@ -30,7 +30,7 @@ return array(
             'user-rest' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/api/user[/:id]',
+                    'route'    => '/api/user[/:id][/]',
                     'constraints' => array(
                         'id'     => '[0-9]+',
                     ),

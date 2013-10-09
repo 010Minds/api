@@ -13,11 +13,11 @@ class OperationRestController extends AbstractRestfulController
 
     public function getList()
     {
-        $idUser = $this->params()->fromRoute('idUser', false);
+        $userId = $this->params()->fromRoute('userId', false);
         $option = $this->params()->fromRoute('option', false);
         $type   = $this->params()->fromRoute('type', false);
-
-        $results = $this->getOperationTable()->getOperations($idUser, $option, $type);
+var_dump($userId); exit();
+        $results = $this->getOperationTable()->getOperations($userId, $option, $type);
 
         $data = array();
         foreach ($results as $result) {
@@ -48,8 +48,13 @@ class OperationRestController extends AbstractRestfulController
 */
     public function create($data)
     {
+
+        $userId = $this->params()->fromRoute('userId', false);
+        $data['user_id'] = $userId;
+
         $operation = new Operation;
         $operation->exchangeArray($data);
+
         $id = $this->getOperationTable()->saveOperation($operation);
 
         return new JsonModel(array(
@@ -63,10 +68,12 @@ class OperationRestController extends AbstractRestfulController
 */
     public function delete($id)
     {
-        $this->getOperationTable()->deleteOperation($id);
+        $userId = $this->params()->fromRoute('userId', false);
+
+        $this->getOperationTable()->deleteOperation($id, $userId);
 
         return new JsonModel(array(
-            'data' => 'deleted',
+            'data' => 'deleted', // Necessário validar se foi apagado com sucesso e retornar erro caso negativo
         ));
     }
 

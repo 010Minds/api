@@ -66,7 +66,6 @@ class OperationTable
 
 		if($id == 0){
 
-
 	        // add date
 	        $dataAtual = date('Y/m/d H:i:s');
 	        $data['create_date'] = $dataAtual;
@@ -86,8 +85,13 @@ class OperationTable
 
 	}
 
-	public function deleteOperation($id)
+/*	public function deleteOperation($id, $userId)
 	{
-		$this->tableGateway->delete(array('id'=>$id));
+		$this->tableGateway->delete(array('id'=>$id, 'user_id'=>$userId));
+	}*/
+
+	public function deleteOperation($id, $idUser)
+	{
+		$this->tableGateway->delete(array('id'=>$id, 'user_id'=>$idUser));
 	}
 }

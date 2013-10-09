@@ -61,7 +61,7 @@ return array(
             'user-stock-rest' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/api/user/:id/stocks[/]',
+                    'route'    => '/api/user/:id/stock[/]',
                     'constraints' => array(
                         'id'     => '[0-9]+',
                     ),
@@ -74,9 +74,9 @@ return array(
             'operation-rest' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/api/user/:idUser/operation[/]',
+                    'route'    => '/api/user/:userId/operation[/]',
                     'constraints' => array(
-                        'idUser' => '[0-9]+',
+                        'userId' => '[0-9]+',
                     ),
                     'defaults' => array(
                         'controller' => 'Operation\Controller\OperationRest',

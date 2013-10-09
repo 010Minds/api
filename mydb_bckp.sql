@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.5.32, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: mydb
+-- Host: 192.168.1.123    Database: mydb
 -- ------------------------------------------------------
 -- Server version	5.5.32-0ubuntu0.12.10.1
 
@@ -28,12 +28,11 @@ CREATE TABLE `operation` (
   `stock_id` int(11) NOT NULL,
   `qtd` varchar(45) NOT NULL,
   `value` varchar(45) NOT NULL,
-  `type` varchar(1) NOT NULL,
+  `type` varchar(4) NOT NULL COMMENT 'buy, sell',
   `action` varchar(8) NOT NULL COMMENT 'pending, rejected, accepted',
   `create_date` timestamp NULL DEFAULT NULL,
-  `accepted_date` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,6 +41,7 @@ CREATE TABLE `operation` (
 
 LOCK TABLES `operation` WRITE;
 /*!40000 ALTER TABLE `operation` DISABLE KEYS */;
+INSERT INTO `operation` VALUES (1,1,1,'10','24,86','buy','pending','0000-00-00 00:00:00'),(2,1,2,'100','397,08','sell','pending','0000-00-00 00:00:00'),(3,1,2,'15','405,08','buy','rejected','0000-00-00 00:00:00'),(4,2,3,'250','277,64','sell','accepted','0000-00-00 00:00:00'),(5,1,1,'100','24,86','buy','accepted','0000-00-00 00:00:00'),(6,1,1,'140','24,86','sell','rejected','0000-00-00 00:00:00'),(8,1,1,'145','405,25','buy','rejected',NULL),(9,1,1,'145','405,25','buy','rejected',NULL),(10,1,1,'145','405,25','buy','rejected',NULL),(11,1,1,'145','405,25','buy','rejected',NULL),(12,1,1,'145','405,25','buy','rejected',NULL),(13,1,1,'145','405,25','buy','rejected',NULL),(14,1,1,'145','405,25','buy','rejected',NULL),(15,1,1,'145','405,25','buy','rejected',NULL),(16,1,1,'145','405,25','buy','rejected',NULL),(17,1,1,'145','405,25','buy','rejected',NULL),(18,1,1,'145','405,25','buy','rejected',NULL),(19,1,1,'145','405,25','buy','rejected','2013-10-08 20:01:44'),(20,1,1,'145','405,25','buy','rejected','2013-10-08 20:02:22'),(21,1,1,'145','405,25','buy','pending','2013-10-08 20:03:01'),(22,1,1,'145','405,25','buy','rejected','2013-10-08 20:03:25'),(23,1,1,'145','405,25','buy','','2013-10-08 20:08:17'),(25,1,1,'145','405,25','buy','pending','2013-10-08 20:11:04'),(26,1,1,'145','405,25','buy','pending','2013-10-08 20:13:06'),(28,2,1,'145','405,25','sell','pending','2013-10-08 20:13:53'),(29,2,4,'145','405,25','sell','pending','2013-10-08 20:14:31');
 /*!40000 ALTER TABLE `operation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -173,4 +173,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-10-07 10:02:27
+-- Dump completed on 2013-10-08 17:48:36
