@@ -62,11 +62,7 @@ return array(
             'user-stock-rest' => array(
                 'type'    => 'segment',
                 'options' => array(
-<<<<<<< HEAD
-                    'route'    => '/api/user/:id/stock[/]',
-=======
                     'route'    => '/api/user/:uid/:my-stock[/:id][/]',
->>>>>>> cab7a7f4bd0612007d066f78bb1d81c054ab2502
                     'constraints' => array(
                         'uid'     => '[0-9]+',
                         'id'      => '[0-9]+',
