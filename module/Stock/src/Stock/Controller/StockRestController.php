@@ -41,7 +41,14 @@ class StockRestController extends AbstractRestfulController
 		$data          = array();
 		$exchangeData  = array();
 		foreach ($results as $result) {
-			$exchangeData = $this->getExchangeTable()->getExchange($result->stockExchangeId);
+			$result->id 	 = (int) $result->id;
+			$result->current = (float) $result->current;
+			$result->open 	 = (float) $result->open;
+			$result->high 	 = (float) $result->high;
+			$result->low 	 = (float) $result->low;
+			$result->percent = (float) $result->percent;
+
+			$exchangeData     = $this->getExchangeTable()->getExchange($result->stockExchangeId);
 			$result->exchange = $exchangeData->getArrayCopy();
 			$data[] = $result;
 		}
