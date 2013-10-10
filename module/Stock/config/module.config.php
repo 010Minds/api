@@ -11,6 +11,7 @@ return array(
             'UserStock\Controller\UserStockRest' => 'UserStock\Controller\UserStockRestController',
             'Exchange\Controller\ExchangeRest'   => 'Exchange\Controller\ExchangeRestController',
             'Operation\Controller\OperationRest' => 'Operation\Controller\OperationRestController',
+            'Follows\Controller\FollowsRest'     => 'Follows\Controller\FollowsRestController',
         ),
     ),
 
@@ -136,6 +137,19 @@ return array(
                                 'controller' => 'Operation\Controller\OperationRest',
                             ),
                         ),
+                    ),
+                ),
+            ),
+            //Route followers
+            'followers-rest' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/api/followers/:uid[/]',
+                    'constraints' => array(
+                        'uid'     => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Follows\Controller\FollowsRest',
                     ),
                 ),
             ),

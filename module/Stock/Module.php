@@ -10,6 +10,8 @@ use Exchange\Model\Exchange;
 use Exchange\Model\ExchangeTable;
 use Operation\Model\Operation;
 use Operation\Model\OperationTable;
+use Follows\Model\Follows;
+use Follows\Model\FollowsTable;
 
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
@@ -18,7 +20,7 @@ use Zend\View\Model\JsonModel;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\Http\Request as HttpRequest;
-//use Zend\Feed\PubSubHubbub\HttpResponse;
+
 
 class Module
 {
@@ -31,9 +33,10 @@ class Module
             'Zend\Loader\StandardAutoloader' => array(
                 'namespaces' => array(
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
-                    'UserStock' => __DIR__ . '/src/' . 'UserStock',
-                    'Operation' => __DIR__ . '/src/' . 'Operation',
-                    'Exchange'  => __DIR__ . '/src/' . 'Exchange',
+                    'UserStock'   => __DIR__ . '/src/' . 'UserStock',
+                    'Operation'   => __DIR__ . '/src/' . 'Operation',
+                    'Exchange'    => __DIR__ . '/src/' . 'Exchange',
+                    'Follows'     => __DIR__ . '/src/' . 'Follows',
                 ),
             ),
         );
@@ -96,6 +99,17 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Operation());
                     return new TableGateway('operation', $dbAdapter, null, $resultSetPrototype);
                 },
+                'Follows\Model\FollowsTable' => function($sm){
+                    $tableGateway = $sm->get('FollowsTableGateway');
+                    $table = new FollowsTable($tableGateway);
+                    return $table;
+                },
+                'FollowsTableGateway' => function($sm){
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Follows());
+                    return new TableGateway('follows', $dbAdapter, null, $resultSetPrototype);
+                },
             ),
         );
     }
@@ -143,6 +157,7 @@ class Module
 
 
         if ($event->isError() && $event->getError() == 'error-exception') {
+            $model->ex        = $event->getParam('exception');
             $model->exception = $event->getParam('exception')->getMessage();
             $model->code      = $event->getParam('exception')->getCode();
             $model->file      = $event->getParam('exception')->getFile() ;
