@@ -153,6 +153,19 @@ return array(
                     ),
                 ),
             ),
+            //Route following
+            'following-rest' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/api/following/:uid[/]',
+                    'constraints' => array(
+                        'uid'     => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Follows\Controller\FollowsRest',
+                    ),
+                ),
+            ),
         ),
     ),
 
