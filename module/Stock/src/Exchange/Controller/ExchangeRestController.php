@@ -15,6 +15,7 @@ class ExchangeRestController extends AbstractRestfulController{
 		$results = $this->getExchangeTable()->fetchAll();
 		$data    = array();
 		foreach ($results as $result) {
+			$result->id = (int) $result->id;
 			$data[] = $result;
 		}
 
@@ -26,6 +27,8 @@ class ExchangeRestController extends AbstractRestfulController{
 	public function get($id){
 		
 		$exchange = $this->getExchangeTable()->getExchange($id);
+
+		$exchange->id = (int) $exchange->id;
 
 		return new JsonModel(array(
             'data' => $exchange,
