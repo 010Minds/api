@@ -16,7 +16,9 @@ use Zend\Db\TableGateway\TableGateway;
 use Zend\ModuleManager;
 use Zend\View\Model\JsonModel;
 use Zend\Mvc\ModuleRouteListener;
-use Zend\Mvc\MvcEvent; 
+use Zend\Mvc\MvcEvent;
+use Zend\Http\Request as HttpRequest;
+//use Zend\Feed\PubSubHubbub\HttpResponse;
 
 class Module
 {
@@ -104,35 +106,59 @@ class Module
         $moduleRouteListener->attach($eventManager);
 
         /**
-         * @var \Zend\ModuleManager\ModuleManager $moduleManager 
+         * @var \Zend\ModuleManager\ModuleManager $moduleManager
          */
         $moduleManager = $e->getApplication()->getServiceManager()->get('modulemanager');
         /**
-         * @var \Zend\EventManager\SharedEventManager $sharedEvents 
+         * @var \Zend\EventManager\SharedEventManager $sharedEvents
          */
         $sharedEvents = $moduleManager->getEventManager()->getSharedManager();
-        $sharedEvents->attach('Zend\Mvc\Application', 'dispatch.error', array($this, 'moduleError'), 100);
+        $sharedEvents->attach('Zend\Mvc\Application', 'dispatch', array($this, 'threatDispatch'), 99);
+        $sharedEvents->attach('Zend\Mvc\Application', 'dispatch.error', array($this, 'threadDispatchError'), 100);
+    }
+    
+    /**
+     * Trata as excepitions da rota correspontende a controller/action
+     * @return json_encode
+     */
+    public function threatDispatch(MvcEvent $event) {
+        $currentModel = $event->getResult();
+        if($currentModel instanceof JsonModel){
+            echo 'aqui';
+            return;
+        }
     }
 
     /**
-     * Trata as excessões
+     * Trata as excessões do tipo dispatch.error
      * @return json_encode
      */
-    public function moduleError($event){ //var_dump($event->getParam('exception') instanceOf \Exception); 
-        if($event->isError() && $event->getError() == 'error-exception'){ 
-            $jsonModel = new JsonModel(array( 
-                'success'      => FALSE, 
+    public function threadDispatchError(MvcEvent $event){
+        $model = new JsonModel(array(
+            'header' => array(
+                'success'      => false,
                 'errorMessage' => $event->getError(),
-                'exception'    => $event->getParam('exception')->getMessage(),
-                'code'         => $event->getParam('exception')->getCode(),
-                'file'         => $event->getParam('exception')->getFile()  
-            )); 
-            $event->setViewModel($jsonModel); 
-            $event->stopPropagation(); 
-            return $jsonModel;  
+            ),
+        ));
+
+
+        if ($event->isError() && $event->getError() == 'error-exception') {
+            $model->exception = $event->getParam('exception')->getMessage();
+            $model->code      = $event->getParam('exception')->getCode();
+            $model->file      = $event->getParam('exception')->getFile() ;
+        } elseif ($event->isError() && $event->getError() == 'error-router-no-match') {
+            $response  = $event->getResponse();
+            $exception = $event->getResult();
+
+            $event->getResponse()->setStatusCode(404);
+
+            $model->httpStatus = $event->getResponse()->getStatusCode();
+            $model->title      = $event->getResponse()->getReasonPhrase();
         }
-        else{
-            return;
-        }
-    } 
+
+        $event->setViewModel($model);
+        $event->stopPropagation();
+
+        return $model;
+    }
 }
