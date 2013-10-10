@@ -22,8 +22,7 @@ class UserStockRestController extends AbstractRestfulController
 	{
 
 		$requestParams = $this->params()->fromRoute();
-
-
+		
 		if(!empty($requestParams['my-stock']) && $requestParams['my-stock'] == 'my-stock'){
 			$results 	   = $this->getUserStockTable()->getStockUser($requestParams['uid'],'');
 		}
