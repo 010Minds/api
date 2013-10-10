@@ -67,6 +67,7 @@ class OperationTable
 		if($id == 0){
 
 	        // add date
+	        date_default_timezone_set('America/Sao_Paulo');
 	        $dataAtual = date('Y/m/d H:i:s');
 	        $data['create_date'] = $dataAtual;
 
