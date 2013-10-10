@@ -5,6 +5,13 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
+class OperationStatus
+{
+	const PENDING = 1;
+	const ACCEPTED = 2;
+	const REJECTED = 3;
+}
+
 class Operation implements InputFilterAwareInterface
 {
 

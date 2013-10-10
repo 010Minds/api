@@ -11,6 +11,7 @@ return array(
             'UserStock\Controller\UserStockRest' => 'UserStock\Controller\UserStockRestController',
             'Exchange\Controller\ExchangeRest'   => 'Exchange\Controller\ExchangeRestController',
             'Operation\Controller\OperationRest' => 'Operation\Controller\OperationRestController',
+            'Cron\Controller\CronRest'           => 'Cron\Controller\CronRestController',
         ),
     ),
 
@@ -139,6 +140,30 @@ return array(
                     ),
                 ),
             ),
+            // Route Cron
+            'cron-operation' => array(
+                'type'      => 'segment',
+                'options'   => array(
+                    'route'    => '/api/cron/operation[/]',
+                    'defaults' => array(
+                        'controller' => 'Cron\Controller\CronRest',
+                    ),
+                ),
+                'may_terminate' => true,
+            ),
+            /*'cron-action' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/api/cron/user/:userId/operation[/:opId][/]',
+                    'constraints' => array(
+                        'userId' => '[0-9]+',
+                        'opId' => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Cron\Controller\CronRest',
+                    ),
+                ),
+            ),*/
         ),
     ),
 

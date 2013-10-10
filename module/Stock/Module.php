@@ -30,10 +30,11 @@ class Module
             ),
             'Zend\Loader\StandardAutoloader' => array(
                 'namespaces' => array(
-                    __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
-                    'UserStock' => __DIR__ . '/src/' . 'UserStock',
-                    'Operation' => __DIR__ . '/src/' . 'Operation',
-                    'Exchange'  => __DIR__ . '/src/' . 'Exchange',
+                    __NAMESPACE__   => __DIR__ . '/src/' . __NAMESPACE__,
+                    'UserStock'     => __DIR__ . '/src/' . 'UserStock',
+                    'Operation'     => __DIR__ . '/src/' . 'Operation',
+                    'Exchange'      => __DIR__ . '/src/' . 'Exchange',
+                    'Cron'          => __DIR__ . '/src/' . 'Cron',
                 ),
             ),
         );
@@ -116,7 +117,7 @@ class Module
         $sharedEvents->attach('Zend\Mvc\Application', 'dispatch', array($this, 'threatDispatch'), 99);
         $sharedEvents->attach('Zend\Mvc\Application', 'dispatch.error', array($this, 'threadDispatchError'), 100);
     }
-    
+
     /**
      * Trata as excepitions da rota correspontende a controller/action
      * @return json_encode
