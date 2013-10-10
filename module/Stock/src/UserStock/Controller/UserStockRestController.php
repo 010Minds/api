@@ -61,6 +61,9 @@ class UserStockRestController extends AbstractRestfulController
 		//verifica se a url my-stock está setada e se a variavel uid não está vazio
 		if(!empty($requestParams['my-stock']) && $requestParams['my-stock'] == 'my-stock' && !empty($requestParams['uid'])){
 			$results = $this->getUserStockTable()->getStockUser($requestParams['uid'],$requestParams['id']);
+		}else{
+			$this->response->setStatusCode(404);
+			return new JsonModel();
 		}
 		$data       = array();
 		$stockData  = array();

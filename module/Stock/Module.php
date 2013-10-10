@@ -116,21 +116,21 @@ class Module
         $sharedEvents->attach('Zend\Mvc\Application', 'dispatch', array($this, 'threatDispatch'), 99);
         $sharedEvents->attach('Zend\Mvc\Application', 'dispatch.error', array($this, 'threadDispatchError'), 100);
     }
-
+    
+    /**
+     * Trata as excepitions da rota correspontende a controller/action
+     * @return json_encode
+     */
     public function threatDispatch(MvcEvent $event) {
-        if ($event->isError()) {
-            $jsonModel = new JsonModel(array(
-                'success' => false,
-                'teste' => $event->getError(),
-            ));
-            $event->setViewModel($jsonModel);
-            $event->stopPropagation();
-            return $jsonModel;
-        } else return;
+        $currentModel = $event->getResult();
+        if($currentModel instanceof JsonModel){
+            echo 'aqui';
+            return;
+        }
     }
 
     /**
-     * Trata as excessões
+     * Trata as excessões do tipo dispatch.error
      * @return json_encode
      */
     public function threadDispatchError(MvcEvent $event){
