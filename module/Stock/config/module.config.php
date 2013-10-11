@@ -12,6 +12,7 @@ return array(
             'Exchange\Controller\ExchangeRest'   => 'Exchange\Controller\ExchangeRestController',
             'Operation\Controller\OperationRest' => 'Operation\Controller\OperationRestController',
             'Cron\Controller\CronRest'           => 'Cron\Controller\CronRestController',
+            'Follows\Controller\FollowsRest'     => 'Follows\Controller\FollowsRestController',
         ),
     ),
 
@@ -140,6 +141,7 @@ return array(
                     ),
                 ),
             ),
+
             // Route Cron
             'cron-operation' => array(
                 'type'      => 'segment',
@@ -164,6 +166,34 @@ return array(
                     ),
                 ),
             ),*/
+
+            //Route followers
+            'followers-rest' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/api/followers/:uid[/]',
+                    'constraints' => array(
+                        'uid'     => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Follows\Controller\FollowsRest',
+                    ),
+                ),
+            ),
+            //Route following
+            'following-rest' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/api/following/:uid[/]',
+                    'constraints' => array(
+                        'uid'     => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Follows\Controller\FollowsRest',
+                    ),
+                ),
+            ),
+
         ),
     ),
 
