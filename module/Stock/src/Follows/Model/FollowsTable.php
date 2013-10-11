@@ -62,4 +62,30 @@ class FollowsTable{
 
 		return $resultSet;
 	}
+
+	/**
+     * Metodo que retorna a quantidade de followers
+     * @param int $id do user que está querendo saber os seus seguidores
+     * @return int $resultSet
+     */ 
+	public function fullFollowers($id){
+		$id = (int) $id;
+		$resultSet = $this->tableGateway->select(array('following' =>  $id));
+		
+
+		return (int) count($resultSet);
+	}
+
+	/**
+     * Metodo que retorna a quantidade de Following
+     * @param int $id do user que está querendo saber a quantidade de seguintes
+     * @return int $resultSet
+     */ 
+	public function fullFollowing($id){
+		$id = (int) $id;
+		$resultSet = $this->tableGateway->select(array('user_id' =>  $id));
+		
+
+		return (int) count($resultSet);
+	}
 }

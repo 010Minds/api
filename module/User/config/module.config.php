@@ -5,8 +5,9 @@ return array(
     # definir controllers
     'controllers' => array(
         'invokables' => array(
-            'User\Controller\User' => 'User\Controller\UserController',
-            'User\Controller\UserRest' => 'User\Controller\UserRestController',
+            'User\Controller\User'           => 'User\Controller\UserController',
+            'User\Controller\UserRest'       => 'User\Controller\UserRestController',
+            'User\Controller\UserPerfilRest' => 'User\Controller\UserPerfilRestController',
         ),
     ),
 
@@ -36,6 +37,18 @@ return array(
                     ),
                     'defaults' => array(
                         'controller' => 'User\Controller\UserRest',
+                    ),
+                ),
+            ),
+            'perfil-rest' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/api/users[/:uid]/:profile[/]',
+                    'constraints' => array(
+                        'uid'     => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'User\Controller\UserPerfilRest',
                     ),
                 ),
             ),
