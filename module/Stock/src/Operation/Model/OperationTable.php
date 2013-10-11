@@ -86,29 +86,6 @@ class OperationTable
 
 	}
 
-	/*
-		Atualiza as operações pendentes no tempo determinado pelo Cron (ex: 30/30 min)
-
-		Pendentes para compra:
-		 - Verificar saldo do usuário antes de efetivar a compra. Regra: (lance x qtd) >= saldo
-		 - NASDAQ: Antes de comprar verificar o saldo em $(dolar).
-		   Caso o saldo seja insuficiente, converter o saldo em R$(reais) para dolar antes da compra
-		 - BOVESPA: Mesma regra que NASDAQ, porém convertendo $(dolar) em reais
-		 - Se lance do usuário for menor que o valor atual => Não efetiva a compra e altera o status para "rejected"
-		 - Se o lance do usuário for maior ou igual ao valor de mercado e o volume do Stock maior ou igual ao volume requerido => Efetiva a compra.
-		    - Stats muda para "accepted"
-		    - Desconta o valor da compra do saldo do usário
-		    - Diminui o volume do stock
-		    - Inclui o Stock na tabela user_stock
-
-		Pendentes para venda:
-		 - Se o valor para venda for maior que o valor de mercado => Não efetiva a venda e altera o status para "rejected"
-		 - Se valor para venda for menor ou igual ao valor de mercado => Efetiva a venda
-		   - Stats muda para "accepted"
-		   - Inclui o valor da venda no saldo do usuário
-		   - Quantidade vendida retorna ao Stock
-		   - Retira o Stock vendido da tabela user_stock
-	*/
 	public function updateOperationPending(){
 
 		// Busca todas as operações pendentes
