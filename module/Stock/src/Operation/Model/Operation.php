@@ -5,11 +5,67 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
+/*
+	Sets the operation status
+*/
 class OperationStatus
 {
 	const PENDING = 1;
 	const ACCEPTED = 2;
 	const REJECTED = 3;
+
+	public static function getStatus($status)
+	{
+		switch($status)
+		{
+			case 'pending':
+				$status = self::PENDING;
+				break;
+
+			case 'accepted':
+				$status = self::ACCEPTED;
+				break;
+
+			case 'rejected':
+				$status = self::REJECTED;
+				break;
+
+			default:
+				throw new \Exception("Status invalid in getStatus", 1);
+
+		}
+
+		return $status;
+	}
+}
+
+/*
+	Sets thr type status
+*/
+class TypeStatus
+{
+	const BUY  = 1;
+	const SELL = 2;
+
+	public static function getType($type)
+	{
+		switch($type)
+		{
+			case 'buy':
+				$type = self::BUY;
+				break;
+
+			case 'sell':
+				$type = self::SELL;
+				break;
+
+			default:
+				throw new \Exception("Type invalid in getType", 1);
+
+		}
+
+		return $type;
+	}
 }
 
 class Operation implements InputFilterAwareInterface
@@ -21,7 +77,8 @@ class Operation implements InputFilterAwareInterface
 	public $qtd;
 	public $value;
 	public $type;
-	public $action;
+	public $status;
+	public $reason;
 	public $createDate;
 	protected $inputFilter;
 
@@ -33,7 +90,8 @@ class Operation implements InputFilterAwareInterface
 		$this->qtd 			= (!empty($data['qtd'])) ? $data['qtd'] : null;
 		$this->value 		= (!empty($data['value'])) ? $data['value'] : null;
 		$this->type 		= (!empty($data['type'])) ? $data['type'] : null;
-		$this->action 		= (!empty($data['action'])) ? $data['action'] : null;
+		$this->status 		= (!empty($data['status'])) ? $data['status'] : null;
+		$this->reason 		= (!empty($data['reason'])) ? $data['reason'] : null;
 		$this->createDate 	= (!empty($data['create_date'])) ? $data['create_date'] : null;
 	}
 

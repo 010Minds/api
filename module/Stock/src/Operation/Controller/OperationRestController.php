@@ -14,10 +14,10 @@ class OperationRestController extends AbstractRestfulController
     public function getList()
     {
         $userId = $this->params()->fromRoute('userId', false);
-        $option = $this->params()->fromRoute('option', false);
+        $status = $this->params()->fromRoute('status', false);
         $type   = $this->params()->fromRoute('type', false);
 
-        $results = $this->getOperationTable()->getOperations($userId, $option, $type);
+        $results = $this->getOperationTable()->getOperations($userId, $status, $type);
 
         $data = array();
         foreach ($results as $result) {

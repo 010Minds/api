@@ -2,6 +2,7 @@
 namespace Operation\Model;
 
 use Zend\Db\TableGateway\TableGateway;
+//use Operation\Model\Operation;
 
 class OperationTable
 {
@@ -19,21 +20,22 @@ class OperationTable
         return $resultSet;
 	}*/
 
-	public function getOperations($idUser, $option, $type)
+	public function getOperations($idUser, $status, $type)
 	{
 		$idUser = (int)$idUser;
 
 		$where= array();
-		if($option){
-			$where['action'] = $option;
+		if($status){
+			$status = OperationStatus::getStatus($status);
+			$where['status'] = $status;
 		}
 		if($type){
+			$type = TypeStatus::getType($type);
 			$where['type'] = $type;
 		}
 		$where['user_id'] = $idUser;
 
 		$resultSet = $this->tableGateway->select($where);
-
 
 		return $resultSet;
 	}
@@ -70,9 +72,10 @@ class OperationTable
 	        date_default_timezone_set('America/Sao_Paulo');
 	        $dataAtual = date('Y/m/d H:i:s');
 	        $data['create_date'] = $dataAtual;
+	        // status default in save
+	        $data['status'] = 'pending';
 
-	        // action default in save
-	        $data['action'] = 'pending';
+	        $data['type'] = TypeStatus::getType($data['type']);
 
 			$this->tableGateway->insert($data);
 			$id = $this->tableGateway->getLastInsertValue();
@@ -90,7 +93,7 @@ class OperationTable
 
 		// Busca todas as operações pendentes
 		// Table 'operation'
-		$where['action'] = 'pending';
+		$where['status'] = 'pending';
 		$resultSet = $this->tableGateway->select($where);
 
         $data = array();
