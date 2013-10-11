@@ -2,7 +2,6 @@
 namespace Operation\Model;
 
 use Zend\Db\TableGateway\TableGateway;
-//use Operation\Model\Operation;
 
 class OperationTable
 {
@@ -23,6 +22,8 @@ class OperationTable
 	public function getOperations($idUser, $status, $type)
 	{
 		$idUser = (int)$idUser;
+		$status = (int)$status;
+		$type 	= (int)$type;
 
 		$where= array();
 		if($status){
@@ -35,6 +36,18 @@ class OperationTable
 		}
 		$where['user_id'] = $idUser;
 
+		$resultSet = $this->tableGateway->select($where);
+
+		return $resultSet;
+	}
+
+	/*
+		Busca todas as operações filtrando pelo seu status
+	*/
+	public function getOperationsStatus($status)
+	{
+		$status = OperationStatus::getStatus($status);
+		$where['status'] = $status;
 		$resultSet = $this->tableGateway->select($where);
 
 		return $resultSet;
@@ -89,37 +102,9 @@ class OperationTable
 
 	}
 
-	public function updateOperationPending(){
+/*	public function updateOperationPending(){
 
-		// Busca todas as operações pendentes
-		// Table 'operation'
-		$where['status'] = 'pending';
-		$resultSet = $this->tableGateway->select($where);
-
-        $data = array();
-        foreach ($resultSet as $result) {
-            $data[] = $result;
-        }
-
-        // Busca Saldo do usuário em reais e dollars
-        // Table 'user'
-
-
-        // Busca o valor atual e volume de cada stock
-        // Table 'stock'
-
-        // Busca stocks do usuario
-        // dados necessários: id, current, volume
-
-
-
-
-
-
-		print_r($data);
-
-		exit();
-	}
+	}*/
 
 
 	public function deleteOperation($id, $idUser)

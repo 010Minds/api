@@ -9,7 +9,9 @@ use Zend\View\Model\JsonModel;
 
 class CronRestController extends AbstractRestfulController
 {
-	protected $OperationTable;
+	protected $operationTable;
+    protected $exchangeTable;
+    protected $userTable;
 
     public function getList()
     {
@@ -82,8 +84,66 @@ class CronRestController extends AbstractRestfulController
     */
     public function replaceList($data){
 
-        // Verifica Operações Pendentes
-        $this->getOperationTable()->updateOperationPending();
+        // Busca as Operações Pendentes
+        $resultSetOperation = $this->getOperationTable()->getOperationsStatus('pending');
+
+        $data = array();
+        foreach ($resultSetOperation as $resultOperation) {
+
+            // Busca os dados da stock_exchange do stock atual
+            $resultSetExchange = $this->getExchangeTable()->getExchange($resultOperation->stockId);
+
+            // Verifica a moeda que o stock está trabalhando
+            switch ($resultSetExchange->currency) {
+
+                case '$':
+                    $currency = 'dollars';
+                    break;
+
+                case 'R$':
+                    $currency = 'reais';
+                    break;
+
+                default:
+                    throw new \Exception("Currency invalid");
+                    break;
+            }
+
+            // Busca dados do usuario
+            $resultSetUser = $this->getUserTable()->getUser($resultOperation->userId);
+
+            // Verifica se usuario tem saldo suficiente
+            $dollarsSaldo = $resultSetUser->dollars;
+            $reaisSaldo = $resultSetUser->reais;
+            $lance = $resultOperation->qtd * $resultOperation->value;
+
+            if(${$currency.'Saldo'} >= $lance){
+                $msg = '[ Possui saldo ] lance -> ' . $lance . ' : saldo -> ' . ${$currency.'Saldo'}."\n";
+
+                /*
+                    - Altera 'status' da "operation" para 'accepted'
+                    - Altera 'reason' para 'Rejeitado por falta de saldo'
+                */
+            }
+            else{
+                $msg = '[ Saldo insuficiente ] lance -> ' . $lance . ' : saldo -> ' . ${$currency.'Saldo'}."\n";
+
+                /*
+                    - Altera 'status' da "operation" para 'reject'
+                    - Altera 'reason' para 'Rejeitado por falta de saldo'
+                */
+
+                continue;
+            }
+
+
+
+            print_r($resultOperation);
+            print_r($resultSetExchange);
+            print_r($resultSetUser);
+            echo "\n".$msg."\n";
+            exit();
+        }
 
         // Verifica Saldo do Usuário
 
@@ -111,7 +171,7 @@ class CronRestController extends AbstractRestfulController
 
 
         return new JsonModel(array(
-            'data' => 'not-implemented',
+            'data' => $pendingOperations,
         ));
 
     }
@@ -125,13 +185,33 @@ class CronRestController extends AbstractRestfulController
         ));
     }
 
+    // Table "operation"
     public function getOperationTable()
     {
-        if(!$this->OperationTable){
+        if(!$this->operationTable){
             $sm = $this->getServiceLocator();
-            $this->OperationTable = $sm->get('Operation\Model\OperationTable');
+            $this->operationTable = $sm->get('Operation\Model\OperationTable');
         }
-        return $this->OperationTable;
+        return $this->operationTable;
+    }
+
+    // Table "stock_exchange"
+    public function getExchangeTable(){
+        if(!$this->exchangeTable){
+            $sm = $this->getServiceLocator();
+            $this->exchangeTable = $sm->get('Exchange\Model\ExchangeTable');
+        }
+        return $this->exchangeTable;
+    }
+
+    // Table "user"
+    public function getUserTable()
+    {
+        if(!$this->userTable){
+            $sm = $this->getServiceLocator();
+            $this->userTable = $sm->get('User\Model\UserTable');
+        }
+        return $this->userTable;
     }
 
 }

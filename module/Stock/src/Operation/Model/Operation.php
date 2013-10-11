@@ -35,12 +35,13 @@ class OperationStatus
 
 		}
 
+		$status = (int)$status;
 		return $status;
 	}
 }
 
 /*
-	Sets thr type status
+	Sets the type status
 */
 class TypeStatus
 {
@@ -64,6 +65,7 @@ class TypeStatus
 
 		}
 
+		$type = (int)$type;
 		return $type;
 	}
 }
