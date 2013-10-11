@@ -52,6 +52,11 @@ class OperationRestController extends AbstractRestfulController
         $userId = $this->params()->fromRoute('userId', false);
         $data['user_id'] = $userId;
 
+        // TODO: When value is 0, get value from Stock
+        if ($data['value'] == 0) {
+            $data['value'] = 1;
+        }
+
         $operation = new Operation;
         $operation->exchangeArray($data);
 
