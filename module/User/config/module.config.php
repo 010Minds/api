@@ -40,7 +40,7 @@ return array(
                     ),
                 ),
             ),
-            'perfil-rest' => array(
+            'user-perfil-rest' => array(
                 'type'    => 'segment',
                 'options' => array(
                     'route'    => '/api/users[/:uid]/:profile[/]',

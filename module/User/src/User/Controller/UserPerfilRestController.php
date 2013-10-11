@@ -27,7 +27,7 @@ class UserPerfilRestController extends AbstractRestfulController{
      * follower,following e lista de followings
      * @return array json_encode
      */
-	public function getList(){
+	public function getList(){ 
 		$requestParams   = $this->params()->fromRoute(); 
 		$userid          = $requestParams['uid'];
 		$profile         = $requestParams['profile'];
@@ -60,7 +60,7 @@ class UserPerfilRestController extends AbstractRestfulController{
 			}
 		}
 
-		$data[] = array(
+		$data = array(
 			'user'       => $results,
 			'follower'  => $followers,
 			'following' => $followings,
