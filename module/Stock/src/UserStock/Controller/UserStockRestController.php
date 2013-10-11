@@ -22,8 +22,7 @@ class UserStockRestController extends AbstractRestfulController
 	{
 
 		$requestParams = $this->params()->fromRoute();
-
-
+		
 		if(!empty($requestParams['my-stock']) && $requestParams['my-stock'] == 'my-stock'){
 			$results 	   = $this->getUserStockTable()->getStockUser($requestParams['uid'],'');
 		}
@@ -68,8 +67,23 @@ class UserStockRestController extends AbstractRestfulController
 		$data       = array();
 		$stockData  = array();
 		foreach ($results as $result) {
+			$result->id      = (int) $result->id;
+			$result->userId  = (int) $result->userId;
+			$result->stockId = (int) $result->stockId;
+			$result->value   = (float) $result->value;
+
 			$stockData = $this->getStockTable()->getStock($result->stockId);
 			$result->stock = $stockData->getArrayCopy();
+			$result->stock['id']              = (int) $result->stock['id'];
+			$result->stock['current']         = (float) $result->stock['current'];
+			$result->stock['open'] 			  = (float) $result->stock['open'];
+			$result->stock['high'] 			  = (float) $result->stock['high'];
+			$result->stock['low'] 			  = (float) $result->stock['low'];
+			$result->stock['percent'] 		  = (float) $result->stock['percent'];
+			$result->stock['country'] 		  = (int) $result->stock['country'];
+			$result->stock['stockExchangeId'] = (int) $result->stock['stockExchangeId'];
+			$result->stock['volume'] 		  = (float) $result->stock['volume'];
+
 			$data[] = $result;
 		}
         return new JsonModel(array(

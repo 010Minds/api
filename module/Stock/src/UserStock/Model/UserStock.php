@@ -9,6 +9,7 @@ class UserStock implements InputFilterAwareInterface
 {
 
 	public $id;
+	public $userId;
 	public $stockId;
 	public $qtd;
 	public $value;
