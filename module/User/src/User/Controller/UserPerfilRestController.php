@@ -28,25 +28,29 @@ class UserPerfilRestController extends AbstractRestfulController{
      * @return array json_encode
      */
 	public function getList(){ 
+		#code
+	}
+
+	public function get($id){
 		$requestParams   = $this->params()->fromRoute(); 
-		$userid          = $requestParams['uid'];
+		//$userid          = $requestParams['uid'];
 		$profile         = $requestParams['profile'];
 		$data            = array();
 		$followingsArray = array();
 
 		//get user
-		$results = $this->getUserTable()->getUser($userid);
+		$results = $this->getUserTable()->getUser($id);
 		
 		$results->id      = (int) $results->id; 
 		$results->reais   = (float) $results->reais;
 		$results->dollars = (float) $results->dollars; 
 		
 		//get total followers
-		$followers      = $this->getFollowsTable()->fullFollowers($userid);
+		$followers      = $this->getFollowsTable()->fullFollowers($id);
 		//get total followings
-		$followings     = $this->getFollowsTable()->fullFollowing($userid);
+		$followings     = $this->getFollowsTable()->fullFollowing($id);
 		//get list followings
-		$dataFollowings = $this->getFollowsTable()->getFollowing($userid);
+		$dataFollowings = $this->getFollowsTable()->getFollowing($id);
 
 		$i = 0;
 		foreach ($dataFollowings as $value) {
@@ -70,10 +74,6 @@ class UserPerfilRestController extends AbstractRestfulController{
 		return new JsonModel(array(
             'data' => $data,
         ));
-	}
-
-	public function get($id){
-		#code ...
 	}
 
 	/**

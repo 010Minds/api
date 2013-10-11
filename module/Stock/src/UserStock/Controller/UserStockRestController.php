@@ -20,10 +20,10 @@ class UserStockRestController extends AbstractRestfulController
      */
 	public function getList()
 	{
-
+		die('teste');
 		$requestParams = $this->params()->fromRoute();
 		
-		if(!empty($requestParams['my-stock']) && $requestParams['my-stock'] == 'my-stock'){
+		/*if(!empty($requestParams['my-stock']) && $requestParams['my-stock'] == 'my-stock'){
 			$results 	   = $this->getUserStockTable()->getStockUser($requestParams['uid'],'');
 		}
 		else if(empty($requestParams['my-stock'])) {
@@ -31,7 +31,9 @@ class UserStockRestController extends AbstractRestfulController
 		} else {
 			$this->response->setStatusCode(404);
 			return new JsonModel();
-		}
+		}*/
+
+		$results = $this->getUserStockTable()->getStockUser($requestParams['uid'], '');
 
 		$data       = array();
 		$stockData  = array();
@@ -84,7 +86,7 @@ class UserStockRestController extends AbstractRestfulController
 			$result->stock['stockExchangeId'] = (int) $result->stock['stockExchangeId'];
 			$result->stock['volume'] 		  = (float) $result->stock['volume'];
 
-			$data[] = $result;
+			$data = $result;
 		}
         return new JsonModel(array(
             'data' => $data,

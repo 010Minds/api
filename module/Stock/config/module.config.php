@@ -8,7 +8,6 @@ return array(
             'Stock\Controller\Stock'             => 'Stock\Controller\StockController',
             'Stock\Controller\StockRest'         => 'Stock\Controller\StockRestController',
             'UserStock\Controller\UserStock'     => 'UserStock\Controller\UserStockController',
-            'UserStock\Controller\UserStockRest' => 'UserStock\Controller\UserStockRestController',
             'Exchange\Controller\ExchangeRest'   => 'Exchange\Controller\ExchangeRestController',
             'Operation\Controller\OperationRest' => 'Operation\Controller\OperationRestController',
             'Follows\Controller\FollowsRest'     => 'Follows\Controller\FollowsRestController',
@@ -60,7 +59,7 @@ return array(
                     ),
                 ),
             ),
-            'user-stock-rest' => array(
+            /*'user-stock-rest' => array(
                 'type'    => 'segment',
                 'options' => array(
                     'route'    => '/api/user/:uid/:my-stock[/:id][/]',
@@ -72,7 +71,7 @@ return array(
                         'controller' => 'UserStock\Controller\UserStockRest',
                     ),
                 ),
-            ),
+            ),*/
             'exchange-rest' => array(
                 'type'    => 'segment',
                 'options' => array(
@@ -98,7 +97,7 @@ return array(
                 ),
             ),
             // Route Operation
-            'operation-rest' => array(
+            /*'operation-rest' => array(
                 'type'    => 'segment',
                 'options' => array(
                     'route'    => '/api/user/:userId/operation[/]',
@@ -139,7 +138,7 @@ return array(
                         ),
                     ),
                 ),
-            ),
+            ),*/
             //Route followers
             'followers-rest' => array(
                 'type'    => 'segment',

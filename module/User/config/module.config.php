@@ -7,6 +7,7 @@ return array(
         'invokables' => array(
             'User\Controller\User'           => 'User\Controller\UserController',
             'User\Controller\UserRest'       => 'User\Controller\UserRestController',
+            'UserStock\Controller\UserStockRest' => 'UserStock\Controller\UserStockRestController',
             'User\Controller\UserPerfilRest' => 'User\Controller\UserPerfilRestController',
         ),
     ),
@@ -31,27 +32,77 @@ return array(
             'user-rest' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/api/user[/:id][/]',
-                    'constraints' => array(
-                        'id'     => '[0-9]+',
-                    ),
+                    'route'    => '/api/user',
                     'defaults' => array(
                         'controller' => 'User\Controller\UserRest',
                     ),
                 ),
-            ),
-            'user-perfil-rest' => array(
-                'type'    => 'segment',
-                'options' => array(
-                    'route'    => '/api/users[/:uid]/:profile[/]',
-                    'constraints' => array(
-                        'uid'     => '[0-9]+',
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'user-id' => array(
+                        'type'    => 'segment',
+                        'options' => array(
+                            'route'    => '/:id',
+                            'constraints' => array(
+                                'id'     => '[0-9]+',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'User\Controller\UserRest',
+                            ),
+                        ),
+                        'may_terminate' => true,
+                        'child_routes' => array(
+                            'user-profile' => array(
+                                'type'    => 'literal',
+                                'options' => array(
+                                    'route'    => '/profile',
+                                    'defaults' => array(
+                                        'controller' => 'User\Controller\UserPerfilRest',
+                                    ),
+                                ),
+                            ),
+                            'user-stock' => array(
+                                'type'    => 'literal',
+                                'options' => array(
+                                    'route'    => '/mystock',
+                                    'defaults' => array(
+                                        'controller' => 'UserStock\Controller\UserStockRest',
+                                    ),
+                                ),
+                            ),
+                        ),
                     ),
-                    'defaults' => array(
-                        'controller' => 'User\Controller\UserPerfilRest',
-                    ),
+                    /*'user-stock' => array(
+                        'type'    => 'segment',
+                        'options' => array(
+                            'route'    => '/:uid/my-stock[/:id]',
+                            'constraints' => array(
+                                'id'      => '[0-9]+',
+                                'uid'     => '[0-9]+',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'UserStock\Controller\UserStockRest',
+                            ),
+                        ),
+                        'may_terminate' => true,
+                        'child_routes' => array(
+                            'user-stock-rest' => array(
+                                'type'    => 'segment',
+                                'options' => array(
+                                    'route'    => '/:my-stock[/:id]',
+                                    'constraints' => array(
+                                        'id'      => '[0-9]+',
+                                    ),
+                                    'defaults' => array(
+                                        'controller' => 'UserStock\Controller\UserStockRest',
+                                    ),
+                                ),
+                            ),
+                        )
+                    ),*/
                 ),
             ),
+            
         ),
     ),
 
