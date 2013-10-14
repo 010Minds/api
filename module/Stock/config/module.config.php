@@ -114,9 +114,9 @@ return array(
             'followers-rest' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/api/followers/:uid[/]',
+                    'route'    => '/api/followers/:id[/]',
                     'constraints' => array(
-                        'uid'     => '[0-9]+',
+                        'id'     => '[0-9]+',
                     ),
                     'defaults' => array(
                         'controller' => 'Follows\Controller\FollowsRest',

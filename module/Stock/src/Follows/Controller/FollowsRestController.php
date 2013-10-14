@@ -19,23 +19,14 @@ class FollowsRestController extends AbstractRestfulController{
 	 * @return array $data
 	 */
 	public function getList(){
-		$requestParams = $this->params()->fromRoute();
-		$requestUri    = $this->getRequest()->getUri(); 
-		
-		//procurando a palavra chave following na request passada
-		$followingUri = $this->getPartsUri($requestUri,'following');
-		//procurando a palavra chave followers na request passada
-		$followersUri = $this->getPartsUri($requestUri,'followers');
-		
-		if(!empty($followingUri) && $followingUri == 'following' && !empty($requestParams['uid'])){
-			$results = $this->getFollowsTable()->getFollowing($requestParams['uid']);
-		}
-		else if(!empty($requestParams['uid']) && !empty($followersUri) && $followersUri == 'followers'){
-			$results = $this->getFollowsTable()->getFollowers($requestParams['uid']);
-		}else {
-			$this->response->setStatusCode(404);
-			return new JsonModel();
-		}
+		#code...
+	}
+
+	public function get($id){
+		$id = (int) $id;
+
+		$results = $this->getFollowsTable()->getFollowers($id);	
+
 		$data          = array();
 		$followersData = array();
 		foreach ($results as $result) {
@@ -44,16 +35,9 @@ class FollowsRestController extends AbstractRestfulController{
 			$result->user_id   = (int) $result->user_id;
 			$result->following = (int) $result->following;
 			
-			if(!empty($followingUri) && $followingUri == 'following' && !empty($requestParams['uid'])){
-				//pegando os dados do following
-				$followersData       = $this->getUserTable()->getUser($result->following);
-				$result->followersId = $followersData->getArrayCopy();
-			}
-			else{
-				//pegando os dados do follower
-				$followersData       = $this->getUserTable()->getUser($result->user_id);
-				$result->followersId = $followersData->getArrayCopy();
-			}
+			//pegando os dados do follower
+			$followersData       = $this->getUserTable()->getUser($result->user_id);
+			$result->followersId = $followersData->getArrayCopy();
 
 			//convertendo tipo
 			$result->followersId['id']      = (int) $result->followersId['id'];
@@ -66,16 +50,6 @@ class FollowsRestController extends AbstractRestfulController{
 		return new JsonModel(array(
             'data' => $data,
         ));
-	}
-
-	public function get($id){
-		
-		/*$follow = $this->getFollowsTable()->getFollows($id);
-
-		return new JsonModel(array(
-            'data' => $follow,
-        ));*/
-		
 	}
 
 	public function getFollowsTable(){
