@@ -13,12 +13,12 @@ class OperationRestController extends AbstractRestfulController
 
     public function getList()
     {
-        $userId = $this->params()->fromRoute('userId', false);
+        $userId = $this->params()->fromRoute('uid', false);
         $option = $this->params()->fromRoute('option', false);
         $type   = $this->params()->fromRoute('type', false);
 
         $results = $this->getOperationTable()->getOperations($userId, $option, $type);
-
+        
         $data = array();
         foreach ($results as $result) {
             $result->id     = (int) $result->id;
@@ -28,7 +28,6 @@ class OperationRestController extends AbstractRestfulController
             $data[] = $result;
         }
 
-        // return array('data' => $result);
         return new JsonModel(array(
             'data' => $data,
         ));
@@ -36,6 +35,7 @@ class OperationRestController extends AbstractRestfulController
 
     public function get($id)
     {
+        die('here');
         $this->response->setStatusCode(404);
 
         return new JsonModel(array(

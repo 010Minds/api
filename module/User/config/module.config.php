@@ -5,9 +5,11 @@ return array(
     # definir controllers
     'controllers' => array(
         'invokables' => array(
-            'User\Controller\User'           => 'User\Controller\UserController',
-            'User\Controller\UserRest'       => 'User\Controller\UserRestController',
-            'User\Controller\UserPerfilRest' => 'User\Controller\UserPerfilRestController',
+            'User\Controller\User'               => 'User\Controller\UserController',
+            'User\Controller\UserRest'           => 'User\Controller\UserRestController',
+            'UserStock\Controller\UserStockRest' => 'UserStock\Controller\UserStockRestController',
+            'User\Controller\UserPerfilRest'     => 'User\Controller\UserPerfilRestController',
+            'Operation\Controller\OperationRest' => 'Operation\Controller\OperationRestController',
         ),
     ),
 
@@ -31,27 +33,119 @@ return array(
             'user-rest' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/api/user[/:id][/]',
-                    'constraints' => array(
-                        'id'     => '[0-9]+',
-                    ),
+                    'route'    => '/api/user',
                     'defaults' => array(
                         'controller' => 'User\Controller\UserRest',
                     ),
                 ),
-            ),
-            'user-perfil-rest' => array(
-                'type'    => 'segment',
-                'options' => array(
-                    'route'    => '/api/users[/:uid]/:profile[/]',
-                    'constraints' => array(
-                        'uid'     => '[0-9]+',
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'user-rest-uid' => array(
+                        'type'    => 'segment',
+                        'options' => array(
+                            'route'    => '/:uid',
+                            'constraints' => array(
+                                'uid'     => '[0-9]+',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'User\Controller\UserRest',
+                            ),
+                        ),
+                        'may_terminate' => false,
+                        'child_routes' => array(
+                            'user-rest-operation' => array(
+                                'type'    => 'literal',
+                                'options' => array(
+                                    'route'    => '/operation',
+                                    'defaults' => array(
+                                        'controller' => 'Operation\Controller\OperationRest',
+                                    ),
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'user-rest-operation-option' => array(
+                                        'type' => 'segment',
+                                        'options' => array(
+                                            'route' => '/:option[/:type]',
+                                            'constraints' => array(
+                                                'type' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                                'option' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                            ),
+                                            'defaults' => array(
+                                                'controller' => 'Operation\Controller\OperationRest',
+                                            ),
+                                        ),
+                                    ),
+                                    'user-rest-operation-id' => array(
+                                        'type' => 'segment',
+                                        'options' => array(
+                                            'route' => '/:id[/]',
+                                            'constraints' => array(
+                                                'id' => '[0-9]+',
+                                            ),
+                                            'defaults' => array(
+                                                'controller' => 'Operation\Controller\OperationRest',
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                            'user-rest-mystock' => array(
+                                'type'    => 'literal',
+                                'options' => array(
+                                    'route'    => '/mystock',
+                                    'defaults' => array(
+                                        'controller' => 'UserStock\Controller\UserStockRest',
+                                    ),
+                                ),
+                                'may_terminate' => true,
+                                'child_routes'  => array(
+                                    'user-rest-mystock-id' => array(
+                                        'type'    => 'segment',
+                                        'options' => array(
+                                            'route'    => '/:id',
+                                            'constraints' => array(
+                                                'id'     => '[0-9]+',
+                                            ),
+                                            'defaults' => array(
+                                                'controller' => 'UserStock\Controller\UserStockRest',
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
                     ),
-                    'defaults' => array(
-                        'controller' => 'User\Controller\UserPerfilRest',
+                    'user-rest-id' => array(
+                        'type'    => 'segment',
+                        'options' => array(
+                            'route'    => '/:id',
+                            'constraints' => array(
+                                'id'     => '[0-9]+',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'User\Controller\UserRest',
+                            ),
+                        ),
+                        'may_terminate' => false,
+                        'child_routes' => array(
+                            'user-rest-profile' => array(
+                                'type'    => 'literal',
+                                'options' => array(
+                                    'route'    => '/profile',
+                                    'constraints' => array(
+                                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                    ),
+                                    'defaults' => array(
+                                        'controller' => 'User\Controller\UserPerfilRest',
+                                    ),
+                                ),
+                            ),
+                        ),
                     ),
                 ),
             ),
+            
         ),
     ),
 
