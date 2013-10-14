@@ -28,7 +28,6 @@ class OperationRestController extends AbstractRestfulController
             $data[] = $result;
         }
 
-        // return array('data' => $result);
         return new JsonModel(array(
             'data' => $data,
         ));
@@ -36,6 +35,7 @@ class OperationRestController extends AbstractRestfulController
 
     public function get($id)
     {
+        die('here');
         $this->response->setStatusCode(404);
 
         return new JsonModel(array(

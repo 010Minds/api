@@ -76,6 +76,18 @@ return array(
                                             ),
                                         ),
                                     ),
+                                    'user-rest-operation-id' => array(
+                                        'type' => 'segment',
+                                        'options' => array(
+                                            'route' => '/:id[/]',
+                                            'constraints' => array(
+                                                'id' => '[0-9]+',
+                                            ),
+                                            'defaults' => array(
+                                                'controller' => 'Operation\Controller\OperationRest',
+                                            ),
+                                        ),
+                                    ),
                                 ),
                             ),
                             'user-rest-mystock' => array(

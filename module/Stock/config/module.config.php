@@ -82,49 +82,6 @@ return array(
                     ),
                 ),
             ),
-            // Route Operation
-            /*'operation-rest' => array(
-                'type'    => 'segment',
-                'options' => array(
-                    'route'    => '/api/user/:userId/operation[/]',
-                    'constraints' => array(
-                        'userId' => '[0-9]+',
-                    ),
-                    'defaults' => array(
-                        'controller' => 'Operation\Controller\OperationRest',
-                    ),
-                ),
-                'may_terminate' => true,
-                'child_routes' => array(
-
-                    'operation-option' => array(
-                        'type' => 'segment',
-                        'options' => array(
-                            'route' => ':option[/:type]',
-                            'constraints' => array(
-                                'type' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'option' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
-                            'defaults' => array(
-                                'controller' => 'Operation\Controller\OperationRest',
-                            ),
-                        ),
-                    ),
-
-                    'operation-id' => array(
-                        'type' => 'segment',
-                        'options' => array(
-                            'route' => ':id[/]',
-                            'constraints' => array(
-                                'id' => '[0-9]+',
-                            ),
-                            'defaults' => array(
-                                'controller' => 'Operation\Controller\OperationRest',
-                            ),
-                        ),
-                    ),
-                ),
-            ),*/
             //Route followers
             'followers-rest' => array(
                 'type'    => 'segment',
