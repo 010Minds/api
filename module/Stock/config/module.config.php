@@ -9,7 +9,6 @@ return array(
             'Stock\Controller\StockRest'         => 'Stock\Controller\StockRestController',
             'UserStock\Controller\UserStock'     => 'UserStock\Controller\UserStockController',
             'Exchange\Controller\ExchangeRest'   => 'Exchange\Controller\ExchangeRestController',
-            //'Operation\Controller\OperationRest' => 'Operation\Controller\OperationRestController',
             'Follows\Controller\FollowsRest'     => 'Follows\Controller\FollowsRestController',
         ),
     ),
@@ -59,19 +58,6 @@ return array(
                     ),
                 ),
             ),
-            /*'user-stock-rest' => array(
-                'type'    => 'segment',
-                'options' => array(
-                    'route'    => '/api/user/:uid/:my-stock[/:id][/]',
-                    'constraints' => array(
-                        'uid'     => '[0-9]+',
-                        'id'      => '[0-9]+',
-                    ),
-                    'defaults' => array(
-                        'controller' => 'UserStock\Controller\UserStockRest',
-                    ),
-                ),
-            ),*/
             'exchange-rest' => array(
                 'type'    => 'segment',
                 'options' => array(

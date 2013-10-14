@@ -5,10 +5,11 @@ return array(
     # definir controllers
     'controllers' => array(
         'invokables' => array(
-            'User\Controller\User'           => 'User\Controller\UserController',
-            'User\Controller\UserRest'       => 'User\Controller\UserRestController',
+            'User\Controller\User'               => 'User\Controller\UserController',
+            'User\Controller\UserRest'           => 'User\Controller\UserRestController',
             'UserStock\Controller\UserStockRest' => 'UserStock\Controller\UserStockRestController',
-            'User\Controller\UserPerfilRest' => 'User\Controller\UserPerfilRestController',
+            'User\Controller\UserPerfilRest'     => 'User\Controller\UserPerfilRestController',
+            'Operation\Controller\OperationRest' => 'Operation\Controller\OperationRestController',
         ),
     ),
 
@@ -52,6 +53,31 @@ return array(
                         ),
                         'may_terminate' => false,
                         'child_routes' => array(
+                            'user-rest-operation' => array(
+                                'type'    => 'literal',
+                                'options' => array(
+                                    'route'    => '/operation',
+                                    'defaults' => array(
+                                        'controller' => 'Operation\Controller\OperationRest',
+                                    ),
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'user-rest-operation-option' => array(
+                                        'type' => 'segment',
+                                        'options' => array(
+                                            'route' => '/:option[/:type]',
+                                            'constraints' => array(
+                                                'type' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                                'option' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                            ),
+                                            'defaults' => array(
+                                                'controller' => 'Operation\Controller\OperationRest',
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
                             'user-rest-mystock' => array(
                                 'type'    => 'literal',
                                 'options' => array(
@@ -62,7 +88,7 @@ return array(
                                 ),
                                 'may_terminate' => true,
                                 'child_routes'  => array(
-                                    'user-rest-id' => array(
+                                    'user-rest-mystock-id' => array(
                                         'type'    => 'segment',
                                         'options' => array(
                                             'route'    => '/:id',
@@ -105,34 +131,6 @@ return array(
                             ),
                         ),
                     ),
-                    /*'user-stock' => array(
-                        'type'    => 'segment',
-                        'options' => array(
-                            'route'    => '/:uid/my-stock[/:id]',
-                            'constraints' => array(
-                                'id'      => '[0-9]+',
-                                'uid'     => '[0-9]+',
-                            ),
-                            'defaults' => array(
-                                'controller' => 'UserStock\Controller\UserStockRest',
-                            ),
-                        ),
-                        'may_terminate' => true,
-                        'child_routes' => array(
-                            'user-stock-rest' => array(
-                                'type'    => 'segment',
-                                'options' => array(
-                                    'route'    => '/:my-stock[/:id]',
-                                    'constraints' => array(
-                                        'id'      => '[0-9]+',
-                                    ),
-                                    'defaults' => array(
-                                        'controller' => 'UserStock\Controller\UserStockRest',
-                                    ),
-                                ),
-                            ),
-                        )
-                    ),*/
                 ),
             ),
             

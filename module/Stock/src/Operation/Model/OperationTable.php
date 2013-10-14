@@ -34,7 +34,6 @@ class OperationTable
 
 		$resultSet = $this->tableGateway->select($where);
 
-
 		return $resultSet;
 	}
 
