@@ -127,7 +127,7 @@ return array(
                                 'controller' => 'User\Controller\UserRest',
                             ),
                         ),
-                        'may_terminate' => false,
+                        'may_terminate' => true,
                         'child_routes' => array(
                             'user-rest-profile' => array(
                                 'type'    => 'literal',

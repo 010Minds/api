@@ -17,6 +17,9 @@ class UserRestController extends AbstractRestfulController
 		$results = $this->getUserTable()->fetchAll();
 		$data = array();
 		foreach ($results as $result) {
+			$result->id      = (int) $result->id;
+			$result->reais   = (float) $result->reais;
+			$result->dollars = (float) $result->dollars;
 			$data[] = $result;
 		}
 
