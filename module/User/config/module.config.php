@@ -11,6 +11,7 @@ return array(
             'User\Controller\UserPerfilRest'     => 'User\Controller\UserPerfilRestController',
             'Operation\Controller\OperationRest' => 'Operation\Controller\OperationRestController',
             'Follows\Controller\FollowsRest'     => 'Follows\Controller\FollowsRestController',
+            'Follows\Controller\FollowingRest'   => 'Follows\Controller\FollowingRestController',
         ),
     ),
 
@@ -174,6 +175,24 @@ return array(
                                     ),
                                     'defaults' => array(
                                         'controller' => 'User\Controller\UserPerfilRest',
+                                    ),
+                                ),
+                            ),
+                            'user-rest-followers' => array(
+                                'type'    => 'literal',
+                                'options' => array(
+                                    'route'    => '/followers',
+                                    'defaults' => array(
+                                        'controller' => 'Follows\Controller\FollowsRest',
+                                    ),
+                                ),
+                            ),
+                            'user-rest-following' => array(
+                                'type'    => 'literal',
+                                'options' => array(
+                                    'route'    => '/following',
+                                    'defaults' => array(
+                                        'controller' => 'Follows\Controller\FollowingRest',
                                     ),
                                 ),
                             ),
