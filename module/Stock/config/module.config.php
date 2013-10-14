@@ -10,6 +10,7 @@ return array(
             'UserStock\Controller\UserStock'     => 'UserStock\Controller\UserStockController',
             'Exchange\Controller\ExchangeRest'   => 'Exchange\Controller\ExchangeRestController',
             'Follows\Controller\FollowsRest'     => 'Follows\Controller\FollowsRestController',
+            'Follows\Controller\FollowingRest'   => 'Follows\Controller\FollowingRestController',
         ),
     ),
 
@@ -126,12 +127,12 @@ return array(
             'following-rest' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/api/following/:uid[/]',
+                    'route'    => '/api/following/:id[/]',
                     'constraints' => array(
-                        'uid'     => '[0-9]+',
+                        'id'     => '[0-9]+',
                     ),
                     'defaults' => array(
-                        'controller' => 'Follows\Controller\FollowsRest',
+                        'controller' => 'Follows\Controller\FollowingRest',
                     ),
                 ),
             ),
