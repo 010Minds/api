@@ -124,6 +124,16 @@ return array(
                                         'controller' => 'Follows\Controller\FollowsRest',
                                     ),
                                 ),
+                            ),
+                            'user-rest-unfollow' => array(
+                                'type'    => 'literal',
+                                'options' => array(
+                                    'verb'     => 'delete',
+                                    'route'    => '/unfollow',
+                                    'defaults' => array(
+                                        'controller' => 'Follows\Controller\FollowsRest',
+                                    ),
+                                ),
                                 'may_terminate' => true,
                                 'child_routes' => array(
                                     'user-rest-follow-id' => array(

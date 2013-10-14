@@ -124,4 +124,16 @@ class FollowsTable{
 
 		return $id;
 	}
+
+	/**
+	 * Método resposável por executar unfollow (deixar de seguir)
+	 * @param int $user_id id do usuário
+	 * @param int $id id do following a ser deletado
+	 */
+	public function deleteFollow($user_id,$id){
+		$this->tableGateway->delete(array(
+			'following' => $id,
+			'user_id'   => $user_id
+		));
+	}
 }

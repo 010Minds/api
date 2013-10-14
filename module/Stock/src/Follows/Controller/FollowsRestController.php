@@ -79,6 +79,25 @@ class FollowsRestController extends AbstractRestfulController{
 	    ));
 	}
 
+	/**
+	 * Método responsável pelo unfollow (deixar de seguir)
+	 * @param int $id id do follow a ser deletado
+	 * @param int $user_id get por request id do user
+	 * @return array json_encode 
+	 */
+	public function delete($id){
+		//id do follow (seguindo)
+		$id      =  (int) $id;   
+		//id do user
+		$user_id =  (int) $this->params()->fromRoute('uid', false);
+
+		$this->getFollowsTable()->deleteFollow($user_id,$id);
+
+		return new JsonModel(array(
+			'data' => 'deleted',
+		));
+	}
+
 	public function getFollowsTable(){
 		if(!$this->followsTable){
 			$sm = $this->getServiceLocator();
