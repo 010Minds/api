@@ -59,26 +59,53 @@ return array(
                 ),
             ),
             'exchange-rest' => array(
-                'type'    => 'segment',
+                'type'    => 'literal',
                 'options' => array(
-                    'route'    => '/api/exchange[/:id][/]',
-                    'constraints' => array(
-                        'id'     => '[0-9]+',
-                    ),
+                    'route'    => '/api/exchange',
                     'defaults' => array(
                         'controller' => 'Exchange\Controller\ExchangeRest',
                     ),
                 ),
-            ),
-            'exchange-stock-rest' => array(
-                'type'    => 'segment',
-                'options' => array(
-                    'route'    => '/api/exchange/:uid/:stock[/]',
-                    'constraints' => array(
-                        'uid'     => '[0-9]+',
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'exchange-rest-uid' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/:uid',
+                            'constraints' => array(
+                                'uid' => '[0-9]+',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Stock\Controller\StockRest',
+                            ),
+                        ),
+                        'may_terminate' => false,
+                        'child_routes' => array(
+                            'exchange-rest-stock' => array(
+                                'type'    => 'literal',
+                                'options' => array(
+                                    'route'    => '/stock',
+                                    'constraints' => array(
+                                        'uid'     => '[0-9]+',
+                                    ),
+                                    'defaults' => array(
+                                        'controller' => 'Stock\Controller\StockRest',
+                                    ),
+                                ),
+                            ),
+                        ),
                     ),
-                    'defaults' => array(
-                        'controller' => 'Stock\Controller\StockRest',
+                    'exchange-rest-id' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/:id',
+                            'constraints' => array(
+                                'id' => '[0-9]+',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Exchange\Controller\ExchangeRest',
+                            ),
+                        ),
                     ),
                 ),
             ),
