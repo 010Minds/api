@@ -39,7 +39,46 @@ return array(
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
-                    'user-id' => array(
+                    'user-rest-uid' => array(
+                        'type'    => 'segment',
+                        'options' => array(
+                            'route'    => '/:uid',
+                            'constraints' => array(
+                                'uid'     => '[0-9]+',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'User\Controller\UserRest',
+                            ),
+                        ),
+                        'may_terminate' => false,
+                        'child_routes' => array(
+                            'user-rest-mystock' => array(
+                                'type'    => 'literal',
+                                'options' => array(
+                                    'route'    => '/mystock',
+                                    'defaults' => array(
+                                        'controller' => 'UserStock\Controller\UserStockRest',
+                                    ),
+                                ),
+                                'may_terminate' => true,
+                                'child_routes'  => array(
+                                    'user-rest-id' => array(
+                                        'type'    => 'segment',
+                                        'options' => array(
+                                            'route'    => '/:id',
+                                            'constraints' => array(
+                                                'id'     => '[0-9]+',
+                                            ),
+                                            'defaults' => array(
+                                                'controller' => 'UserStock\Controller\UserStockRest',
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                    'user-rest-id' => array(
                         'type'    => 'segment',
                         'options' => array(
                             'route'    => '/:id',
@@ -50,23 +89,17 @@ return array(
                                 'controller' => 'User\Controller\UserRest',
                             ),
                         ),
-                        'may_terminate' => true,
+                        'may_terminate' => false,
                         'child_routes' => array(
-                            'user-profile' => array(
+                            'user-rest-profile' => array(
                                 'type'    => 'literal',
                                 'options' => array(
                                     'route'    => '/profile',
+                                    'constraints' => array(
+                                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                    ),
                                     'defaults' => array(
                                         'controller' => 'User\Controller\UserPerfilRest',
-                                    ),
-                                ),
-                            ),
-                            'user-stock' => array(
-                                'type'    => 'literal',
-                                'options' => array(
-                                    'route'    => '/mystock',
-                                    'defaults' => array(
-                                        'controller' => 'UserStock\Controller\UserStockRest',
                                     ),
                                 ),
                             ),

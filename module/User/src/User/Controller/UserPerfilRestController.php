@@ -34,7 +34,6 @@ class UserPerfilRestController extends AbstractRestfulController{
 	public function get($id){
 		$requestParams   = $this->params()->fromRoute(); 
 		//$userid          = $requestParams['uid'];
-		$profile         = $requestParams['profile'];
 		$data            = array();
 		$followingsArray = array();
 

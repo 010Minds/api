@@ -9,7 +9,7 @@ return array(
             'Stock\Controller\StockRest'         => 'Stock\Controller\StockRestController',
             'UserStock\Controller\UserStock'     => 'UserStock\Controller\UserStockController',
             'Exchange\Controller\ExchangeRest'   => 'Exchange\Controller\ExchangeRestController',
-            'Operation\Controller\OperationRest' => 'Operation\Controller\OperationRestController',
+            //'Operation\Controller\OperationRest' => 'Operation\Controller\OperationRestController',
             'Follows\Controller\FollowsRest'     => 'Follows\Controller\FollowsRestController',
         ),
     ),

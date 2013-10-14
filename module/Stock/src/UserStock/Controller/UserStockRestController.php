@@ -20,21 +20,11 @@ class UserStockRestController extends AbstractRestfulController
      */
 	public function getList()
 	{
-		die('teste');
 		$requestParams = $this->params()->fromRoute();
+		//id do user
+		$uid = $requestParams['uid'];
 		
-		/*if(!empty($requestParams['my-stock']) && $requestParams['my-stock'] == 'my-stock'){
-			$results 	   = $this->getUserStockTable()->getStockUser($requestParams['uid'],'');
-		}
-		else if(empty($requestParams['my-stock'])) {
-			$results       = $this->getStockTable()->fetchAll();
-		} else {
-			$this->response->setStatusCode(404);
-			return new JsonModel();
-		}*/
-
-		$results = $this->getUserStockTable()->getStockUser($requestParams['uid'], '');
-
+		$results 	= $this->getUserStockTable()->getStockUser($uid,'');
 		$data       = array();
 		$stockData  = array();
 		foreach ($results as $result) {
@@ -56,16 +46,12 @@ class UserStockRestController extends AbstractRestfulController
      */
 	public function get($id)
 	{
-
 		$requestParams = $this->params()->fromRoute();
+		//id do user
+		$uid           = $requestParams['uid'];
 
-		//verifica se a url my-stock está setada e se a variavel uid não está vazio
-		if(!empty($requestParams['my-stock']) && $requestParams['my-stock'] == 'my-stock' && !empty($requestParams['uid'])){
-			$results = $this->getUserStockTable()->getStockUser($requestParams['uid'],$requestParams['id']);
-		}else{
-			$this->response->setStatusCode(404);
-			return new JsonModel();
-		}
+		$results = $this->getUserStockTable()->getStockUser($uid,$id);
+		
 		$data       = array();
 		$stockData  = array();
 		foreach ($results as $result) {
