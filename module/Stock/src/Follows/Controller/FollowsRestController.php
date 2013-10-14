@@ -5,6 +5,7 @@ use Zend\Mvc\Controller\AbstractRestfulController;
 
 use Follows\Model\Follows;
 use Follows\Model\FollowsTable;
+use Follows\Form\FollowsForm;
 use UserStock\Model\UserStock;
 use UserStock\Model\UserStockTable;
 use Zend\View\Model\JsonModel;
@@ -14,14 +15,15 @@ class FollowsRestController extends AbstractRestfulController{
 	protected $followsTable;
 	protected $userTable;
 
-	/**
-	 * Método que lista os followers pegando id por request
-	 * @return array $data
-	 */
+	
 	public function getList(){
 		#code...
 	}
 
+	/**
+	 * Método que lista os followers pegando id por request
+	 * @return array $data
+	 */
 	public function get($id){
 		$id = (int) $id;
 
@@ -50,6 +52,31 @@ class FollowsRestController extends AbstractRestfulController{
 		return new JsonModel(array(
             'data' => $data,
         ));
+	}
+
+	/**
+	 * Método que cadastra os follows - (quem estou seguindo)
+	 * @return array $data
+	 */
+	public function create($data){
+		//id do user
+		$data['user_id'] =  (int) $this->params()->fromRoute('uid', false);
+        
+        $form    = new FollowsForm();
+	    $follows = new Follows();
+
+		$form->setInputFilter($follows->getInputFilter());
+	    $form->setData($data);
+	    
+	    $id = 0;
+	    if ($form->isValid()) { 
+	        $follows->exchangeArray($form->getData());
+	        $id = $this->getFollowsTable()->follow($follows);
+	    }
+	    
+	    return new JsonModel(array(
+	        'data' => $this->getFollowsTable()->getObjFollow($id),
+	    ));
 	}
 
 	public function getFollowsTable(){

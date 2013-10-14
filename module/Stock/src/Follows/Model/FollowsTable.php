@@ -88,4 +88,40 @@ class FollowsTable{
 
 		return (int) count($resultSet);
 	}
+
+	/**
+	 * Método que retorna o objeto follow (linha)
+	 * @param  int $id id da linha do db
+     * @return array $row
+     */
+	public function getObjFollow($id){
+		$id        = (int) $id;
+		$resultSet = $this->tableGateway->select(array('id' => $id));
+		$row = $resultSet->current();
+		
+		if(!$row){
+			throw new \Exception("Could not find row $id");
+		}
+		
+		return $row;
+	}
+
+	/**
+	 * Responsável por cadastrar a listas de follows
+	 * @param objeto Follows
+	 * @return int $id
+	 */
+	public function follow(Follows $follows){
+		$data = array(
+			'user_id' 	=> $follows->user_id,
+			'following'	=> $follows->following,
+		);
+		
+		$id = (int) $follows->id;
+		
+		$this->tableGateway->insert($data);
+		$id = $this->tableGateway->getLastInsertValue();
+
+		return $id;
+	}
 }

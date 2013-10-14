@@ -10,6 +10,7 @@ return array(
             'UserStock\Controller\UserStockRest' => 'UserStock\Controller\UserStockRestController',
             'User\Controller\UserPerfilRest'     => 'User\Controller\UserPerfilRestController',
             'Operation\Controller\OperationRest' => 'Operation\Controller\OperationRestController',
+            'Follows\Controller\FollowsRest'     => 'Follows\Controller\FollowsRestController',
         ),
     ),
 
@@ -51,7 +52,7 @@ return array(
                                 'controller' => 'User\Controller\UserRest',
                             ),
                         ),
-                        'may_terminate' => false,
+                        'may_terminate' => true,
                         'child_routes' => array(
                             'user-rest-operation' => array(
                                 'type'    => 'literal',
@@ -109,6 +110,31 @@ return array(
                                             ),
                                             'defaults' => array(
                                                 'controller' => 'UserStock\Controller\UserStockRest',
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                            'user-rest-follow' => array(
+                                'type'    => 'literal',
+                                'options' => array(
+                                    'verb'     => 'post',
+                                    'route'    => '/follow',
+                                    'defaults' => array(
+                                        'controller' => 'Follows\Controller\FollowsRest',
+                                    ),
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'user-rest-follow-id' => array(
+                                        'type' => 'segment',
+                                        'options' => array(
+                                            'route' => '/:id[/]',
+                                            'constraints' => array(
+                                                'id' => '[0-9]+',
+                                            ),
+                                            'defaults' => array(
+                                                'controller' => 'Follows\Controller\FollowsRest',
                                             ),
                                         ),
                                     ),

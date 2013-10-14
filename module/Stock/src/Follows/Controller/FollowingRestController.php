@@ -54,6 +54,10 @@ class FollowingRestController extends AbstractRestfulController{
         ));
 	}
 
+	public function create($data){
+		die('here');
+	}
+
 	public function getFollowsTable(){
 		if(!$this->followsTable){
 			$sm = $this->getServiceLocator();
