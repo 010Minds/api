@@ -36,13 +36,13 @@ class FollowingRestController extends AbstractRestfulController{
 			$result->following = (int) $result->following;
 
 			//pegando os dados do following
-			$followersData       = $this->getUserTable()->getUser($result->following);
-			$result->followersId = $followersData->getArrayCopy();
+			$followersData = $this->getUserTable()->getUser($result->following);
+			$result->user  = $followersData->getArrayCopy();
 
 			//convertendo tipo
-			$result->followersId['id']      = (int) $result->followersId['id'];
-			$result->followersId['reais']   = (float) $result->followersId['reais'];
-			$result->followersId['dollars'] = (float) $result->followersId['dollars'];
+			$result->user['id']      = (int) $result->user['id'];
+			$result->user['reais']   = (float) $result->user['reais'];
+			$result->user['dollars'] = (float) $result->user['dollars'];
 
 			
 
