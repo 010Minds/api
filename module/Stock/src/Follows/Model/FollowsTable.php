@@ -38,6 +38,11 @@ class FollowsTable{
      */ 
 	public function getFollowing($id){
 		$id     = (int) $id;
+
+		if($id == 0){
+			throw new \Exception("The user id can not be zero");
+		}
+
 		$resultSet = $this->tableGateway->select(array('user_id' => $id));
 
 		if(empty($resultSet)){ 
@@ -114,6 +119,26 @@ class FollowsTable{
 		));
 
 		return $resultSet;	
+	}
+
+	/**
+     * Metodo generico para listar os  Following
+     * @param array array('user_id' => 1) or array('user_id' => 1,'permission' => false)
+     * @return array $resultSet
+     */ 
+	public function customFollowing($arrayParam){
+
+		if(empty($arrayParam)){
+			throw new \Exception("The array can not be empty");
+		}
+
+		$resultSet = $this->tableGateway->select($arrayParam);
+
+		if(empty($resultSet)){ 
+			throw new \Exception("Could not find following");
+		}
+
+		return $resultSet;
 	}
 
 	/**
