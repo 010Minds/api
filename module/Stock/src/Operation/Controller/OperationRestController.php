@@ -13,7 +13,7 @@ class OperationRestController extends AbstractRestfulController
 
     public function getList()
     {
-        $userId = $this->params()->fromRoute('userId', false);
+        $userId = $this->params()->fromRoute('uid', false);
         $status = $this->params()->fromRoute('status', false);
         $type   = $this->params()->fromRoute('type', false);
 
@@ -21,10 +21,13 @@ class OperationRestController extends AbstractRestfulController
 
         $data = array();
         foreach ($results as $result) {
+            $result->id     = (int) $result->id;
+            $result->userId = (int) $result->userId;
+            $result->value  = (float) $result->value;
+
             $data[] = $result;
         }
 
-        // return array('data' => $result);
         return new JsonModel(array(
             'data' => $data,
         ));
@@ -32,6 +35,7 @@ class OperationRestController extends AbstractRestfulController
 
     public function get($id)
     {
+        die('here');
         $this->response->setStatusCode(404);
 
         return new JsonModel(array(
@@ -51,6 +55,11 @@ class OperationRestController extends AbstractRestfulController
 
         $userId = $this->params()->fromRoute('userId', false);
         $data['user_id'] = $userId;
+
+        // TODO: When value is 0, get value from Stock
+        if ($data['value'] == 0) {
+            $data['value'] = 1;
+        }
 
         $operation = new Operation;
         $operation->exchangeArray($data);

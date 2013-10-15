@@ -142,6 +142,7 @@ class Module
             echo 'aqui';
             return;
         }
+        //var_dump($event->getController());
     }
 
     /**

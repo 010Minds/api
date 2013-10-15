@@ -61,7 +61,7 @@ class Follows implements InputFilterAwareInterface{
 			$inputFilter = new InputFilter();
 
 			$inputFilter->add(array(
-				'name'		=> 'id',
+				'name'		=> 'user_id',
 				'required'	=> false,
 				'filters'	=> array(
 					array('name' => 'Int'),

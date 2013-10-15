@@ -29,10 +29,10 @@ class StockRestController extends AbstractRestfulController
 
 		$requestParams = $this->params()->fromRoute(); 
 		
-		if(!empty($requestParams['stock']) && $requestParams['stock'] == 'stock'){
+		if(!empty($requestParams['uid'])){ // list route /api/exchange/:id/:stock
 			$results 	   = $this->getStockTable()->getStockExchange($requestParams['uid']);
 		}
-		else if(empty($requestParams['stock'])) {
+		else if(empty($requestParams['uid'])) {// list route api/stock
 			$results       = $this->getStockTable()->fetchAll();
 		} else {
 			$this->response->setStatusCode(404);
@@ -41,8 +41,18 @@ class StockRestController extends AbstractRestfulController
 		$data          = array();
 		$exchangeData  = array();
 		foreach ($results as $result) {
-			$exchangeData = $this->getExchangeTable()->getExchange($result->stockExchangeId);
+			$result->id 	 		 = (int) $result->id;
+			$result->current 		 = (float) $result->current;
+			$result->open 	 		 = (float) $result->open;
+			$result->high 	 		 = (float) $result->high;
+			$result->low 	 		 = (float) $result->low;
+			$result->percent 		 = (float) $result->percent;
+			$result->stockExchangeId = (int) $result->stockExchangeId;
+
+			$exchangeData     = $this->getExchangeTable()->getExchange($result->stockExchangeId);
 			$result->exchange = $exchangeData->getArrayCopy();
+			$result->exchange['id'] = (int) $result->exchange['id'];
+
 			$data[] = $result;
 		}
 
@@ -60,8 +70,17 @@ class StockRestController extends AbstractRestfulController
 	public function get($id)
 	{
 		$stock = $this->getStockTable()->getStock($id);
+		$stock->id 	 		     = (int) $stock->id;
+		$stock->current 		 = (float) $stock->current;
+		$stock->open 	 		 = (float) $stock->open;
+		$stock->high 	 		 = (float) $stock->high;
+		$stock->low 	 		 = (float) $stock->low;
+		$stock->percent 		 = (float) $stock->percent;
+		$stock->stockExchangeId  = (int) $stock->stockExchangeId;
+
 		$exchangeData = $this->getExchangeTable()->getExchange($stock->stockExchangeId);
 		$stock->exchange = $exchangeData->getArrayCopy();
+		$stock->exchange['id'] = (int) $stock->exchange['id'];
 
         return new JsonModel(array(
             'data' => $stock,
