@@ -70,6 +70,13 @@ class Timeline implements InputFilterAwareInterface{
 					array('name' => 'Int'),
 				),
 			));
+			$inputFilter->add(array(
+				'name'		=> 'type',
+				'required'	=> false,
+				'filters'	=> array(
+					array('name' => 'Int'),
+				),
+			));
 
 			$this->inputFilter = $inputFilter;
 		}

@@ -39,8 +39,24 @@ class TimelineRestController extends AbstractRestfulController{
 		#code...
 	}
 
-	public function create($id){
-		#code...
+	public function create($data){
+		$data['user_id'] =  (int) $this->params()->fromRoute('id', false);
+		
+		$form     = new TimelineForm();
+	    $timeline = new Timeline();
+
+	    $form->setInputFilter($timeline->getInputFilter());
+	    $form->setData($data);
+
+	    $id = 0;
+	    if ($form->isValid()) { 
+	        $timeline->exchangeArray($form->getData());
+	        $id = $this->getTimelineTable()->saveTimeline($timeline);
+	    }
+
+		return new JsonModel(array(
+            'data' => $this->getTimelineTable()->getTimeline($id),
+        ));
 	}
 
 	public function getTimelineTable(){
