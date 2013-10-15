@@ -54,7 +54,7 @@ class TimelineRestController extends AbstractRestfulController{
 	public function listTimeline($id,$followingId){
 		$data = array();
 		
-		$results = $this->getFollowsTable()->getFollowing($id);
+		$results = $this->getFollowsTable()->customFollowing(array('user_id' => $id,'permission' => true));
 		foreach($results as $result){
 			if($result->following == $followingId){
 				return $result->following;	
