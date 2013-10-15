@@ -11,11 +11,8 @@ class FollowsForm extends Form
 		parent::__construct('follows');
 
 		$this->add(array(
-			'name' => 'following',
-			'type' => 'Text',
-			'options' => array(
-				'label' => 'Following',
-			),
+			'name' => 'id',
+			'type' => 'Hidden',
 		));
 	}
 }
