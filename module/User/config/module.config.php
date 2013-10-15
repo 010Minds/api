@@ -12,6 +12,7 @@ return array(
             'Operation\Controller\OperationRest' => 'Operation\Controller\OperationRestController',
             'Follows\Controller\FollowsRest'     => 'Follows\Controller\FollowsRestController',
             'Follows\Controller\FollowingRest'   => 'Follows\Controller\FollowingRestController',
+            'Timeline\Controller\TimelineRest'   => 'Timeline\Controller\TimelineRestController',
         ),
     ),
 
@@ -205,6 +206,15 @@ return array(
                                     'route'    => '/following',
                                     'defaults' => array(
                                         'controller' => 'Follows\Controller\FollowingRest',
+                                    ),
+                                ),
+                            ),
+                            'user-rest-timeline' => array(
+                                'type'    => 'literal',
+                                'options' => array(
+                                    'route'    => '/timeline',
+                                    'defaults' => array(
+                                        'controller' => 'Timeline\Controller\TimelineRest',
                                     ),
                                 ),
                             ),
