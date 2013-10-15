@@ -5,13 +5,14 @@ use Stock\Model\Stock;
 use Stock\Model\StockTable;
 use UserStock\Model\UserStock;
 use UserStock\Model\UserStockTable;
-
 use Exchange\Model\Exchange;
 use Exchange\Model\ExchangeTable;
 use Operation\Model\Operation;
 use Operation\Model\OperationTable;
 use Follows\Model\Follows;
 use Follows\Model\FollowsTable;
+use Timeline\Model\Timeline;
+use Timeline\Model\TimelineTable;
 
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
@@ -110,6 +111,17 @@ class Module
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Follows());
                     return new TableGateway('follows', $dbAdapter, null, $resultSetPrototype);
+                },
+                'Timeline\Model\TimelineTable' => function($sm){
+                    $tableGateway = $sm->get('TimelineTableGateway');
+                    $table = new TimelineTable($tableGateway);
+                    return $table;
+                },
+                'TimelineTableGateway' => function($sm){
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Timeline());
+                    return new TableGateway('timeline', $dbAdapter, null, $resultSetPrototype);
                 },
             ),
         );
