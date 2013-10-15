@@ -23,11 +23,13 @@ class TimelineTable{
 	}
 
 	/**
-     * Metodo que lista toda a timeline
+     * Metodo que lista toda a timeline do usuário
+     * @param int $id da user
      * @return array $resultSet
      */
-	public function fetchAll(){
-		$resultSet = $this->tableGateway->select();
+	public function fetchAllUser($id){
+		$id        = (int) $id;
+		$resultSet = $this->tableGateway->select(array('user_id' => $id));
 
         return $resultSet;
 	}
@@ -81,7 +83,7 @@ class TimelineTable{
 
 	/**
 	 * deleta a timeline
-	 * @param int $id id do timeline a ser deletado
+	 * @param int $id id do Timeline a ser deletado
 	 */
 	public function deleteTimeline($id)	{
 		$this->tableGateway->delete(array('id'=>$id));

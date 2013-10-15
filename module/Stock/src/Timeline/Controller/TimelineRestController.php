@@ -17,8 +17,21 @@ class TimelineRestController extends AbstractRestfulController{
 	}
 
 	public function get($id){
+		$id   = (int) $id;
+		$data = array();
+
+		$results = $this->getTimelineTable()->fetchAllUser($id);
+
+		foreach ($results as $result) {
+			$result->id      = (int) $result->id;
+			$result->type    = (int) $result->type;
+			$result->user_id = (int) $result->user_id;
+
+			$data[] = $result;
+		}
+
 		return new JsonModel(array(
-            'data' => $id,
+            'data' => $data,
         ));
 	}
 
