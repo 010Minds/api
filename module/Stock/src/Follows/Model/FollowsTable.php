@@ -106,6 +106,16 @@ class FollowsTable{
 		return $row;
 	}
 
+	public function getPending($id){
+		$id = (int) $id;
+		$resultSet = $this->tableGateway->select(array(
+			'following'    =>  $id,
+			'permission' => 0,
+		));
+
+		return $resultSet;	
+	}
+
 	/**
 	 * Responsável por cadastrar a listas de follows
 	 * @param objeto Follows

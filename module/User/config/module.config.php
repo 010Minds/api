@@ -186,6 +186,18 @@ return array(
                                         'controller' => 'Follows\Controller\FollowsRest',
                                     ),
                                 ),
+                                'may_terminate' => true,
+                                'child_routes'  => array(
+                                    'user-rest-followers-pending' => array(
+                                        'type'    => 'literal',
+                                        'options' => array(
+                                            'route'    => '/pending',
+                                            'defaults' => array(
+                                                'controller' => 'Follows\Controller\FollowsRest',
+                                            ),
+                                        ),
+                                    ),
+                                ),
                             ),
                             'user-rest-following' => array(
                                 'type'    => 'literal',
