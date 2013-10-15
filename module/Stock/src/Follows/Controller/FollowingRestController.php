@@ -31,20 +31,28 @@ class FollowingRestController extends AbstractRestfulController{
 		$followersData = array();
 		foreach ($results as $result) {
 			//convertendo tipo
-			$result->id        = (int) $result->id;
-			$result->user_id   = (int) $result->user_id;
-			$result->following = (int) $result->following;
+			$result->id         = (int) $result->id;
+			$result->user_id    = (int) $result->user_id;
+			$result->following  = (int) $result->following;
+			$result->permission = (boolean) $result->permission;
 
 			//pegando os dados do following
 			$followersData = $this->getUserTable()->getUser($result->following);
 			$result->user  = $followersData->getArrayCopy();
-
-			//convertendo tipo
-			$result->user['id']      = (int) $result->user['id'];
-			$result->user['reais']   = (float) $result->user['reais'];
-			$result->user['dollars'] = (float) $result->user['dollars'];
-
-			
+			if($result->permission == true){
+				//convertendo tipo
+				$result->user['id']      = (int) $result->user['id'];
+				$result->user['reais']   = (float) $result->user['reais'];
+				$result->user['dollars'] = (float) $result->user['dollars'];
+			}
+			else{
+				unset($result->user['id']);
+				unset($result->user['mail']);
+				unset($result->user['user']);
+				unset($result->user['password']);
+				unset($result->user['reais']);
+				unset($result->user['dollars']);
+			}
 
 			$data[] = $result;
 		}
