@@ -2,6 +2,7 @@
 namespace Timeline\Model;
 
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\Sql\Select;
 
 /**
  * Class TimelineTable Model
@@ -23,15 +24,15 @@ class TimelineTable{
 	}
 
 	/**
-     * Metodo que lista toda a timeline do usuário
-     * @param int $id da user
+     * Metodo que lista toda a timeline 
      * @return array $resultSet
      */
-	public function fetchAllUser($id){
-		$id        = (int) $id;
-		$resultSet = $this->tableGateway->select(array('user_id' => $id));
-
-        return $resultSet;
+	public function fetchAll(){ 
+		$resultSet = $this->tableGateway->select(function(Select $select){
+			$select->order("date DESC");
+		});
+		
+		return $resultSet;
 	}
 
 	/**
@@ -58,16 +59,18 @@ class TimelineTable{
 	 * @return int $id
 	 */
 	public function saveTimeline(Timeline $timeline){
+		$objDate = new \DateTime('NOW');
+		$date    = $objDate->format('Y-m-d H:i:s');
 		$data = array(
 			'description' => $timeline->description,
-			'date' 		  => $timeline->date,
-			'type' 	      => $timeline->type,
+			'date' 		  => $date,
+			'type' 	      => TypeStatus::getType($timeline->type),
 			'user_id' 	  => $timeline->user_id,
 		);
 
 		$id = (int) $timeline->id;
 
-		if($id == 0){
+		if($id == 0){ 
 			$this->tableGateway->insert($data);
 			$id = $this->tableGateway->getLastInsertValue();
 		} else {

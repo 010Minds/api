@@ -5,6 +5,37 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
+
+class TypeStatus
+{
+	
+	const BUY  = 1;
+	const SELL = 2;
+
+	public static function getType($type)
+	{
+		switch($type)
+		{
+			case 'buy':
+				$type = self::BUY;
+				break;
+
+			case 'sell':
+				$type = self::SELL;
+				break;
+
+			default:
+				throw new \Exception("Type invalid in getType", 1);
+
+		}
+
+		$type = (int)$type;
+		return $type;
+	}
+}
+
+
+
 /**
  * Class Timeline Model
  * @api
@@ -74,7 +105,8 @@ class Timeline implements InputFilterAwareInterface{
 				'name'		=> 'type',
 				'required'	=> false,
 				'filters'	=> array(
-					array('name' => 'Int'),
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
 				),
 			));
 
