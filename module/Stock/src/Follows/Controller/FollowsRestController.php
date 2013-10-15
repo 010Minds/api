@@ -42,7 +42,7 @@ class FollowsRestController extends AbstractRestfulController{
 	}
 
 	/**
-	 * Lista todos os followers do user (é complemento do método get)
+	 * Lista todos os followers do user (é complemento do método)
 	 * @param int $id do user 
 	 * @return array $data
 	 */
@@ -58,15 +58,21 @@ class FollowsRestController extends AbstractRestfulController{
 			$result->following  = (int) $result->following;
 			$result->permission = (boolean) $result->permission;
 			
+			//pegando os dados do follower
+			$followersData = $this->getUserTable()->getUser($result->user_id);
+			$result->user  = $followersData->getArrayCopy();
 			if($result->permission == true){
-				//pegando os dados do follower
-				$followersData = $this->getUserTable()->getUser($result->user_id);
-				$result->user  = $followersData->getArrayCopy();
-
 				//convertendo tipo
 				$result->user['id']      = (int) $result->user['id'];
 				$result->user['reais']   = (float) $result->user['reais'];
 				$result->user['dollars'] = (float) $result->user['dollars'];
+			}else{
+				unset($result->user['id']);
+				unset($result->user['mail']);
+				unset($result->user['user']);
+				unset($result->user['password']);
+				unset($result->user['reais']);
+				unset($result->user['dollars']);
 			}
 
 			$data[] = $result;
