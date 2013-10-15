@@ -70,6 +70,7 @@ class TypeStatus
 	}
 }
 
+
 class Operation implements InputFilterAwareInterface
 {
 
@@ -93,7 +94,7 @@ class Operation implements InputFilterAwareInterface
 		$this->value 		= (!empty($data['value'])) ? $data['value'] : null;
 		$this->type 		= (!empty($data['type'])) ? $data['type'] : null;
 		$this->status 		= (!empty($data['status'])) ? $data['status'] : null;
-		$this->reason 		= (!empty($data['reason'])) ? $data['reason'] : null;
+		$this->reason		= (!empty($data['reason'])) ? $data['reason'] : null;
 		$this->createDate 	= (!empty($data['create_date'])) ? $data['create_date'] : null;
 	}
 

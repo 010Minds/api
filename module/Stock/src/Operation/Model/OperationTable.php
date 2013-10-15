@@ -103,9 +103,10 @@ class OperationTable
 
 	}
 
-/*	public function updateOperationPending(){
-
-	}*/
+	public function updateOperation($data, $where)
+	{
+		$this->tableGateway->update($data, $where);
+	}
 
 
 	public function deleteOperation($id, $idUser)

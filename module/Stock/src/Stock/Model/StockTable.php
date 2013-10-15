@@ -71,6 +71,11 @@ class StockTable
 		return $id;*/
 	}
 
+	public function updateStock($data, $where)
+	{
+		$this->tableGateway->update($data, $where);
+	}
+
 	public function deleteStock($id)
 	{
 		$this->tableGateway->delete(array('id'=>$id));

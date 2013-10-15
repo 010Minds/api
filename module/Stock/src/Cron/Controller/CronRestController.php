@@ -5,13 +5,19 @@ use Zend\Mvc\Controller\AbstractRestfulController;
 
 use Operation\Model\Operation;
 use Operation\Model\OperationTable;
+use Operation\Model\OperationStatus;
+use Operation\Model\TypeStatus;
+use UserStock\Model\UserStock;
+use UserStock\Model\UserStockTable;
 use Zend\View\Model\JsonModel;
 
 class CronRestController extends AbstractRestfulController
 {
 	protected $operationTable;
+    protected $stockTable;
     protected $exchangeTable;
     protected $userTable;
+    protected $userStockTable;
 
     public function getList()
     {
@@ -58,42 +64,22 @@ class CronRestController extends AbstractRestfulController
     }
 
     /*
-        Atualiza as operações pendentes no tempo determinado pelo Cron (ex: 30/30 min)
-
-         - Verificar operações pendentes
-
-        Pendentes para compra:
-         - Verificar saldo do usuário e a disponibilidade de volume do stock antes de efetivar a compra. Regra: (lance x qtd) >= saldo
-         - NASDAQ: Antes de comprar verificar o saldo em $(dolar).
-           Caso o saldo seja insuficiente, avisar que deve-se converter o saldo em R$(reais) para dolar antes da compra
-         - BOVESPA: Mesma regra que NASDAQ, porém convertendo $(dolar) em reais
-         - Se lance do usuário for menor que o valor atual => Não efetiva a compra e altera o status para "rejected" e informar o motivo
-         - Se o lance do usuário for maior ou igual ao valor de mercado e o volume do Stock maior ou igual ao volume requerido => Efetiva a compra.
-            - Stats muda para "accepted"
-            - Desconta o valor da compra do saldo do usário
-            - Diminui o volume do stock
-            - Inclui o Stock na tabela user_stock
-
-        Pendentes para venda:
-         - Se o valor para venda for maior que o valor de mercado => Não efetiva a venda e altera o status para "rejected" e informar o motivo
-         - Se valor para venda for menor ou igual ao valor de mercado => Efetiva a venda
-           - Stats muda para "accepted"
-           - Inclui o valor da venda no saldo do usuário
-           - Quantidade vendida retorna ao Stock
-           - Retira o Stock vendido da tabela user_stock
+        Verifica as operações pendentes
     */
     public function replaceList($data){
 
         // Busca as Operações Pendentes
         $resultSetOperation = $this->getOperationTable()->getOperationsStatus('pending');
 
-        $data = array();
         foreach ($resultSetOperation as $resultOperation) {
 
-            // Busca os dados da stock_exchange do stock atual
-            $resultSetExchange = $this->getExchangeTable()->getExchange($resultOperation->stockId);
+            // Busca os dados do Stock
+            $resultSetStock = $this->getStockTable()->getStock($resultOperation->stockId);
 
-            // Verifica a moeda que o stock está trabalhando
+            // Busca os dados da stock_exchange do stock atual
+            $resultSetExchange = $this->getExchangeTable()->getExchange($resultSetStock->stockExchangeId);
+
+            // Verifica a moeda que o stock_exchange está trabalhando
             switch ($resultSetExchange->currency) {
 
                 case '$':
@@ -117,61 +103,163 @@ class CronRestController extends AbstractRestfulController
             $reaisSaldo = $resultSetUser->reais;
             $lance = $resultOperation->qtd * $resultOperation->value;
 
-            if(${$currency.'Saldo'} >= $lance){
-                $msg = '[ Possui saldo ] lance -> ' . $lance . ' : saldo -> ' . ${$currency.'Saldo'}."\n";
 
-                /*
-                    - Altera 'status' da "operation" para 'accepted'
-                    - Altera 'reason' para 'Rejeitado por falta de saldo'
-                */
-            }
-            else{
-                $msg = '[ Saldo insuficiente ] lance -> ' . $lance . ' : saldo -> ' . ${$currency.'Saldo'}."\n";
+            // COMPRA
+            if($resultOperation->type == TypeStatus::BUY){
 
-                /*
-                    - Altera 'status' da "operation" para 'reject'
-                    - Altera 'reason' para 'Rejeitado por falta de saldo'
-                */
+                if(${$currency.'Saldo'} >= $lance){
+                    // Usuário possui saldo
 
-                continue;
-            }
+                    // Verefica se tem volume o suficiente disponível para compra
+                    if($resultSetStock->volume >= $resultOperation->qtd){
+                        // Volume disponível
 
+                        // Altera 'status' da "operation" para 'accepted'
+                        $data = array(  'status'=> OperationStatus::ACCEPTED,
+                                        'reason' => 'Compra efetuada com sucesso.');
+                        $where = array('id'=> $resultOperation->id);
+                        $this->getOperationTable()->updateOperation($data, $where);
 
+                        // Desconta o valor da compra do saldo do usuário
+                        $saldoAtualizado = ${$currency.'Saldo'} - $lance;
+                        $data = array($currency => $saldoAtualizado);
+                        $where = array('id' => $resultSetUser->id);
+                        $this->getUserTable()->updateUser($data, $where);
 
-            print_r($resultOperation);
-            print_r($resultSetExchange);
-            print_r($resultSetUser);
-            echo "\n".$msg."\n";
-            exit();
-        }
+                        // Diminui o volume comprado do Stock
+                        $volumeAtualizado = $resultSetStock->volume - $resultOperation->qtd;
+                        $data = array('volume' => $volumeAtualizado);
+                        $where = array('id' => $resultSetStock->id);
+                        $this->getStockTable()->updateStock($data, $where);
 
-        // Verifica Saldo do Usuário
+                        // Inclui Stock em User-stock
+                        date_default_timezone_set('America/Sao_Paulo');
+                        $dataAtual = date('Y/m/d H:i:s');
 
-        // Verifica Volume Disponível do Stock
+                        $data      = array( 'user_id' => $resultOperation->userId,
+                                            'stock_id' => $resultOperation->stockId,
+                                            'qtd' => $resultOperation->qtd,
+                                            'value' => $resultOperation->value,
+                                            'create_date' => $dataAtual,
+                                            );
 
-        // Se tudo ocorreu corretamente
-        // - Muda status da operação
-        // - Desconta saldo do usuário
-        // - Diminui volume do Stock
-        // - Inclui Stock em user_stock
+                        $userStock = new UserStock;
+                        $userStock->exchangeArray($data);
 
-/*        $pendingOperations = $this->getOperationTable()->updateOperationPending();
+                        $this->getUserStockTable()->saveUserStock($userStock);
 
-        for ($pendingOperations) {
-            if($buy) {
-                $boo = $getuserTable->validateBuySaldo($operation);
-                if ($boo (tem saldo)) {
+                    }
+                    else{
+                        // Volume indisponível
+
+                        // Altera 'status' da "operation" para 'rejected' e informa o motivo
+                        $data = array(  'status'=> OperationStatus::REJECTED,
+                                        'reason' => 'Compra rejeitada: Volume indisponível para compra.');
+                        $where = array('id'=> $resultOperation->id);
+                        $this->getOperationTable()->updateOperation($data, $where);
+                    }
+
 
                 }
+                else{
+                    // Usuário NÃO possui saldo
 
-            } else if ($sell) {
+                    // Altera 'status' da "operation" para 'rejected' e informa o motivo
+                    $data = array(  'status'=> OperationStatus::REJECTED,
+                                    'reason' => 'Compra rejeitada: Saldo insuficiente.');
+                    $where = array('id'=> $resultOperation->id);
+                    $this->getOperationTable()->updateOperation($data, $where);
+                }
+            }
+            // VENDA
+            else{
+
+                // Verifica se o valor para venda é menor ou igual ao valor de mercado
+                if($resultOperation->value <= $resultSetStock->current){
+
+                    // Retorna a quantidade do stock atual para o usuário atual
+                    $resultStocksOfUser = $this->getUserStockTable()->getStocksOfUser($resultOperation->userId, $resultOperation->stockId);
+                    $qtdStockToSell = 0;
+                    $StocksOfUser = array();
+                    $i=0;
+                    foreach($resultStocksOfUser as $resultStockOfUser){
+
+                        $StocksOfUser[$i]['id'] = $resultStockOfUser->id;
+                        $StocksOfUser[$i]['user_id'] = $resultStockOfUser->userId;
+                        $StocksOfUser[$i]['stock_id'] = $resultStockOfUser->stockId;
+                        $StocksOfUser[$i]['qtd'] = $resultStockOfUser->qtd;
+
+                        // Soma a quantidade disponível do stock atual
+                        $qtdStockToSell += $resultStockOfUser->qtd;
+
+                        $i++;
+                    }
+
+                    // Verifica se a quantidade de Stock, que o usuário possui, é maior ou igual a quantidade que colocou a venda
+                    if($qtdStockToSell >= $resultOperation->qtd){
+
+                        // Inclui o valor da venda ao saldo do usuário
+                        $saldoAtualizado = ${$currency.'Saldo'} + $lance;
+                        $data = array($currency => $saldoAtualizado);
+                        $where = array('id' => $resultSetUser->id);
+                        $this->getUserTable()->updateUser($data, $where);
+
+                        // Retorna o volume vendido ao Stock
+                        $volumeAtualizado = $resultSetStock->volume + $resultOperation->qtd;
+                        $data = array('volume' => $volumeAtualizado);
+                        $where = array('id' => $resultSetStock->id);
+                        $this->getStockTable()->updateStock($data, $where);
+
+                        // Tira o volume vendido do Stock do usuário
+                        foreach ($StocksOfUser as $StockOfUser) {
+
+                            // Se a quantidade a venda for maior ou igual a quantidade do stock atual, decrementa e exclui estoque
+                            if($resultOperation->qtd >= $StockOfUser['qtd']){
+
+                            }
+                            // Se a quantidade a venda for menor que a quantidade do stock atual, decrementa e atualiza estoque
+                            else{
+
+                            }
+
+                        }
+
+                        exit;
+
+                        // Altera 'status' da "operation" para 'accepted'
+                        $data = array(  'status'=> OperationStatus::ACCEPTED,
+                                        'reason' => 'Venda efetuada com sucesso.');
+                        $where = array('id'=> $resultOperation->id);
+                        $this->getOperationTable()->updateOperation($data, $where);
+
+                    }
+                    else{
+                        // Altera 'status' da "operation" para 'reject'
+                        $data = array(  'status'=> OperationStatus::REJECTED,
+                                        'reason' => 'Venda rejeitada: Volume colocado a venda é menor que o volume disponível no estoque do usuário.');
+                        $where = array('id'=> $resultOperation->id);
+                        $this->getOperationTable()->updateOperation($data, $where);
+                    }
+
+                }
+                else{
+                    // Altera 'status' da "operation" para 'rejected' e informa o motivo
+                    $data = array(  'status'=> OperationStatus::REJECTED,
+                                    'reason' => 'Venda rejeitada: Valor superior ao valor de mercado.');
+                    $where = array('id'=> $resultOperation->id);
+                    $this->getOperationTable()->updateOperation($data, $where);
+                }
 
             }
-        }*/
+
+
+
+        }
+
 
 
         return new JsonModel(array(
-            'data' => $pendingOperations,
+            'data' => "",
         ));
 
     }
@@ -195,6 +283,16 @@ class CronRestController extends AbstractRestfulController
         return $this->operationTable;
     }
 
+    // Table "stock"
+    public function getStockTable()
+    {
+        if(!$this->stockTable){
+            $sm = $this->getServiceLocator();
+            $this->stockTable = $sm->get('Stock\Model\StockTable');
+        }
+        return $this->stockTable;
+    }
+
     // Table "stock_exchange"
     public function getExchangeTable(){
         if(!$this->exchangeTable){
@@ -212,6 +310,16 @@ class CronRestController extends AbstractRestfulController
             $this->userTable = $sm->get('User\Model\UserTable');
         }
         return $this->userTable;
+    }
+
+    // Table "user_stock"
+    public function getUserStockTable()
+    {
+        if(!$this->userStockTable){
+            $sm = $this->getServiceLocator();
+            $this->userStockTable = $sm->get('UserStock\Model\UserStockTable');
+        }
+        return $this->userStockTable;
     }
 
 }
