@@ -37,6 +37,7 @@ class Module
                     'Operation'   => __DIR__ . '/src/' . 'Operation',
                     'Exchange'    => __DIR__ . '/src/' . 'Exchange',
                     'Follows'     => __DIR__ . '/src/' . 'Follows',
+                    'Timeline'    => __DIR__ . '/src/' . 'Timeline',
                 ),
             ),
         );
