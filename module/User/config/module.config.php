@@ -93,6 +93,30 @@ return array(
                                     ),
                                 ),
                             ),
+                            'user-rest-profile' => array(
+                                'type'    => 'literal',
+                                'options' => array(
+                                    'route'    => '/profile',
+                                    'defaults' => array(
+                                        'controller' => 'User\Controller\UserPerfilRest',
+                                    ),
+                                ),
+                                'may_terminate' => true,
+                                'child_routes'  => array(
+                                    'user-rest-profile-id' => array(
+                                        'type'    => 'segment',
+                                        'options' => array(
+                                            'route'    => '/:id',
+                                            'constraints' => array(
+                                                'id'     => '[0-9]+',
+                                            ),
+                                            'defaults' => array(
+                                                'controller' => 'User\Controller\UserPerfilRest',
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
                             'user-rest-mystock' => array(
                                 'type'    => 'literal',
                                 'options' => array(
@@ -167,18 +191,6 @@ return array(
                         ),
                         'may_terminate' => true,
                         'child_routes' => array(
-                            'user-rest-profile' => array(
-                                'type'    => 'literal',
-                                'options' => array(
-                                    'route'    => '/profile',
-                                    'constraints' => array(
-                                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                    ),
-                                    'defaults' => array(
-                                        'controller' => 'User\Controller\UserPerfilRest',
-                                    ),
-                                ),
-                            ),
                             'user-rest-followers' => array(
                                 'type'    => 'literal',
                                 'options' => array(
@@ -217,30 +229,6 @@ return array(
                                         'controller' => 'Timeline\Controller\TimelineRest',
                                     ),
                                 ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-            'profile-rest' => array(
-                'type'    => 'literal',
-                'options' => array(
-                    'route'    => '/api/profile',
-                    'defaults' => array(
-                        'controller' => 'User\Controller\UserPerfilRest',
-                    ),
-                ),
-                'may_terminate' => true,
-                'child_routes' => array(
-                    'profile-rest-id' => array(
-                        'type'    => 'segment',
-                        'options' => array(
-                            'route'    => '/:id',
-                            'constraints' => array(
-                                'id'     => '[0-9]+',
-                            ),
-                            'defaults' => array(
-                                'controller' => 'User\Controller\UserPerfilRest',
                             ),
                         ),
                     ),
