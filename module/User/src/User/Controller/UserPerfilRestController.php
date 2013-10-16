@@ -35,18 +35,66 @@ class UserPerfilRestController extends AbstractRestfulController{
         ));
 	}
 	
+	/**
+     * O método get retorna os dados do user visitado.
+     * @return array json_encode
+     */
 	public function get($id){
-		$requestParams   = $this->getRequest()->getUri();
-		$userUri         = $this->getPartsUri($requestParams,'user');
+		$userId = $this->params()->fromRoute('uid', false);
+
+		return new JsonModel(array(
+            'data' => $this->profile($userId,$id),
+        ));
+	}
+
+	/**
+     * Retorna o profile do user visitado respeitando as seguintes condições:
+     * Permission true/false. Se permission for false testa se o perfil é publico.
+     * @param int $userId id do meu usuário.
+     * @param int $id do usuario visitado. 
+     * @return array json_encode
+     */
+	public function profile($userId,$id){
 		$data            = array();
 		$followingsArray = array();
 
 		//get user
 		$results = $this->getUserTable()->getUser($id);
-
-		$results->id      = (int) $results->id; 
-		$results->reais   = (float) $results->reais;
-		$results->dollars = (float) $results->dollars; 
+		//userId my profile checking follow id
+		$resultsFollow = $this->getFollowsTable()->myFollow($id,$userId);
+		
+		//retirando o campo password não é necessario retorna-lo
+		unset($results->password);
+		$results->id             = (int) $results->id;
+		$results->public_profile = (boolean) $results->public_profile;
+		
+		//verificando se já segue ou está pendente de aprovação
+		if(!empty($resultsFollow)){
+			$results->permission = (boolean) $resultsFollow->permission; 	
+			
+			if($resultsFollow->permission == true){
+				$results->reais   = (float) $results->reais;
+				$results->dollars = (float) $results->dollars;
+			}else{
+				//teste se o perfil é publico/privado
+				if($results->public_profile == false){
+					//retirando alguns dados desnecessários
+					unset($results->dollars);
+					unset($results->reais);
+					unset($results->mail);
+					unset($results->user);
+				}
+			}
+		}else{
+			//teste se o perfil é publico/privado
+			if($results->public_profile == false){
+				//retirando alguns dados desnecessários
+				unset($results->dollars);
+				unset($results->reais);
+				unset($results->mail);
+				unset($results->user);
+			}
+		}
 		
 		//get total followers
 		$followers      = $this->getFollowsTable()->fullFollowers($id);
@@ -55,31 +103,11 @@ class UserPerfilRestController extends AbstractRestfulController{
 
 		$data = array(
 			'user'       => $results,
-			'follower'  => $followers,
-			'following' => $followings,
+			'follower'   => $followers,
+			'following'  => $followings,
 		);
-
-		if(!empty($userUri) && $userUri == 'user'){
-			//get list followings
-			$dataFollowings = $this->getFollowsTable()->getFollowing($id);
-			$i = 0;
-			foreach ($dataFollowings as $value) {
-				if($i <= 9){
-					$value->id        = (int) $value->id;
-					$value->user_id   = (int) $value->user_id;
-					$value->following = (int) $value->following;
-					//mudar para retornar o user
-					$followingsArray += array('user_'.$value->following => $value);
-					$i++;	
-				}
-			}
-
-			$data['followings'] = $followingsArray;
-		}
-
-		return new JsonModel(array(
-            'data' => $data,
-        ));
+		
+		return $data;
 	}
 
 	/**
@@ -140,7 +168,7 @@ class UserPerfilRestController extends AbstractRestfulController{
 						unset($resultUser->user);
 					}
 				}
-				$resultUser->permission     = (boolean) $value->permission;
+				$resultUser->permission = (boolean) $value->permission;
 				
 				$followingsArray += array('user_'.$value->following => $resultUser);
 				$i++;	
