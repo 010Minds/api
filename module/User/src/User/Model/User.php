@@ -15,17 +15,19 @@ class User implements InputFilterAwareInterface
 	public $name;
 	public $reais;
 	public $dollars;
+	public $public_profile;
 	protected $inputFilter;
 
 	public function exchangeArray($data)
 	{
-		$this->id 		= (!empty($data['id'])) ? $data['id'] : null;
-		$this->mail 	= (!empty($data['mail'])) ? $data['mail'] : null;
-		$this->user 	= (!empty($data['user'])) ? $data['user'] : null;
-		$this->password = (!empty($data['password'])) ? $data['password'] : null;
-		$this->name 	= (!empty($data['name'])) ? $data['name'] : null;
-		$this->reais 	= (!empty($data['reais'])) ? $data['reais'] : null;
-		$this->dollars 	= (!empty($data['dollars'])) ? $data['dollars'] : null;
+		$this->id 				= (!empty($data['id'])) ? $data['id'] : null;
+		$this->mail 			= (!empty($data['mail'])) ? $data['mail'] : null;
+		$this->user 			= (!empty($data['user'])) ? $data['user'] : null;
+		$this->password 		= (!empty($data['password'])) ? $data['password'] : null;
+		$this->name 			= (!empty($data['name'])) ? $data['name'] : null;
+		$this->reais 			= (!empty($data['reais'])) ? $data['reais'] : null;
+		$this->dollars 	        = (!empty($data['dollars'])) ? $data['dollars'] : null;
+		$this->public_profile 	= (!empty($data['public_profile'])) ? $data['public_profile'] : null;
 	}
 
 	public function getArrayCopy()
