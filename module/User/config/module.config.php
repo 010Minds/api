@@ -5,14 +5,15 @@ return array(
     # definir controllers
     'controllers' => array(
         'invokables' => array(
-            'User\Controller\User'               => 'User\Controller\UserController',
-            'User\Controller\UserRest'           => 'User\Controller\UserRestController',
-            'UserStock\Controller\UserStockRest' => 'UserStock\Controller\UserStockRestController',
-            'User\Controller\UserPerfilRest'     => 'User\Controller\UserPerfilRestController',
-            'Operation\Controller\OperationRest' => 'Operation\Controller\OperationRestController',
-            'Follows\Controller\FollowsRest'     => 'Follows\Controller\FollowsRestController',
-            'Follows\Controller\FollowingRest'   => 'Follows\Controller\FollowingRestController',
-            'Timeline\Controller\TimelineRest'   => 'Timeline\Controller\TimelineRestController',
+            'User\Controller\User'                  => 'User\Controller\UserController',
+            'User\Controller\UserRest'              => 'User\Controller\UserRestController',
+            'UserStock\Controller\UserStockRest'    => 'UserStock\Controller\UserStockRestController',
+            'User\Controller\UserPerfilRest'        => 'User\Controller\UserPerfilRestController',
+            'User\Controller\UserExchangeStockRest' => 'User\Controller\UserExchangeStockRestController',
+            'Operation\Controller\OperationRest'    => 'Operation\Controller\OperationRestController',
+            'Follows\Controller\FollowsRest'        => 'Follows\Controller\FollowsRestController',
+            'Follows\Controller\FollowingRest'      => 'Follows\Controller\FollowingRestController',
+            'Timeline\Controller\TimelineRest'      => 'Timeline\Controller\TimelineRestController',
         ),
     ),
 
@@ -112,6 +113,42 @@ return array(
                                             ),
                                             'defaults' => array(
                                                 'controller' => 'User\Controller\UserPerfilRest',
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                            'user-rest-exchange' => array(
+                                'type'    => 'literal',
+                                'options' => array(
+                                    'route'    => '/exchange',
+                                    'defaults' => array(
+                                        'controller' => 'User\Controller\UserExchangeStockRest',
+                                    ),
+                                ),
+                                'may_terminate' => true,
+                                'child_routes'  => array(
+                                    'user-rest-exchange-id' => array(
+                                        'type'    => 'segment',
+                                        'options' => array(
+                                            'route'    => '/:id',
+                                            'constraints' => array(
+                                                'id'     => '[0-9]+',
+                                            ),
+                                            'defaults' => array(
+                                                'controller' => 'User\Controller\UserExchangeStockRest',
+                                            ),
+                                        ),
+                                        'may_terminate' => true,
+                                        'child_routes'  => array(
+                                            'user-rest-exchange-id-mystock' => array(
+                                                'type'    => 'literal',
+                                                'options' => array(
+                                                    'route'    => '/mystock',
+                                                    'defaults' => array(
+                                                        'controller' => 'User\Controller\UserExchangeStockRest',
+                                                    ),
+                                                ),
                                             ),
                                         ),
                                     ),
