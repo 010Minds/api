@@ -40,9 +40,9 @@ class UserTable
 			'user' 		     => $user->user,
 			'password' 	     => $user->password,
 			'name' 		     => $user->name,
-			'reais'		     => $user->reais,
+			'reais'		     => (float)$user->reais,
 			'dollars' 	     => $user->dollars,
-			'public_profile' => $user->dollars,
+			'public_profile' => $user->public_profile,
 		);
 
 		$id = (int) $user->id;
