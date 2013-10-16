@@ -222,7 +222,30 @@ return array(
                     ),
                 ),
             ),
-            
+            'profile-rest' => array(
+                'type'    => 'literal',
+                'options' => array(
+                    'route'    => '/api/profile',
+                    'defaults' => array(
+                        'controller' => 'User\Controller\UserPerfilRest',
+                    ),
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'profile-rest-id' => array(
+                        'type'    => 'segment',
+                        'options' => array(
+                            'route'    => '/:id',
+                            'constraints' => array(
+                                'id'     => '[0-9]+',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'User\Controller\UserPerfilRest',
+                            ),
+                        ),
+                    ),
+                ),
+            ),
         ),
     ),
 
