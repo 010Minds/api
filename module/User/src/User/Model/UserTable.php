@@ -36,12 +36,13 @@ class UserTable
 	public function saveUser(User $user)
 	{
 		$data = array(
-			'mail' 		=> $user->mail,
-			'user' 		=> $user->user,
-			'password' 	=> $user->password,
-			'name' 		=> $user->name,
-			'reais'		=> $user->reais,
-			'dollars' 	=> $user->dollars,
+			'mail' 		     => $user->mail,
+			'user' 		     => $user->user,
+			'password' 	     => $user->password,
+			'name' 		     => $user->name,
+			'reais'		     => (float)$user->reais,
+			'dollars' 	     => $user->dollars,
+			'public_profile' => $user->public_profile,
 		);
 
 		$id = (int) $user->id;

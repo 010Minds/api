@@ -1,0 +1,1 @@
+ALTER TABLE `mydb`.`user` ADD COLUMN `public_profile` TINYINT NOT NULL DEFAULT 0  AFTER `dollars` ;
