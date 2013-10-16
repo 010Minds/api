@@ -50,7 +50,6 @@ class OperationTable
 		$where['status'] = $status;
 		$resultSet = $this->tableGateway->select($where);
 
-
 		return $resultSet;
 	}
 

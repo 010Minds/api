@@ -91,6 +91,41 @@ class UserStockTable
 		return $row;
 	}
 
+	/**
+	 * Método que efetiva a venda do stock do user
+	 * @param int $idStock id do stock.
+	 * @param int $qtdSell quantidade vendida do estoque
+	 * @return $qtdSell retorna a quantidade que não baixou do stock
+	 */
+	public function decrementStockUser($idStock, $qtdSell){
+		$idStock = (int) $idStock;
+		$qtdSell = (int) $qtdSell;
+
+		// Busca stock atual
+		$stockData = $this->getStock($idStock);
+
+        // Atualiza quantidade restante a ser vendida
+        $qtdProcessada = -(($qtdSell*-1) + $stockData->qtd);
+
+        // Se a quantidade a venda for maior ou igual a quantidade do stock atual, exclui estoque
+        if($qtdSell >= $stockData->qtd){
+
+        	$this->deleteUserStock($idStock, $stockData->userId);
+        }
+        // Se a quantidade a venda for menor que a quantidade do stock atual, atualiza estoque
+        else{
+
+        	// Caso o valor seja negativo, muda o sinal e atualiza o estoque do usuario
+        	if($qtdProcessada <0){
+        		$qtdSell = ($qtdProcessada*-1);
+        	}
+
+        	$this->tableGateway->update(array('qtd'=>$qtdSell), array('id' => $idStock));
+        }
+
+        return $qtdProcessada;
+	}
+
 
 	public function saveUserStock(UserStock $userStock)
 	{
@@ -110,7 +145,7 @@ class UserStockTable
 			$id = $this->tableGateway->getLastInsertValue();
 		} else {
 			if($this->getUserStock($id)){
-				$this->tableGateway->update($data, array('user_id' => $id));
+				$this->tableGateway->update($data, array('id' => $id));
 			} else {
 				throw new \Exception("UserStock id does not exist");
 			}
