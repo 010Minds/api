@@ -25,18 +25,77 @@ class FollowsRestController extends AbstractRestfulController{
 	 * @return array $data
 	 */
 	public function get($id){
-		$id = (int) $id;
+		$id         = (int) $id;
+		$data       = array();
+		$request    = $this->getRequest()->getUri();
+		$pendingUri = $this->getPartsUri($request,'pending');
 
-		$results = $this->getFollowsTable()->getFollowers($id);	
+		//lista as pendencias do user
+		if(!empty($pendingUri) && $pendingUri == 'pending'){
+			$data = $this->listPending($id);
+		}else{
+			$data = $this->listFollowers($id);
+		}
+		return new JsonModel(array(
+            'data' => $data,
+        ));
+	}
 
+	/**
+	 * Lista todos os followers do user (é complemento do método)
+	 * @param int $id do user 
+	 * @return array $data
+	 */
+	public function listFollowers($id){
+		$results       = $this->getFollowsTable()->getFollowers($id);	
 		$data          = array();
 		$followersData = array();
+		
 		foreach ($results as $result) {
 			//convertendo tipo
-			$result->id        = (int) $result->id;
-			$result->user_id   = (int) $result->user_id;
-			$result->following = (int) $result->following;
+			$result->id         = (int) $result->id;
+			$result->user_id    = (int) $result->user_id;
+			$result->following  = (int) $result->following;
+			$result->permission = (boolean) $result->permission;
 			
+			//pegando os dados do follower
+			$followersData = $this->getUserTable()->getUser($result->user_id);
+			$result->user  = $followersData->getArrayCopy();
+			if($result->permission == true){
+				//convertendo tipo
+				$result->user['id']      = (int) $result->user['id'];
+				$result->user['reais']   = (float) $result->user['reais'];
+				$result->user['dollars'] = (float) $result->user['dollars'];
+			}else{
+				unset($result->user['id']);
+				unset($result->user['mail']);
+				unset($result->user['user']);
+				unset($result->user['password']);
+				unset($result->user['reais']);
+				unset($result->user['dollars']);
+			}
+
+			$data[] = $result;
+		}
+		return $data;
+	}
+
+	/**
+	 * Método que lista os followers pendentes(aguardando a aprovação do user)
+	 * @param int $id do user 
+	 * @return array $data
+	 */
+	public function listPending($id){
+		$data    = array();
+		$results = $this->getFollowsTable()->getPending($id);
+
+		foreach($results as $result){
+			//convertendo tipo
+			$result->id         = (int) $result->id;
+			$result->user_id    = (int) $result->user_id;
+			$result->following  = (int) $result->following;
+			$result->permission = (boolean) $result->permission;
+
 			//pegando os dados do follower
 			$followersData = $this->getUserTable()->getUser($result->user_id);
 			$result->user  = $followersData->getArrayCopy();
@@ -48,10 +107,7 @@ class FollowsRestController extends AbstractRestfulController{
 
 			$data[] = $result;
 		}
-
-		return new JsonModel(array(
-            'data' => $data,
-        ));
+		return $data;
 	}
 
 	/**

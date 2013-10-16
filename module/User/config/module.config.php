@@ -12,6 +12,7 @@ return array(
             'Operation\Controller\OperationRest' => 'Operation\Controller\OperationRestController',
             'Follows\Controller\FollowsRest'     => 'Follows\Controller\FollowsRestController',
             'Follows\Controller\FollowingRest'   => 'Follows\Controller\FollowingRestController',
+            'Timeline\Controller\TimelineRest'   => 'Timeline\Controller\TimelineRestController',
         ),
     ),
 
@@ -186,6 +187,18 @@ return array(
                                         'controller' => 'Follows\Controller\FollowsRest',
                                     ),
                                 ),
+                                'may_terminate' => true,
+                                'child_routes'  => array(
+                                    'user-rest-followers-pending' => array(
+                                        'type'    => 'literal',
+                                        'options' => array(
+                                            'route'    => '/pending',
+                                            'defaults' => array(
+                                                'controller' => 'Follows\Controller\FollowsRest',
+                                            ),
+                                        ),
+                                    ),
+                                ),
                             ),
                             'user-rest-following' => array(
                                 'type'    => 'literal',
@@ -193,6 +206,15 @@ return array(
                                     'route'    => '/following',
                                     'defaults' => array(
                                         'controller' => 'Follows\Controller\FollowingRest',
+                                    ),
+                                ),
+                            ),
+                            'user-rest-timeline' => array(
+                                'type'    => 'literal',
+                                'options' => array(
+                                    'route'    => '/timeline',
+                                    'defaults' => array(
+                                        'controller' => 'Timeline\Controller\TimelineRest',
                                     ),
                                 ),
                             ),

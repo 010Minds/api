@@ -1,9 +1,9 @@
 <?php
-namespace Follows\Form;
+namespace Timeline\Form;
 
 use Zend\Form\Form;
 
-class FollowsForm extends Form
+class TimelineForm extends Form
 {
 	public function __construct($name=null)
 	{
@@ -11,8 +11,11 @@ class FollowsForm extends Form
 		parent::__construct('follows');
 
 		$this->add(array(
-			'name' => 'id',
-			'type' => 'Hidden',
+			'name' => 'description',
+			'type' => 'Text',
+			'options' => array(
+				'label' => 'Description',
+			),
 		));
 	}
 }

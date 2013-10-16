@@ -38,6 +38,11 @@ class FollowsTable{
      */ 
 	public function getFollowing($id){
 		$id     = (int) $id;
+
+		if($id == 0){
+			throw new \Exception("The user id can not be zero");
+		}
+
 		$resultSet = $this->tableGateway->select(array('user_id' => $id));
 
 		if(empty($resultSet)){ 
@@ -106,6 +111,36 @@ class FollowsTable{
 		return $row;
 	}
 
+	public function getPending($id){
+		$id = (int) $id;
+		$resultSet = $this->tableGateway->select(array(
+			'following'    =>  $id,
+			'permission' => 0,
+		));
+
+		return $resultSet;	
+	}
+
+	/**
+     * Metodo generico para listar os  Following
+     * @param array array('user_id' => 1) or array('user_id' => 1,'permission' => false)
+     * @return array $resultSet
+     */ 
+	public function customFollowing($arrayParam){
+
+		if(empty($arrayParam)){
+			throw new \Exception("The array can not be empty");
+		}
+
+		$resultSet = $this->tableGateway->select($arrayParam);
+
+		if(empty($resultSet)){ 
+			throw new \Exception("Could not find following");
+		}
+
+		return $resultSet;
+	}
+
 	/**
 	 * Responsável por cadastrar a listas de follows
 	 * @param objeto Follows
@@ -114,7 +149,7 @@ class FollowsTable{
 	public function follow(Follows $follows){
 		$data = array(
 			'user_id' 	=> $follows->user_id,
-			'following'	=> $follows->following,
+			'following'	=> $follows->id,
 		);
 		
 		$id = (int) $follows->id;

@@ -24,10 +24,14 @@ class Follows implements InputFilterAwareInterface{
 	 */
 	public $created_date;
 	/**
+	 * permission true/false
+	 */
+	public $permission;
+	/**
 	 * following from user table
 	 */
 	public $following;
-	public $followersId;
+	public $user;
 	protected $inputFilter;
 
 	/**
@@ -38,7 +42,8 @@ class Follows implements InputFilterAwareInterface{
 		$this->user_id  	 = (!empty($data['user_id'])) ? $data['user_id'] : null;
 		$this->created_date  = (!empty($data['created_date'])) ? $data['created_date'] : null;
 		$this->following  	 = (!empty($data['following'])) ? $data['following'] : null;
-		$this->followersId   = (!empty($data['followersId'])) ? $data['followersId'] : null;
+		$this->user          = (!empty($data['user'])) ? $data['user'] : null;
+		$this->permission    = (!empty($data['permission'])) ? $data['permission'] : false;
 	}
 
 	/**
