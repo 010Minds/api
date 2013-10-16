@@ -25,7 +25,6 @@ class ExchangeRestController extends AbstractRestfulController{
 	}
 
 	public function get($id){
-		
 		$exchange = $this->getExchangeTable()->getExchange($id);
 
 		$exchange->id = (int) $exchange->id;

@@ -5,6 +5,7 @@ use Zend\Mvc\Controller\AbstractRestfulController;
 
 use Follows\Model\Follows;
 use Follows\Model\FollowsTable;
+use Follows\Form\FollowsForm;
 use UserStock\Model\UserStock;
 use UserStock\Model\UserStockTable;
 use Zend\View\Model\JsonModel;
@@ -14,68 +15,143 @@ class FollowsRestController extends AbstractRestfulController{
 	protected $followsTable;
 	protected $userTable;
 
+	
+	public function getList(){
+		#code...
+	}
+
 	/**
 	 * Método que lista os followers pegando id por request
 	 * @return array $data
 	 */
-	public function getList(){
-		$requestParams = $this->params()->fromRoute();
-		$requestUri    = $this->getRequest()->getUri(); 
-		
-		//procurando a palavra chave following na request passada
-		$followingUri = $this->getPartsUri($requestUri,'following');
-		//procurando a palavra chave followers na request passada
-		$followersUri = $this->getPartsUri($requestUri,'followers');
-		
-		if(!empty($followingUri) && $followingUri == 'following' && !empty($requestParams['uid'])){
-			$results = $this->getFollowsTable()->getFollowing($requestParams['uid']);
-		}
-		else if(!empty($requestParams['uid']) && !empty($followersUri) && $followersUri == 'followers'){
-			$results = $this->getFollowsTable()->getFollowers($requestParams['uid']);
-		}else {
-			$this->response->setStatusCode(404);
-			return new JsonModel();
-		}
-		$data          = array();
-		$followersData = array();
-		foreach ($results as $result) {
-			//convertendo tipo
-			$result->id        = (int) $result->id;
-			$result->user_id   = (int) $result->user_id;
-			$result->following = (int) $result->following;
-			
-			if(!empty($followingUri) && $followingUri == 'following' && !empty($requestParams['uid'])){
-				//pegando os dados do following
-				$followersData       = $this->getUserTable()->getUser($result->following);
-				$result->followersId = $followersData->getArrayCopy();
-			}
-			else{
-				//pegando os dados do follower
-				$followersData       = $this->getUserTable()->getUser($result->user_id);
-				$result->followersId = $followersData->getArrayCopy();
-			}
+	public function get($id){
+		$id         = (int) $id;
+		$data       = array();
+		$request    = $this->getRequest()->getUri();
+		$pendingUri = $this->getPartsUri($request,'pending');
 
-			//convertendo tipo
-			$result->followersId['id']      = (int) $result->followersId['id'];
-			$result->followersId['reais']   = (float) $result->followersId['reais'];
-			$result->followersId['dollars'] = (float) $result->followersId['dollars'];
-
-			$data[] = $result;
+		//lista as pendencias do user
+		if(!empty($pendingUri) && $pendingUri == 'pending'){
+			$data = $this->listPending($id);
+		}else{
+			$data = $this->listFollowers($id);
 		}
-
 		return new JsonModel(array(
             'data' => $data,
         ));
 	}
 
-	public function get($id){
+	/**
+	 * Lista todos os followers do user (é complemento do método)
+	 * @param int $id do user 
+	 * @return array $data
+	 */
+	public function listFollowers($id){
+		$results       = $this->getFollowsTable()->getFollowers($id);	
+		$data          = array();
+		$followersData = array();
 		
-		/*$follow = $this->getFollowsTable()->getFollows($id);
+		foreach ($results as $result) {
+			//convertendo tipo
+			$result->id         = (int) $result->id;
+			$result->user_id    = (int) $result->user_id;
+			$result->following  = (int) $result->following;
+			$result->permission = (boolean) $result->permission;
+			
+			//pegando os dados do follower
+			$followersData = $this->getUserTable()->getUser($result->user_id);
+			$result->user  = $followersData->getArrayCopy();
+			if($result->permission == true){
+				//convertendo tipo
+				$result->user['id']      = (int) $result->user['id'];
+				$result->user['reais']   = (float) $result->user['reais'];
+				$result->user['dollars'] = (float) $result->user['dollars'];
+			}else{
+				unset($result->user['id']);
+				unset($result->user['mail']);
+				unset($result->user['user']);
+				unset($result->user['password']);
+				unset($result->user['reais']);
+				unset($result->user['dollars']);
+			}
+
+			$data[] = $result;
+		}
+		return $data;
+	}
+
+	/**
+	 * Método que lista os followers pendentes(aguardando a aprovação do user)
+	 * @param int $id do user 
+	 * @return array $data
+	 */
+	public function listPending($id){
+		$data    = array();
+		$results = $this->getFollowsTable()->getPending($id);
+
+		foreach($results as $result){
+			//convertendo tipo
+			$result->id         = (int) $result->id;
+			$result->user_id    = (int) $result->user_id;
+			$result->following  = (int) $result->following;
+			$result->permission = (boolean) $result->permission;
+
+			//pegando os dados do follower
+			$followersData = $this->getUserTable()->getUser($result->user_id);
+			$result->user  = $followersData->getArrayCopy();
+
+			//convertendo tipo
+			$result->user['id']      = (int) $result->user['id'];
+			$result->user['reais']   = (float) $result->user['reais'];
+			$result->user['dollars'] = (float) $result->user['dollars'];
+
+			$data[] = $result;
+		}
+		return $data;
+	}
+
+	/**
+	 * Método que cadastra os follows - (quem estou seguindo)
+	 * @return array $data
+	 */
+	public function create($data){
+		//id do user
+		$data['user_id'] =  (int) $this->params()->fromRoute('uid', false);
+        
+        $form    = new FollowsForm();
+	    $follows = new Follows();
+
+		$form->setInputFilter($follows->getInputFilter());
+	    $form->setData($data);
+	    
+	    $id = 0;
+	    if ($form->isValid()) { 
+	        $follows->exchangeArray($form->getData());
+	        $id = $this->getFollowsTable()->follow($follows);
+	    }
+	    
+	    return new JsonModel(array(
+	        'data' => $this->getFollowsTable()->getObjFollow($id),
+	    ));
+	}
+
+	/**
+	 * Método responsável pelo unfollow (deixar de seguir)
+	 * @param int $id id do follow a ser deletado
+	 * @param int $user_id get por request id do user
+	 * @return array json_encode 
+	 */
+	public function delete($id){
+		//id do follow (seguindo)
+		$id      =  (int) $id;   
+		//id do user
+		$user_id =  (int) $this->params()->fromRoute('uid', false);
+
+		$this->getFollowsTable()->deleteFollow($user_id,$id);
 
 		return new JsonModel(array(
-            'data' => $follow,
-        ));*/
-		
+			'data' => 'deleted',
+		));
 	}
 
 	public function getFollowsTable(){

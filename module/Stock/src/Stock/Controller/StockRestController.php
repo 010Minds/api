@@ -29,10 +29,10 @@ class StockRestController extends AbstractRestfulController
 
 		$requestParams = $this->params()->fromRoute(); 
 		
-		if(!empty($requestParams['stock']) && $requestParams['stock'] == 'stock'){
+		if(!empty($requestParams['uid'])){ // list route /api/exchange/:id/:stock
 			$results 	   = $this->getStockTable()->getStockExchange($requestParams['uid']);
 		}
-		else if(empty($requestParams['stock'])) {
+		else if(empty($requestParams['uid'])) {// list route api/stock
 			$results       = $this->getStockTable()->fetchAll();
 		} else {
 			$this->response->setStatusCode(404);

@@ -60,8 +60,14 @@ class UserTable
 		return $id;
 	}
 
+	public function updateUser($data, $where)
+	{
+		$this->tableGateway->update($data, $where);
+	}
+
 	public function deleteUser($id)
 	{
 		$this->tableGateway->delete(array('id'=>$id));
 	}
+
 }

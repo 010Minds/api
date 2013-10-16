@@ -5,13 +5,14 @@ use Stock\Model\Stock;
 use Stock\Model\StockTable;
 use UserStock\Model\UserStock;
 use UserStock\Model\UserStockTable;
-
 use Exchange\Model\Exchange;
 use Exchange\Model\ExchangeTable;
 use Operation\Model\Operation;
 use Operation\Model\OperationTable;
 use Follows\Model\Follows;
 use Follows\Model\FollowsTable;
+use Timeline\Model\Timeline;
+use Timeline\Model\TimelineTable;
 
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
@@ -32,11 +33,13 @@ class Module
             ),
             'Zend\Loader\StandardAutoloader' => array(
                 'namespaces' => array(
-                    __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
-                    'UserStock'   => __DIR__ . '/src/' . 'UserStock',
-                    'Operation'   => __DIR__ . '/src/' . 'Operation',
-                    'Exchange'    => __DIR__ . '/src/' . 'Exchange',
+                    __NAMESPACE__   => __DIR__ . '/src/' . __NAMESPACE__,
+                    'UserStock'     => __DIR__ . '/src/' . 'UserStock',
+                    'Operation'     => __DIR__ . '/src/' . 'Operation',
+                    'Exchange'      => __DIR__ . '/src/' . 'Exchange',
+                    'Cron'          => __DIR__ . '/src/' . 'Cron',
                     'Follows'     => __DIR__ . '/src/' . 'Follows',
+                    'Timeline'    => __DIR__ . '/src/' . 'Timeline',
                 ),
             ),
         );
@@ -110,6 +113,17 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Follows());
                     return new TableGateway('follows', $dbAdapter, null, $resultSetPrototype);
                 },
+                'Timeline\Model\TimelineTable' => function($sm){
+                    $tableGateway = $sm->get('TimelineTableGateway');
+                    $table = new TimelineTable($tableGateway);
+                    return $table;
+                },
+                'TimelineTableGateway' => function($sm){
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Timeline());
+                    return new TableGateway('timeline', $dbAdapter, null, $resultSetPrototype);
+                },
             ),
         );
     }
@@ -130,7 +144,7 @@ class Module
         $sharedEvents->attach('Zend\Mvc\Application', 'dispatch', array($this, 'threatDispatch'), 99);
         $sharedEvents->attach('Zend\Mvc\Application', 'dispatch.error', array($this, 'threadDispatchError'), 100);
     }
-    
+
     /**
      * Trata as excepitions da rota correspontende a controller/action
      * @return json_encode
@@ -141,6 +155,7 @@ class Module
             echo 'aqui';
             return;
         }
+        //var_dump($event->getController());
     }
 
     /**

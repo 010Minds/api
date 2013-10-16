@@ -5,15 +5,18 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
+
 class Exchange implements InputFilterAwareInterface{
 
 	public $id;
 	public $name;
+	public $currency;
 	protected $inputFilter;
 
 	public function exchangeArray($data){
-		$this->id 	 = (!empty($data['id'])) ? $data['id'] : null;
-		$this->name  = (!empty($data['name'])) ? $data['name'] : null;
+		$this->id 	 	= (!empty($data['id'])) ? $data['id'] : null;
+		$this->name  	= (!empty($data['name'])) ? $data['name'] : null;
+		$this->currency = (!empty($data['currency'])) ? $data['currency'] : null;
 	}
 
 	public function getArrayCopy(){
