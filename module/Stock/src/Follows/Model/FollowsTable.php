@@ -68,6 +68,18 @@ class FollowsTable{
 		return $resultSet;
 	}
 
+	public function myFollow($id,$userId){
+		$id        = (int) $id;
+		$resultSet = $this->tableGateway->select(array('following' => $id, 'user_id' => $userId));
+		$row = $resultSet->current();
+		
+		if(!$row){
+			$row = false;
+		}
+		
+		return $row;
+	}
+
 	/**
      * Metodo que retorna a quantidade de followers
      * @param int $id do user que está querendo saber os seus seguidores
