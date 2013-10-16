@@ -32,6 +32,23 @@ class StockTable
 		return $row;
 	}
 
+	public function getCustomStock($arrayParam)
+	{
+		if(empty($arrayParam)){
+			throw new \Exception("The array can not be empty");
+		}
+		
+		$resultSet = $this->tableGateway->select($arrayParam);
+		
+		$row = $resultSet->current();
+
+		if(empty($row)){ 
+			throw new \Exception("Could not find stock");
+		}
+
+		return $row;
+	}
+
 	public function getStockExchange($id){
 		$id = (int) $id;
 		$resultSet = $this->tableGateway->select(array('stock_exchange_id' => $id ));
