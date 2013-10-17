@@ -55,7 +55,7 @@ class UserStockRestController extends AbstractRestfulController
 	}
 
 	/**
-     * O método get pega a url /api/user/:uid/:my-stock/:id
+     * O método get pega a url /api/user/:uid/:my-stock/:id (teste)
      *
      * @api
      * @return array json_encode
