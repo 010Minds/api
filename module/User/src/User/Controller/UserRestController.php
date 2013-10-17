@@ -43,12 +43,12 @@ class UserRestController extends AbstractRestfulController
 	public function create($data)
 	{
 	    $form = new UserForm();
-	    $user = new User();
+	    $user = new User(); 
 	    $form->setInputFilter($user->getInputFilter());
 	    $form->setData($data);
-	    $id = 0;
-	    if ($form->isValid()) {
-	        $user->exchangeArray($form->getData());
+	    $id = 0;  
+	    if ($form->isValid()) { 
+	        $user->exchangeArray($form->getData()); 
 	        $id = $this->getUserTable()->saveUser($user);
 	    }
 
@@ -58,7 +58,7 @@ class UserRestController extends AbstractRestfulController
 	}
 
 	public function update($id, $data)
-	{
+	{ 
 	    $data['id'] = $id;
 	    $user = $this->getUserTable()->getUser($id);
 	    $form  = new UserForm();

@@ -40,13 +40,13 @@ class UserTable
 			'user' 		     => $user->user,
 			'password' 	     => $user->password,
 			'name' 		     => $user->name,
-			'reais'		     => (float)$user->reais,
+			'reais'		     => $user->reais,
 			'dollars' 	     => $user->dollars,
 			'public_profile' => $user->public_profile,
 		);
 
 		$id = (int) $user->id;
-
+		
 		if($id == 0){
 			$this->tableGateway->insert($data);
 			$id = $this->tableGateway->getLastInsertValue();
