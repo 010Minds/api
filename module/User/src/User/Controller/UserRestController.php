@@ -84,7 +84,8 @@ class UserRestController extends AbstractRestfulController
 		));
 	}
 
-	public function deleteList(){
+	public function deleteList()
+	{
 		throw new NotImplementedException("This method not exists");
 	}
 
