@@ -7,6 +7,9 @@ use Operation\Model\Operation;
 use Operation\Model\OperationTable;
 use Zend\View\Model\JsonModel;
 
+// Exceptions
+use Application\Exception\NotImplementedException;
+
 class OperationRestController extends AbstractRestfulController
 {
 	protected $operationTable;
@@ -75,6 +78,15 @@ class OperationRestController extends AbstractRestfulController
     {
     }
 */
+
+    public function update($id,$data){
+       throw new NotImplementedException("This method not exists");
+    }
+
+    public function replaceList($data){
+        throw new NotImplementedException("This method not exists");
+    }
+
     public function delete($id)
     {
         $userId = $this->params()->fromRoute('userId', false);

@@ -8,6 +8,9 @@ use UserStock\Model\UserStockTable;
 use Stock\Model\StockTable;
 use Zend\View\Model\JsonModel;
 
+// Exceptions
+use Application\Exception\NotImplementedException;
+
 class UserStockRestController extends AbstractRestfulController
 {
 	protected $userStockTable;
@@ -157,6 +160,7 @@ class UserStockRestController extends AbstractRestfulController
 	    return new JsonModel(array(
 	        'data' => $this->getStockTable()->getStock($id),
 	    ));*/
+		throw new NotImplementedException("This method not exists");
 	}
 
 	public function update($id, $data)
@@ -174,6 +178,7 @@ class UserStockRestController extends AbstractRestfulController
 	    return new JsonModel(array(
 	        'data' => $this->getStockTable()->getStock($id),
 	    ));*/
+		throw new NotImplementedException("This method not exists");
 	}
 
 
