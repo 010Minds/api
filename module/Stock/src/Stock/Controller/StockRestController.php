@@ -128,19 +128,28 @@ class StockRestController extends AbstractRestfulController
 		return $this->exchangeTable;
 	}
 
-	public function create($data){
+	public function create($data)
+	{
 		throw new NotImplementedException("This method not exists");
 	}
 
-	public function update($id,$data){
+	public function update($id,$data)
+	{
 		throw new NotImplementedException("This method not exists");
 	}
 
-	public function replaceList($data){
+	public function replaceList($data)
+	{
         throw new NotImplementedException("This method not exists");
     }
 
-	public function delete($id){
+	public function delete($id)
+	{
+		throw new NotImplementedException("This method not exists");
+	}
+
+	public function deleteList()
+    {
 		throw new NotImplementedException("This method not exists");
 	}
 }
