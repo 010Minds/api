@@ -186,6 +186,11 @@ class UserStockRestController extends AbstractRestfulController
 		throw new NotImplementedException("This method not exists");
 	}
 
+	public function deleteList()
+    {
+		throw new NotImplementedException("This method not exists");
+	}
+
 
 
 	public function getUserStockTable()
