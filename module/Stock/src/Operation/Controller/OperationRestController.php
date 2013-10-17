@@ -45,6 +45,7 @@ class OperationRestController extends AbstractRestfulController
             'data' => 'not-implemented',
         ));
     }
+
 /*
     public function setIdentifierName($name)
     {
@@ -72,17 +73,16 @@ class OperationRestController extends AbstractRestfulController
             'data' => $this->getOperationTable()->get($id),
         ));
     }
-/*
-    public function update($id, $data)
-    {
-    }
-*/
 
     public function update($id,$data){
        throw new NotImplementedException("This method not exists");
     }
 
     public function replaceList($data){
+        throw new NotImplementedException("This method not exists");
+    }
+
+    public function deleteList(){
         throw new NotImplementedException("This method not exists");
     }
 
