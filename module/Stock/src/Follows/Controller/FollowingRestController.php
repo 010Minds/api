@@ -42,6 +42,7 @@ class FollowingRestController extends AbstractRestfulController{
 			//pegando os dados do following
 			$followersData = $this->getUserTable()->getUser($result->following);
 			$result->user  = $followersData->getArrayCopy();
+			$result->user['public_profile'] = (boolean) $result->user['public_profile'];
 			if($result->permission == true){
 				//convertendo tipo
 				$result->user['id']      = (int) $result->user['id'];

@@ -49,8 +49,7 @@ class FollowsRestController extends AbstractRestfulController{
 	 * @param int $id do user 
 	 * @return array $data
 	 */
-	public function listFollowers($id)
-	{
+	public function listFollowers($id){
 		$results       = $this->getFollowsTable()->getFollowers($id);	
 		$data          = array();
 		$followersData = array();
@@ -171,6 +170,12 @@ class FollowsRestController extends AbstractRestfulController{
 	{
         throw new NotImplementedException("This method not exists");
     }
+
+    public function deleteList()
+	{
+		throw new NotImplementedException("This method not exists");
+		
+	}
 
 	public function update($id,$data)
 	{
