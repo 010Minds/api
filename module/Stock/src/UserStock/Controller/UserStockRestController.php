@@ -21,9 +21,10 @@ class UserStockRestController extends AbstractRestfulController
 	public function getList()
 	{
 		$requestParams = $this->params()->fromRoute();
+
 		//id do user
 		$uid = $requestParams['uid'];
-		
+
 		$results 	= $this->getUserStockTable()->getStockUser($uid,'');
 		$data       = array();
 		$stockData  = array();
@@ -44,7 +45,7 @@ class UserStockRestController extends AbstractRestfulController
 			$result->stock['country'] 		  = (int) $result->stock['country'];
 			$result->stock['stockExchangeId'] = (int) $result->stock['stockExchangeId'];
 			$result->stock['volume'] 		  = (float) $result->stock['volume'];
-			
+
 			$data[] = $result;
 		}
 
@@ -66,7 +67,7 @@ class UserStockRestController extends AbstractRestfulController
 		$uid           = $requestParams['uid'];
 
 		$results = $this->getUserStockTable()->getStockUser($uid,$id);
-		
+
 		$data       = array();
 		$stockData  = array();
 		foreach ($results as $result) {
