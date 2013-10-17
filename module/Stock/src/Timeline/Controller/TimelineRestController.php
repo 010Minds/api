@@ -65,11 +65,18 @@ class TimelineRestController extends AbstractRestfulController{
 		}
 	}
 
-	public function delete($id){
+	public function delete($id)
+	{
 		throw new NotImplementedException("This method not exists");
 	}
 
-	public function replaceList($data){
+	public function replaceList($data)
+	{
+        throw new NotImplementedException("This method not exists");
+    }
+
+    public function update($id,$data)
+	{
         throw new NotImplementedException("This method not exists");
     }
 

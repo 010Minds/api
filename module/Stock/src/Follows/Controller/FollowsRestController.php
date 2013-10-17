@@ -32,12 +32,17 @@ class FollowsRestController extends AbstractRestfulController{
 		$data       = array();
 		$request    = $this->getRequest()->getUri();
 		$pendingUri = $this->getPartsUri($request,'pending');
+		$unfollowUri = $this->getPartsUri($request,'unfollow');
 
 		//lista as pendencias do user
 		if(!empty($pendingUri) && $pendingUri == 'pending'){
 			$data = $this->listPending($id);
 		}else{
-			$data = $this->listFollowers($id);
+			if(empty($unfollowUri) && $unfollowUri != 'unfollow' ){
+				$data = $this->listFollowers($id);	
+			}else{
+				throw new NotImplementedException("This method not exists");
+			}
 		}
 		return new JsonModel(array(
             'data' => $data,
@@ -49,7 +54,7 @@ class FollowsRestController extends AbstractRestfulController{
 	 * @param int $id do user 
 	 * @return array $data
 	 */
-	public function listFollowers($id){
+	public function listFollowers($id){ 
 		$results       = $this->getFollowsTable()->getFollowers($id);	
 		$data          = array();
 		$followersData = array();
@@ -89,7 +94,7 @@ class FollowsRestController extends AbstractRestfulController{
 	 * @return array $data
 	 */
 	public function listPending($id)
-	{
+	{ 
 		$data    = array();
 		$results = $this->getFollowsTable()->getPending($id);
 
@@ -120,24 +125,30 @@ class FollowsRestController extends AbstractRestfulController{
 	 */
 	public function create($data)
 	{
-		//id do user
-		$data['user_id'] =  (int) $this->params()->fromRoute('uid', false);
-        
-        $form    = new FollowsForm();
-	    $follows = new Follows();
+		$request     = $this->getRequest()->getUri();
+		$unfollowUri = $this->getPartsUri($request,'unfollow');
+		if(empty($unfollowUri) && $unfollowUri != 'unfollow' ){
+			//id do user
+			$data['user_id'] =  (int) $this->params()->fromRoute('uid', false);
+	        
+	        $form    = new FollowsForm();
+		    $follows = new Follows();
 
-		$form->setInputFilter($follows->getInputFilter());
-	    $form->setData($data);
-	    
-	    $id = 0;
-	    if ($form->isValid()) { 
-	        $follows->exchangeArray($form->getData());
-	        $id = $this->getFollowsTable()->follow($follows);
-	    }
-	    
-	    return new JsonModel(array(
-	        'data' => $this->getFollowsTable()->getObjFollow($id),
-	    ));
+			$form->setInputFilter($follows->getInputFilter());
+		    $form->setData($data);
+		    
+		    $id = 0;
+		    if ($form->isValid()) { 
+		        $follows->exchangeArray($form->getData());
+		        $id = $this->getFollowsTable()->follow($follows);
+		    }
+		    
+		    return new JsonModel(array(
+		        'data' => $this->getFollowsTable()->getObjFollow($id),
+		    ));
+		}else{
+			throw new NotImplementedException("This method not exists");
+		}
 	}
 
 	/**
