@@ -68,7 +68,11 @@ class UserTable
 
 	public function deleteUser($id)
 	{
-		$this->tableGateway->delete(array('id'=>$id));
+		$return = $this->tableGateway->delete(array('id'=>$id));
+		if(empty($return)){
+			throw new \Exception("User id does not exist. Please provide a valid id");
+		}
+		return $return;
 	}
 
 }

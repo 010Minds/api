@@ -79,11 +79,13 @@ class UserRestController extends AbstractRestfulController
 
 	public function delete($id)
 	{
-		$this->getUserTable()->deleteUser($id);
-
 		return new JsonModel(array(
-			'data' => 'deleted',
+			'data' => $this->getUserTable()->deleteUser($id),
 		));
+	}
+
+	public function deleteList(){
+		throw new NotImplementedException("This method not exists");
 	}
 
 	public function replaceList($data){
