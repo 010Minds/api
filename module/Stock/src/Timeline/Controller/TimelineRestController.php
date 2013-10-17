@@ -10,6 +10,9 @@ use Follows\Model\Follows;
 use Follows\Model\FollowsTable;
 use Zend\View\Model\JsonModel;
 
+// Exceptions
+use Application\Exception\NotImplementedException;
+
 class TimelineRestController extends AbstractRestfulController{
 
 	protected $timelineTable;
@@ -63,8 +66,12 @@ class TimelineRestController extends AbstractRestfulController{
 	}
 
 	public function delete($id){
-		#code...
+		throw new NotImplementedException("This method not exists");
 	}
+
+	public function replaceList($data){
+        throw new NotImplementedException("This method not exists");
+    }
 
 	public function create($data){
 		$data['user_id'] =  (int) $this->params()->fromRoute('id', false);

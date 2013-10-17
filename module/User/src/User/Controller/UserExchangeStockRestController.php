@@ -99,6 +99,10 @@ class UserExchangeStockRestController extends AbstractRestfulController
 		throw new NotImplementedException("This method not exists");
 	}
 
+	public function replaceList($data){
+        throw new NotImplementedException("This method not exists");
+    }
+
 	/**
      * O método getUserStockTable faz a selecão da classe table com o banco de dados.
      * @return objeto table

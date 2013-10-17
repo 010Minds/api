@@ -77,6 +77,10 @@ class FollowingRestController extends AbstractRestfulController{
 		throw new NotImplementedException("This method not exists");
 	}
 
+	public function replaceList($data){
+        throw new NotImplementedException("This method not exists");
+    }
+
 	public function getFollowsTable(){
 		if(!$this->followsTable){
 			$sm = $this->getServiceLocator();

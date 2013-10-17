@@ -136,6 +136,10 @@ class StockRestController extends AbstractRestfulController
 		throw new NotImplementedException("This method not exists");
 	}
 
+	public function replaceList($data){
+        throw new NotImplementedException("This method not exists");
+    }
+
 	public function delete($id){
 		throw new NotImplementedException("This method not exists");
 	}

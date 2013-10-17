@@ -157,6 +157,10 @@ class FollowsRestController extends AbstractRestfulController{
 		));
 	}
 
+	public function replaceList($data){
+        throw new NotImplementedException("This method not exists");
+    }
+
 	public function update($id,$data){
 		throw new NotImplementedException("This method not exists");
 		

@@ -49,6 +49,10 @@ class ExchangeRestController extends AbstractRestfulController{
 	public function delete($id){
 		throw new NotImplementedException("This method not exists");
 	}
+	
+	public function replaceList($data){
+        throw new NotImplementedException("This method not exists");
+    }
 
 	public function getExchangeTable(){
 		if(!$this->exchangeTable){

@@ -8,6 +8,9 @@ use User\Form\UserForm;
 use User\Model\UserTable;
 use Zend\View\Model\JsonModel;
 
+// Exceptions
+use Application\Exception\NotImplementedException;
+
 class UserRestController extends AbstractRestfulController
 {
 	protected $userTable;
@@ -82,6 +85,10 @@ class UserRestController extends AbstractRestfulController
 			'data' => 'deleted',
 		));
 	}
+
+	public function replaceList($data){
+        throw new NotImplementedException("This method not exists");
+    }
 
 	public function getUserTable()
 	{

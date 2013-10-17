@@ -146,6 +146,10 @@ class UserStockRestController extends AbstractRestfulController
 		}
 	}
 
+	public function replaceList($data){
+        throw new NotImplementedException("This method not exists");
+    }
+
 	public function create($data)
 	{
 /*	    $form = new Form();
