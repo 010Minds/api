@@ -67,13 +67,13 @@ return array(
                                 ),
                                 'may_terminate' => true,
                                 'child_routes' => array(
-                                    'user-rest-operation-option' => array(
+                                    'user-rest-operation-status' => array(
                                         'type' => 'segment',
                                         'options' => array(
-                                            'route' => '/:option[/:type]',
+                                            'route' => '/:status[/:type]',
                                             'constraints' => array(
-                                                'type' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                                'option' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                                'status' => '[a-zA-Z]*',
+                                                'type' => '[a-zA-Z]*',
                                             ),
                                             'defaults' => array(
                                                 'controller' => 'Operation\Controller\OperationRest',

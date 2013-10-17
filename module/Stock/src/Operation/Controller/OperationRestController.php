@@ -52,8 +52,7 @@ class OperationRestController extends AbstractRestfulController
 */
     public function create($data)
     {
-
-        $userId = $this->params()->fromRoute('userId', false);
+        $userId = $this->params()->fromRoute('uid', false);
         $data['user_id'] = $userId;
 
         // TODO: When value is 0, get value from Stock
@@ -77,7 +76,7 @@ class OperationRestController extends AbstractRestfulController
 */
     public function delete($id)
     {
-        $userId = $this->params()->fromRoute('userId', false);
+        $userId = $this->params()->fromRoute('uid', false);
 
         $this->getOperationTable()->deleteOperation($id, $userId);
 

@@ -22,8 +22,8 @@ class OperationTable
 	public function getOperations($idUser, $status, $type)
 	{
 		$idUser = (int)$idUser;
-		$status = (int)$status;
-		$type 	= (int)$type;
+		$status = $status;
+		$type 	= $type;
 
 		$where= array();
 		if($status){
@@ -81,12 +81,12 @@ class OperationTable
 
 		if($id == 0){
 
-	        // add date
+	        // get date
 	        date_default_timezone_set('America/Sao_Paulo');
 	        $dataAtual = date('Y/m/d H:i:s');
 	        $data['create_date'] = $dataAtual;
 	        // status default in save
-	        $data['status'] = 'pending';
+	        $data['status'] = OperationStatus::PENDING;
 
 	        $data['type'] = TypeStatus::getType($data['type']);
 

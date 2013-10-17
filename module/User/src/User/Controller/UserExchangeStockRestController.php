@@ -13,7 +13,7 @@ use Zend\View\Model\JsonModel;
  *
  * @api
  * @author Alexsandro André <andre@010minds.com>
- * 
+ *
  */
 class UserExchangeStockRestController extends AbstractRestfulController
 {
@@ -26,7 +26,7 @@ class UserExchangeStockRestController extends AbstractRestfulController
      * @return array json_encode
      */
 	public function getList()
-	{ 
+	{
 		return new JsonModel(array(
             'data' => 'getList',
         ));
@@ -39,7 +39,7 @@ class UserExchangeStockRestController extends AbstractRestfulController
 	public function get($id)
 	{
 		$userId = (int) $this->params()->fromRoute('uid', false);
-		
+
 		return new JsonModel(array(
             'data' => $this->getMyStockByExchange($userId,$id),
         ));
@@ -80,7 +80,7 @@ class UserExchangeStockRestController extends AbstractRestfulController
 
 			$data[] = $result;
 		}
-		
+
 		return $data;
 	}
 

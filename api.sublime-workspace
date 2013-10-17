@@ -191,38 +191,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "module/Stock/src/Cron/Controller/CronRestController.php",
-			"settings":
-			{
-				"buffer_size": 14248,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "api.sublime-project",
-			"settings":
-			{
-				"buffer_size": 86,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "module/Stock/src/UserStock/Model/UserStockTable.php",
-			"settings":
-			{
-				"buffer_size": 3970,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "module/Stock/src/UserStock/Model/UserStock.php",
-			"settings":
-			{
-				"buffer_size": 1447,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -272,8 +240,28 @@
 	},
 	"file_history":
 	[
-		"/var/www-store/vendor/zendframework/zendframework/library/Zend/Db/TableGateway/TableGateway.php",
+		"/var/www-store/module/Stock/src/Cron/Controller/CronRestController.php",
+		"/var/www-store/module/User/src/User/Controller/UserExchangeStockRestController.php",
+		"/var/www-store/module/User/config/module.config.php",
 		"/var/www-store/module/Stock/src/Stock/Model/StockTable.php",
+		"/var/www-store/data/database/007-mydb-timeline-alter-table.sql",
+		"/var/www-store/data/database/e-011-mydb-soperation-update-data.sql",
+		"/var/www-store/data/database/e-012-mydb-altertable-stock-field-volume.sql",
+		"/var/www-store/data/database/e-013-mydb-altertable-stock-field-reason.sql",
+		"/var/www-store/data/database/010-mydb-stock_exchange-update-data.sql",
+		"/var/www-store/data/database/009-mydb-stock_exchange-add-column-currency.sql",
+		"/var/www-store/data/database/008-mydb-operation-update-data-field-type.sql",
+		"/var/www-store/data/database/004-mydb-follows-add-column-permission.sql",
+		"/var/www-store/data/database/005-mydb-follows-alter-table-permission.sql",
+		"/var/www-store/data/database/e-006-mydb-operation-update_data_field_status.sql",
+		"/var/www-store/data/database/006-mydb-timeline.sql",
+		"/var/www-store/data/database/e-007-mydb-operation-change-column-type.sql",
+		"/var/www-store/data/database/001-mydb-user_stock-increment-id.sql",
+		"/var/www-store/module/Stock/src/UserStock/Model/UserStock.php",
+		"/var/www-store/module/Stock/src/UserStock/Model/UserStockTable.php",
+		"/var/www-store/api.sublime-project",
+		"/home/user/.config/sublime-text-3/Packages/Default/Default (Linux).sublime-keymap",
+		"/var/www-store/vendor/zendframework/zendframework/library/Zend/Db/TableGateway/TableGateway.php",
 		"/var/www-store/module/User/src/User/Model/UserTable.php",
 		"/var/www-store/module/Stock/src/Operation/Model/Operation.php",
 		"/var/www-store/module/Stock/src/Operation/Model/OperationTable.php",
@@ -282,15 +270,11 @@
 		"/var/www-store/module/Stock/src/Operation/Controller/OperationRestController.php",
 		"/var/www-store/module/Stock/config/module.config.php",
 		"/var/www-store/module/Stock/Module.php",
-		"/var/www-store/module/Stock/src/UserStock/Model/UserStock.php",
 		"/var/www-store/module/Stock/src/UserStock/Controller/UserStockRestController.php",
 		"/var/www-store/module/Stock/src/UserStock/Controller/UserStockController.php",
-		"/var/www-store/module/Stock/src/UserStock/Model/UserStockTable.php",
 		"/var/www-store/module/Stock/src/Exchange/Model/Exchange.php",
 		"/var/www-store/module/Stock/src/Stock/Controller/StockRestController.php",
-		"/var/www-store/module/User/config/module.config.php",
 		"/var/www-store/module/Stock/src/Exchange/Model/ExchangeTable.php",
-		"/var/www-store/module/Stock/src/Cron/Controller/CronRestController.php",
 		"/var/www-store/module/User/src/User/Controller/UserRestController.php",
 		"/var/www-store/module/Stock/src/Exchange/Controller/ExchangeRestController.php",
 		"/var/www-store/vendor/zendframework/zendframework/library/Zend/Mvc/Controller/AbstractRestfulController.php",
@@ -383,23 +367,7 @@
 		"/var/www/module/Usuario/view/usuario/usuario/delete.phtml",
 		"/var/www/module/Usuario/view/usuario/usuario/edit.phtml",
 		"/var/www/module/Usuario/view/usuario/usuario/index.phtml",
-		"/var/www/module/Usuario/src/Usuario/Controller/UsuarioController.php",
-		"/var/www/module/Usuario/src/Usuario/Model/UsuarioTable.php",
-		"/var/www/module/Usuario/src/Usuario/Model/Usuario.php",
-		"/var/www/module/Usuario/src/Usuario/Form/UsuarioForm.php",
-		"/var/www/module/Usuario/view/usuario/usuario/add.phtml",
-		"/var/www/module/Album/view/album/album/delete.phtml",
-		"/var/www/module/Album/view/album/album/edit.phtml",
-		"/var/www/module/Album/view/album/album/add.phtml",
-		"/var/www/module/Usuario/autoload_classmap.php",
-		"/var/www/module/Usuario/Module.php",
-		"/home/user/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
-		"/home/user/.config/sublime-text-3/Packages/Default/Default (Linux).sublime-keymap",
-		"/var/www/vendor/ZF2/tests/ZendTest/ServiceManager/TestAsset/CallableWithMutableCreationOptions.php",
-		"/var/www/module/Contato/src/Contato/Controller/ContatosController.php",
-		"/var/www/module/Contato/Module.php",
-		"/var/www/module/Contato/view/contato/contatos/index.phtml",
-		"/var/www/module/Ezequiel/src/Ezequiel/Controller/EzequielController.php"
+		"/var/www/module/Usuario/src/Usuario/Controller/UsuarioController.php"
 	],
 	"find":
 	{
@@ -578,121 +546,8 @@
 	"groups":
 	[
 		{
-			"selected": 1,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "module/Stock/src/Cron/Controller/CronRestController.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 14248,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								5597,
-								5597
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 2295.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "api.sublime-project",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 86,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JSON.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "module/Stock/src/UserStock/Model/UserStockTable.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3970,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								179,
-								179
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "module/Stock/src/UserStock/Model/UserStock.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1447,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								458,
-								458
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				}
 			]
 		},
 		{
