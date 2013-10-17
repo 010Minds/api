@@ -172,7 +172,10 @@ class Module
 
 
         if ($event->isError() && $event->getError() == 'error-exception') {
-            $model->ex        = $event->getParam('exception');
+            /*if ($event->getParam('exception') instanceof \Application\Exception\NotImplementedException) {
+                var_dump($event->getParam('exception'));
+            }*/
+            //$model->ex        = $event->getParam('exception');
             $model->exception = $event->getParam('exception')->getMessage();
             $model->code      = $event->getParam('exception')->getCode();
             $model->file      = $event->getParam('exception')->getFile() ;
