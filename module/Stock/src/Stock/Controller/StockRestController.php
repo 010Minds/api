@@ -8,6 +8,9 @@ use Stock\Model\StockTable;
 use Exchange\Model\ExchangeTable;
 use Zend\View\Model\JsonModel;
 
+// Exceptions
+use Application\Exception\NotImplementedException;
+
 /**
  * StockRestController classe que gerencia as ações
  *
@@ -127,44 +130,26 @@ class StockRestController extends AbstractRestfulController
 
 	public function create($data)
 	{
-/*	    $form = new Form();
-	    $stock = new Stock();
-	    $form->setInputFilter($stock->getInputFilter());
-	    $form->setData($data);
-	    $id = 0;
-	    if ($form->isValid()) {
-	        $stock->exchangeArray($form->getData());
-	        $id = $this->getStockTable()->saveStock($stock);
-	    }
-
-	    return new JsonModel(array(
-	        'data' => $this->getStockTable()->getStock($id),
-	    ));*/
+		throw new NotImplementedException("This method not exists");
 	}
 
-	public function update($id, $data)
+	public function update($id,$data)
 	{
-/*	    $data['id'] = $id;
-	    $stock = $this->getStockTable()->getStock($id);
-	    $form  = new StockForm();
-	    $form->bind($stock);
-	    $form->setInputFilter($stock->getInputFilter());
-	    $form->setData($data);
-	    if ($form->isValid()) {
-	        $id = $this->getStockTable()->saveStock($form->getData());
-	    }
-
-	    return new JsonModel(array(
-	        'data' => $this->getStockTable()->getStock($id),
-	    ));*/
+		throw new NotImplementedException("This method not exists");
 	}
+
+	public function replaceList($data)
+	{
+        throw new NotImplementedException("This method not exists");
+    }
 
 	public function delete($id)
 	{
-/*		$this->getStockTable()->deleteStock($id);
+		throw new NotImplementedException("This method not exists");
+	}
 
-		return new JsonModel(array(
-			'data' => 'deleted',
-		));*/
+	public function deleteList()
+    {
+		throw new NotImplementedException("This method not exists");
 	}
 }

@@ -9,6 +9,9 @@ use UserStock\Model\UserStock;
 use UserStock\Model\UserStockTable;
 use Zend\View\Model\JsonModel;
 
+// Exceptions
+use Application\Exception\NotImplementedException;
+
 class FollowingRestController extends AbstractRestfulController{
 
 	protected $followsTable;
@@ -63,8 +66,20 @@ class FollowingRestController extends AbstractRestfulController{
 	}
 
 	public function create($data){
-		die('here');
+		throw new NotImplementedException("This method not exists");
 	}
+
+	public function update($id,$data){
+		throw new NotImplementedException("This method not exists");
+	}
+
+	public function delete($id){
+		throw new NotImplementedException("This method not exists");
+	}
+
+	public function replaceList($data){
+        throw new NotImplementedException("This method not exists");
+    }
 
 	public function getFollowsTable(){
 		if(!$this->followsTable){

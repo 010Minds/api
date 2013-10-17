@@ -8,6 +8,9 @@ use User\Form\UserForm;
 use User\Model\UserTable;
 use Zend\View\Model\JsonModel;
 
+// Exceptions
+use Application\Exception\NotImplementedException;
+
 class UserRestController extends AbstractRestfulController
 {
 	protected $userTable;
@@ -43,12 +46,12 @@ class UserRestController extends AbstractRestfulController
 	public function create($data)
 	{
 	    $form = new UserForm();
-	    $user = new User();
+	    $user = new User(); 
 	    $form->setInputFilter($user->getInputFilter());
 	    $form->setData($data);
-	    $id = 0;
-	    if ($form->isValid()) {
-	        $user->exchangeArray($form->getData());
+	    $id = 0;  
+	    if ($form->isValid()) { 
+	        $user->exchangeArray($form->getData()); 
 	        $id = $this->getUserTable()->saveUser($user);
 	    }
 
@@ -58,7 +61,7 @@ class UserRestController extends AbstractRestfulController
 	}
 
 	public function update($id, $data)
-	{
+	{ 
 	    $data['id'] = $id;
 	    $user = $this->getUserTable()->getUser($id);
 	    $form  = new UserForm();
@@ -76,12 +79,19 @@ class UserRestController extends AbstractRestfulController
 
 	public function delete($id)
 	{
-		$this->getUserTable()->deleteUser($id);
-
 		return new JsonModel(array(
-			'data' => 'deleted',
+			'data' => $this->getUserTable()->deleteUser($id),
 		));
 	}
+
+	public function deleteList()
+	{
+		throw new NotImplementedException("This method not exists");
+	}
+
+	public function replaceList($data){
+        throw new NotImplementedException("This method not exists");
+    }
 
 	public function getUserTable()
 	{

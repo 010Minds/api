@@ -126,7 +126,7 @@ class User implements InputFilterAwareInterface
 
 			$inputFilter->add(array(
 				'name'		=> 'public_profile',
-				'required'	=> true,
+				'required'	=> false,
 				'filters'	=> array(
 					array('name' => 'StripTags'),
 					array('name' => 'StringTrim'),

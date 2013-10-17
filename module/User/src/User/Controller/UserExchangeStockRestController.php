@@ -8,6 +8,9 @@ use UserStock\Model\UserStockTable;
 use Stock\Model\StockTable;
 use Zend\View\Model\JsonModel;
 
+// Exceptions
+use Application\Exception\NotImplementedException;
+
 /**
  * classe que gerencia o perfil do usuário
  *
@@ -83,6 +86,22 @@ class UserExchangeStockRestController extends AbstractRestfulController
 
 		return $data;
 	}
+
+	public function create($data){
+		throw new NotImplementedException("This method not exists");
+	}
+
+	public function update($id,$data){
+		throw new NotImplementedException("This method not exists");
+	}
+
+	public function delete($id){
+		throw new NotImplementedException("This method not exists");
+	}
+
+	public function replaceList($data){
+        throw new NotImplementedException("This method not exists");
+    }
 
 	/**
      * O método getUserStockTable faz a selecão da classe table com o banco de dados.

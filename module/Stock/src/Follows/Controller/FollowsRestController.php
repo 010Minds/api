@@ -10,6 +10,9 @@ use UserStock\Model\UserStock;
 use UserStock\Model\UserStockTable;
 use Zend\View\Model\JsonModel;
 
+// Exceptions
+use Application\Exception\NotImplementedException;
+
 class FollowsRestController extends AbstractRestfulController{
 
 	protected $followsTable;
@@ -17,7 +20,7 @@ class FollowsRestController extends AbstractRestfulController{
 
 	
 	public function getList(){
-		#code...
+		throw new NotImplementedException("This method not exists");
 	}
 
 	/**
@@ -46,7 +49,8 @@ class FollowsRestController extends AbstractRestfulController{
 	 * @param int $id do user 
 	 * @return array $data
 	 */
-	public function listFollowers($id){
+	public function listFollowers($id)
+	{
 		$results       = $this->getFollowsTable()->getFollowers($id);	
 		$data          = array();
 		$followersData = array();
@@ -85,7 +89,8 @@ class FollowsRestController extends AbstractRestfulController{
 	 * @param int $id do user 
 	 * @return array $data
 	 */
-	public function listPending($id){
+	public function listPending($id)
+	{
 		$data    = array();
 		$results = $this->getFollowsTable()->getPending($id);
 
@@ -114,7 +119,8 @@ class FollowsRestController extends AbstractRestfulController{
 	 * Método que cadastra os follows - (quem estou seguindo)
 	 * @return array $data
 	 */
-	public function create($data){
+	public function create($data)
+	{
 		//id do user
 		$data['user_id'] =  (int) $this->params()->fromRoute('uid', false);
         
@@ -141,20 +147,39 @@ class FollowsRestController extends AbstractRestfulController{
 	 * @param int $user_id get por request id do user
 	 * @return array json_encode 
 	 */
-	public function delete($id){
-		//id do follow (seguindo)
-		$id      =  (int) $id;   
-		//id do user
-		$user_id =  (int) $this->params()->fromRoute('uid', false);
-
-		$this->getFollowsTable()->deleteFollow($user_id,$id);
-
-		return new JsonModel(array(
-			'data' => 'deleted',
-		));
+	public function delete($id)
+	{
+		$request     = $this->getRequest()->getUri();
+		$unfollowUri = $this->getPartsUri($request,'unfollow');
+		
+		if(!empty($unfollowUri) && $unfollowUri == 'unfollow'){
+			//id do follow (seguindo)
+			$id      =  (int) $id;   
+			//id do user
+			$user_id =  (int) $this->params()->fromRoute('uid', false);
+			$return  = $this->getFollowsTable()->deleteFollow($user_id,$id);
+			
+			return new JsonModel(array(
+				'data' => $return,
+			));
+		}else{
+			throw new NotImplementedException("This method not exists");
+		}
 	}
 
-	public function getFollowsTable(){
+	public function replaceList($data)
+	{
+        throw new NotImplementedException("This method not exists");
+    }
+
+	public function update($id,$data)
+	{
+		throw new NotImplementedException("This method not exists");
+		
+	}
+
+	public function getFollowsTable()
+	{
 		if(!$this->followsTable){
 			$sm = $this->getServiceLocator();
 			$this->followsTable = $sm->get('Follows\Model\FollowsTable');
@@ -166,7 +191,8 @@ class FollowsRestController extends AbstractRestfulController{
      * O método getStockTable faz a selecão da classe table com o banco de dados.
      * @return objeto table
      */
-	public function getUserTable(){
+	public function getUserTable()
+	{
 		if(!$this->userTable){
 			$sm = $this->getServiceLocator();
 			$this->userTable = $sm->get('User\Model\UserTable');
@@ -180,8 +206,8 @@ class FollowsRestController extends AbstractRestfulController{
 	 * @param String $chave palavra que desejada a ser encontrada na uri
 	 * @return String $chave 
 	 */
-	public function getPartsUri($requestUri,$chave){
-		
+	public function getPartsUri($requestUri,$chave)
+	{
 		if(empty($requestUri) || empty($chave)){
 			return false;
 		}

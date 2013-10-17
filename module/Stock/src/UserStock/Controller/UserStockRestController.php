@@ -8,6 +8,9 @@ use UserStock\Model\UserStockTable;
 use Stock\Model\StockTable;
 use Zend\View\Model\JsonModel;
 
+// Exceptions
+use Application\Exception\NotImplementedException;
+
 class UserStockRestController extends AbstractRestfulController
 {
 	protected $userStockTable;
@@ -21,6 +24,7 @@ class UserStockRestController extends AbstractRestfulController
 	public function getList()
 	{
 		$requestParams = $this->params()->fromRoute();
+
 		//id do user
 		$uid = $requestParams['uid'];
 
@@ -54,7 +58,7 @@ class UserStockRestController extends AbstractRestfulController
 	}
 
 	/**
-     * O método get pega a url /api/user/:uid/:my-stock/:id
+     * O método get pega a url /api/user/:uid/:my-stock/:id (teste)
      *
      * @api
      * @return array json_encode
@@ -142,6 +146,10 @@ class UserStockRestController extends AbstractRestfulController
 		}
 	}
 
+	public function replaceList($data){
+        throw new NotImplementedException("This method not exists");
+    }
+
 	public function create($data)
 	{
 /*	    $form = new Form();
@@ -157,6 +165,7 @@ class UserStockRestController extends AbstractRestfulController
 	    return new JsonModel(array(
 	        'data' => $this->getStockTable()->getStock($id),
 	    ));*/
+		throw new NotImplementedException("This method not exists");
 	}
 
 	public function update($id, $data)
@@ -174,6 +183,12 @@ class UserStockRestController extends AbstractRestfulController
 	    return new JsonModel(array(
 	        'data' => $this->getStockTable()->getStock($id),
 	    ));*/
+		throw new NotImplementedException("This method not exists");
+	}
+
+	public function deleteList()
+    {
+		throw new NotImplementedException("This method not exists");
 	}
 
 

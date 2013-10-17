@@ -178,9 +178,13 @@ class FollowsTable{
 	 * @param int $id id do following a ser deletado
 	 */
 	public function deleteFollow($user_id,$id){
-		$this->tableGateway->delete(array(
+		$return = $this->tableGateway->delete(array(
 			'following' => $id,
 			'user_id'   => $user_id
 		));
+		if(empty($return)){
+			throw new \Exception("User id does not exist. Please provide a valid id");
+		}
+		return $return;
 	}
 }
