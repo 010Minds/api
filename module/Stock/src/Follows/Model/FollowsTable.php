@@ -174,7 +174,13 @@ class FollowsTable{
 
 	public function acceptedFollow(Follows $follows)
 	{
+		$data = array(
+			'permission' => $follows->permission ? 1 : 0,
+		);
 
+		$id = (int) $follows->id; 
+
+		return $this->tableGateway->update($data, array('id' => $id));
 	}
 
 	/**

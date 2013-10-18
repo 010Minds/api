@@ -19,7 +19,8 @@ class FollowsRestController extends AbstractRestfulController{
 	protected $userTable;
 
 	
-	public function getList(){
+	public function getList()
+	{
 		throw new NotImplementedException("This method not exists");
 	}
 
@@ -27,7 +28,8 @@ class FollowsRestController extends AbstractRestfulController{
 	 * Método que lista os followers pegando id por request
 	 * @return array $data
 	 */
-	public function get($id){
+	public function get($id)
+	{
 		$id         = (int) $id;
 		$data       = array();
 		$request    = $this->getRequest()->getUri();
@@ -54,7 +56,8 @@ class FollowsRestController extends AbstractRestfulController{
 	 * @param int $id do user 
 	 * @return array $data
 	 */
-	public function listFollowers($id){ 
+	public function listFollowers($id)
+	{ 
 		$results       = $this->getFollowsTable()->getFollowers($id);	
 		$data          = array();
 		$followersData = array();
@@ -186,18 +189,29 @@ class FollowsRestController extends AbstractRestfulController{
 	public function update($id,$data)
 	{
 		//id row table
-		$id              = (int) $id;
-		//id do user
-		$data['user_id'] =  (int) $this->params()->fromRoute('uid', false);
-		$follow          = $this->getFollowsTable()->getObjFollow($id);
-		$form            = new FollowsForm();
+		$id = (int) $id;
+		if($id <= 0){
+			throw new \Exception("Id does not exist. Please provide a valid id");
+		}
 
+		$data['id'] = $id;
+		$follow     = $this->getFollowsTable()->getObjFollow($id);
+		$userId     = $follow->user_id;
+		$form       = new FollowsForm();
+		
 		$form->bind($follow);
 	    $form->setInputFilter($follow->getInputFilter());
 	    $form->setData($data);
-	    if ($form->isValid()) {
-	        $id = $this->getFollowsTable()->saveUser($form->getData());
+	    
+	    if ($form->isValid()) {  
+	        $retorno = $this->getFollowsTable()->acceptedFollow($form->getData());
+	    }else{
+	    	// criar exception de form invalid
 	    }
+	    
+	    return new JsonModel(array( 
+			'data' => $this->getUserTable()->getUser($userId),
+		));
 	}
 
 	public function replaceList($data)
