@@ -5,13 +5,13 @@ return array(
     # definir controllers
     'controllers' => array(
         'invokables' => array(
-            'Stock\Controller\Stock'             => 'Stock\Controller\StockController',
-            'Stock\Controller\StockRest'         => 'Stock\Controller\StockRestController',
-            'UserStock\Controller\UserStock'     => 'UserStock\Controller\UserStockController',
-            'Exchange\Controller\ExchangeRest'   => 'Exchange\Controller\ExchangeRestController',
-            'Operation\Controller\OperationRest' => 'Operation\Controller\OperationRestController',
-            'Cron\Controller\CronRest'           => 'Cron\Controller\CronRestController',
-            'Follows\Controller\FollowsRest'     => 'Follows\Controller\FollowsRestController',
+            'Stock\Controller\Stock'                    => 'Stock\Controller\StockController',
+            'Stock\Controller\StockRest'                => 'Stock\Controller\StockRestController',
+            'UserStock\Controller\UserStock'            => 'UserStock\Controller\UserStockController',
+            'Exchange\Controller\ExchangeRest'          => 'Exchange\Controller\ExchangeRestController',
+            'Operation\Controller\OperationRest'        => 'Operation\Controller\OperationRestController',
+            'Cron\Controller\CronRest'                  => 'Cron\Controller\CronRestController',
+            'Follows\Controller\FollowsRest'            => 'Follows\Controller\FollowsRestController',
         ),
     ),
 

@@ -3,71 +3,35 @@ namespace Cron\Controller;
 
 use Zend\Mvc\Controller\AbstractRestfulController;
 
+use Notification\Model\Notification;
+use Notification\Model\NotificationTable;
+use Notification\Model\TypeStatus as NotificationTypeStatus;
 use Operation\Model\Operation;
 use Operation\Model\OperationTable;
 use Operation\Model\OperationStatus;
-use Operation\Model\TypeStatus;
+use Operation\Model\TypeStatus as OperationTypeStatus;
 use UserStock\Model\UserStock;
 use UserStock\Model\UserStockTable;
+
 use Zend\View\Model\JsonModel;
+
+// Exceptions
+use Application\Exception\NotImplementedException;
 
 class CronRestController extends AbstractRestfulController
 {
+    protected $notificationTable;
 	protected $operationTable;
     protected $stockTable;
     protected $exchangeTable;
     protected $userTable;
     protected $userStockTable;
 
-    public function getList()
-    {
-        $this->response->setStatusCode(404);
-
-        return new JsonModel(array(
-            'data' => 'not-implemented',
-        ));
-    }
-
-    public function get($id)
-    {
-        $this->response->setStatusCode(404);
-
-        return new JsonModel(array(
-            'data' => 'not-implemented',
-        ));
-    }
-/*
-    public function setIdentifierName($name)
-    {
-        $this->identifierName = (string) $name;
-        //return $this;
-        print($this); exit();
-    }
-*/
-    public function create($data)
-    {
-
-        $this->response->setStatusCode(404);
-
-        return new JsonModel(array(
-            'data' => 'not-implemented',
-        ));
-    }
-
-    public function update($id, $data)
-    {
-        $this->response->setStatusCode(404);
-
-        return new JsonModel(array(
-            'data' => 'not-implemented',
-        ));
-    }
-
     /*
         Verifica as operações pendentes
     */
-    public function replaceList($data){
-
+    public function replaceList($data)
+    {
         // Busca as Operações Pendentes
         $resultSetOperation = $this->getOperationTable()->getOperationsStatus('pending');
 
@@ -143,7 +107,7 @@ class CronRestController extends AbstractRestfulController
 
 
             // COMPRA
-            if($resultOperation->type == TypeStatus::BUY){
+            if($resultOperation->type == OperationTypeStatus::BUY){
 // echo '  Tipo de operação: COMPRA'."\n";
 // echo '  Saldo usuário: '.${$currency.'Saldo'}."\n";
 
@@ -155,12 +119,6 @@ class CronRestController extends AbstractRestfulController
                     // Volume disponível
                     if($resultSetStock->volume >= $resultOperation->qtd){
 // echo '  Volume status: Volume Suficiente'."\n";
-
-                        // Altera 'status' da "operation" para 'accepted'
-                        $data = array(  'status'=> OperationStatus::ACCEPTED,
-                                        'reason' => 'Compra efetuada com sucesso.');
-                        $where = array('id'=> $resultOperation->id);
-                        $this->getOperationTable()->updateOperation($data, $where);
 
                         // Desconta o valor da compra do saldo do usuário
                         $saldoAtualizado = ${$currency.'Saldo'} - $lance;
@@ -189,15 +147,40 @@ class CronRestController extends AbstractRestfulController
                         $userStock->exchangeArray($data);
 
                         $this->getUserStockTable()->saveUserStock($userStock);
+
+                        // Altera 'status' da "operation" para 'accepted'
+                        $description = 'Compra efetuada com sucesso.';
+
+                        $data = array(  'status'=> OperationStatus::ACCEPTED,
+                                        'reason' => $description);
+                        $where = array('id'=> $resultOperation->id);
+                        $this->getOperationTable()->updateOperation($data, $where);
+
+                        // Salva notificação
+                        $notification = new Notification;
+                        $notification->userId       = $resultOperation->userId;
+                        $notification->type         = $resultOperation->type;
+                        $notification->description  = $resultSetStock->name." (".$description.")";
+                        $this->getNotificationTable()->saveNotification($notification);
+
                     }
                     // Volume indisponível
                     else{
 
                         // Altera 'status' da "operation" para 'rejected' e informa o motivo
+                        $description = 'Compra rejeitada: Volume indisponível para compra.';
+
                         $data = array(  'status'=> OperationStatus::REJECTED,
-                                        'reason' => 'Compra rejeitada: Volume indisponível para compra.');
+                                        'reason' => $description);
                         $where = array('id'=> $resultOperation->id);
                         $this->getOperationTable()->updateOperation($data, $where);
+
+                        // Salva notificação
+                        $notification = new Notification;
+                        $notification->userId       = $resultOperation->userId;
+                        $notification->type         = $resultOperation->type;
+                        $notification->description  = $resultSetStock->name." (".$description.")";
+                        $this->getNotificationTable()->saveNotification($notification);
 
 // echo '  Volume status: Volume Insuficiente'."\n";
                     }
@@ -208,10 +191,19 @@ class CronRestController extends AbstractRestfulController
                 else{
 
                     // Altera 'status' da "operation" para 'rejected' e informa o motivo
+                    $description = 'Compra rejeitada: Saldo insuficiente.';
+
                     $data = array(  'status'=> OperationStatus::REJECTED,
-                                    'reason' => 'Compra rejeitada: Saldo insuficiente.');
+                                    'reason' => $description);
                     $where = array('id'=> $resultOperation->id);
                     $this->getOperationTable()->updateOperation($data, $where);
+
+                    // Salva notificação
+                    $notification = new Notification;
+                    $notification->userId       = $resultOperation->userId;
+                    $notification->type         = $resultOperation->type;
+                    $notification->description  = $resultSetStock->name." (".$description.")";
+                    $this->getNotificationTable()->saveNotification($notification);
 
 // echo '  Saldo status: Saldo Insuficiente'."\n";
                 }
@@ -275,20 +267,37 @@ class CronRestController extends AbstractRestfulController
                         }
 
                         // Altera 'status' da "operation" para 'accepted'
+                        $description = 'Venda efetuada com sucesso.';
+
                         $data = array(  'status'=> OperationStatus::ACCEPTED,
-                                        'reason' => 'Venda efetuada com sucesso.');
+                                        'reason' => $description);
                         $where = array('id'=> $resultOperation->id);
                         $this->getOperationTable()->updateOperation($data, $where);
 
+                        // Salva notificação
+                        $notification = new Notification;
+                        $notification->userId       = $resultOperation->userId;
+                        $notification->type         = $resultOperation->type;
+                        $notification->description  = $resultSetStock->name." (".$description.")";
+                        $this->getNotificationTable()->saveNotification($notification);
                     }
                     else{
 // echo '  : Usuário não possui os stocks colocado a venda'."\n";
 
                         // Altera 'status' da "operation" para 'reject'
+                        $description = 'Venda rejeitada: Volume colocado a venda é menor que o volume disponível no estoque do usuário.';
+
                         $data = array(  'status'=> OperationStatus::REJECTED,
-                                        'reason' => 'Venda rejeitada: Volume colocado a venda é menor que o volume disponível no estoque do usuário.');
+                                        'reason' => $description);
                         $where = array('id'=> $resultOperation->id);
                         $this->getOperationTable()->updateOperation($data, $where);
+
+                        // Salva notificação
+                        $notification = new Notification;
+                        $notification->userId       = $resultOperation->userId;
+                        $notification->type         = $resultOperation->type;
+                        $notification->description  = $resultSetStock->name." (".$description.")";
+                        $this->getNotificationTable()->saveNotification($notification);
                     }
 
                 }
@@ -296,10 +305,19 @@ class CronRestController extends AbstractRestfulController
 // echo '  Status da Venda: Valor de venda maior que o valor de mercado'."\n";
 
                     // Altera 'status' da "operation" para 'rejected' e informa o motivo
+                    $description = 'Venda rejeitada: Valor superior ao valor de mercado.';
+
                     $data = array(  'status'=> OperationStatus::REJECTED,
-                                    'reason' => 'Venda rejeitada: Valor superior ao valor de mercado.');
+                                    'reason' => $description);
                     $where = array('id'=> $resultOperation->id);
                     $this->getOperationTable()->updateOperation($data, $where);
+
+                    // Salva notificação
+                    $notification = new Notification;
+                    $notification->userId       = $resultOperation->userId;
+                    $notification->type         = $resultOperation->type;
+                    $notification->description  = $resultSetStock->name." (".$description.")";
+                    $this->getNotificationTable()->saveNotification($notification);
                 }
 
             }
@@ -314,13 +332,41 @@ class CronRestController extends AbstractRestfulController
 
     }
 
+    public function getList()
+    {
+        throw new NotImplementedException("This method not exists");
+    }
+
+    public function get($id)
+    {
+        throw new NotImplementedException("This method not exists");
+    }
+
+    public function create($data)
+    {
+
+        throw new NotImplementedException("This method not exists");
+    }
+
+    public function update($id, $data)
+    {
+        throw new NotImplementedException("This method not exists");
+    }
+
     public function delete($id)
     {
-        $this->response->setStatusCode(404);
+        throw new NotImplementedException("This method not exists");
+    }
 
-        return new JsonModel(array(
-            'data' => 'not-implemented',
-        ));
+
+    // Table "notification"
+    public function getNotificationTable()
+    {
+        if(!$this->notificationTable){
+            $sm = $this->getServiceLocator();
+            $this->notificationTable = $sm->get('Notification\Model\NotificationTable');
+        }
+        return $this->notificationTable;
     }
 
     // Table "operation"
@@ -371,5 +417,4 @@ class CronRestController extends AbstractRestfulController
         }
         return $this->userStockTable;
     }
-
 }

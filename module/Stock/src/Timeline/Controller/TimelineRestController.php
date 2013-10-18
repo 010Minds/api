@@ -12,6 +12,7 @@ use Zend\View\Model\JsonModel;
 
 // Exceptions
 use Application\Exception\NotImplementedException;
+// use Application\Exception\InvalidParametersException;
 
 class TimelineRestController extends AbstractRestfulController{
 
@@ -22,13 +23,18 @@ class TimelineRestController extends AbstractRestfulController{
 		#code...
 	}
 
-	public function get($id){
+	public function get($id)
+	{
 		$id   = (int) $id;
+		if (!$id) {
+			// throw new InvalidParametersException("Error Processing Request", 1);
+		}
+
 		$data = array();
-		
+
 
 		$results = $this->getTimelineTable()->fetchAll();
-		
+
 		foreach ($results as $result) {
 			$result->id      = (int) $result->id;
 			$result->type    = (int) $result->type;
@@ -36,13 +42,13 @@ class TimelineRestController extends AbstractRestfulController{
 
 			if($id == $result->user_id){
 				$data[] = $result;
-			}else{ 
+			}else{
 				if($this->listTimeline($id,$result->user_id)){
-					$data[] = $result;	
+					$data[] = $result;
 				}
 			}
 		}
-		
+
 		return new JsonModel(array(
             'data' => $data,
         ));
@@ -56,11 +62,11 @@ class TimelineRestController extends AbstractRestfulController{
 	 */
 	public function listTimeline($id,$followingId){
 		$data = array();
-		
+
 		$results = $this->getFollowsTable()->customFollowing(array('user_id' => $id,'permission' => true));
 		foreach($results as $result){
 			if($result->following == $followingId){
-				return $result->following;	
+				return $result->following;
 			}
 		}
 	}
@@ -82,7 +88,7 @@ class TimelineRestController extends AbstractRestfulController{
 
 	public function create($data){
 		$data['user_id'] =  (int) $this->params()->fromRoute('id', false);
-		
+
 		$form     = new TimelineForm();
 	    $timeline = new Timeline();
 
@@ -90,7 +96,7 @@ class TimelineRestController extends AbstractRestfulController{
 	    $form->setData($data);
 
 	    $id = 0;
-	    if ($form->isValid()) { 
+	    if ($form->isValid()) {
 	        $timeline->exchangeArray($form->getData());
 	        $id = $this->getTimelineTable()->saveTimeline($timeline);
 	    }

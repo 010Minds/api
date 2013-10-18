@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"no",
+				"notification"
+			],
+			[
 				"sto",
 				"stockData"
 			],
@@ -191,6 +195,46 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "module/Stock/src/Cron/Controller/CronRestController.php",
+			"settings":
+			{
+				"buffer_size": 14469,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "module/Stock/Module.php",
+			"settings":
+			{
+				"buffer_size": 9036,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "module/Stock/src/Notification/Controller/NotificationRestController.php",
+			"settings":
+			{
+				"buffer_size": 1359,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "module/Stock/src/Notification/Model/Notification.php",
+			"settings":
+			{
+				"buffer_size": 1232,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "module/Stock/src/Notification/Model/NotificationTable.php",
+			"settings":
+			{
+				"buffer_size": 1454,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -240,10 +284,29 @@
 	},
 	"file_history":
 	[
+		"/var/www-store/module/Stock/src/Operation/Model/OperationTable.php",
+		"/var/www-store/module/Stock/src/UserStock/Model/UserStockTable.php",
+		"/var/www-store/module/User/src/User/Model/UserTable.php",
+		"/var/www-store/module/Stock/src/UserStock/Model/UserStock.php",
 		"/var/www-store/module/Stock/src/Cron/Controller/CronRestController.php",
-		"/var/www-store/module/User/src/User/Controller/UserExchangeStockRestController.php",
+		"/var/www-store/module/Stock/src/Operation/Controller/OperationRestController.php",
+		"/var/www-store/module/Stock/config/module.config.php",
+		"/var/www-store/module/Stock/Module.php",
+		"/var/www-store/module/Stock/src/Notification/Model/OperationTable.php",
+		"/var/www-store/module/Stock/src/Notification/Model/Notification.php",
+		"/var/www-store/module/Stock/src/Operation/Model/Operation.php",
 		"/var/www-store/module/User/config/module.config.php",
+		"/var/www-store/module/Stock/src/Follows/Controller/FollowsRestController.php",
+		"/var/www-store/module/Stock/src/Follows/Model/FollowsTable.php",
+		"/var/www-store/module/Stock/src/Stock/Controller/StockRestController.php",
+		"/var/www-store/module/Stock/src/Stock/Controller/StockController.php",
+		"/var/www-store/module/User/src/User/Controller/UserExchangeStockRestController.php",
 		"/var/www-store/module/Stock/src/Stock/Model/StockTable.php",
+		"/var/www-store/module/User/src/User/Model/User.php",
+		"/var/www-store/module/Stock/src/UserStock/Controller/UserStockRestController.php",
+		"/var/www-store/module/Stock/src/Follows/Model/Follows.php",
+		"/var/www-store/config/autoload/local.php",
+		"/var/www-store/config/application.config.php",
 		"/var/www-store/data/database/007-mydb-timeline-alter-table.sql",
 		"/var/www-store/data/database/e-011-mydb-soperation-update-data.sql",
 		"/var/www-store/data/database/e-012-mydb-altertable-stock-field-volume.sql",
@@ -257,30 +320,18 @@
 		"/var/www-store/data/database/006-mydb-timeline.sql",
 		"/var/www-store/data/database/e-007-mydb-operation-change-column-type.sql",
 		"/var/www-store/data/database/001-mydb-user_stock-increment-id.sql",
-		"/var/www-store/module/Stock/src/UserStock/Model/UserStock.php",
-		"/var/www-store/module/Stock/src/UserStock/Model/UserStockTable.php",
 		"/var/www-store/api.sublime-project",
 		"/home/user/.config/sublime-text-3/Packages/Default/Default (Linux).sublime-keymap",
 		"/var/www-store/vendor/zendframework/zendframework/library/Zend/Db/TableGateway/TableGateway.php",
-		"/var/www-store/module/User/src/User/Model/UserTable.php",
-		"/var/www-store/module/Stock/src/Operation/Model/Operation.php",
-		"/var/www-store/module/Stock/src/Operation/Model/OperationTable.php",
-		"/var/www-store/module/User/src/User/Model/User.php",
 		"/var/www-store/module/Stock/src/Stock/Model/Stock.php",
-		"/var/www-store/module/Stock/src/Operation/Controller/OperationRestController.php",
-		"/var/www-store/module/Stock/config/module.config.php",
-		"/var/www-store/module/Stock/Module.php",
-		"/var/www-store/module/Stock/src/UserStock/Controller/UserStockRestController.php",
 		"/var/www-store/module/Stock/src/UserStock/Controller/UserStockController.php",
 		"/var/www-store/module/Stock/src/Exchange/Model/Exchange.php",
-		"/var/www-store/module/Stock/src/Stock/Controller/StockRestController.php",
 		"/var/www-store/module/Stock/src/Exchange/Model/ExchangeTable.php",
 		"/var/www-store/module/User/src/User/Controller/UserRestController.php",
 		"/var/www-store/module/Stock/src/Exchange/Controller/ExchangeRestController.php",
 		"/var/www-store/vendor/zendframework/zendframework/library/Zend/Mvc/Controller/AbstractRestfulController.php",
 		"/var/www-store/module/Cron/config/module.config.php",
 		"/var/www-store/module/User/Module.php",
-		"/var/www-store/config/application.config.php",
 		"/var/www-store/module/Cron/Module.php",
 		"/var/www-store/module/Cron/src/Cron/Model/Cron.php",
 		"/var/www-store/module/Cron/src/Cron/Controller/CronRestController.php",
@@ -289,11 +340,9 @@
 		"/var/www-store/vendor/zendframework/zendframework/library/Zend/Mvc/Controller/AbstractController.php",
 		"/var/www-store/vendor/zendframework/zendframework/library/Zend/ServiceManager/ServiceLocatorAwareInterface.php",
 		"/var/www-store/config/autoload/global.php",
-		"/var/www-store/config/autoload/local.php",
 		"/var/www-store/module/User/src/User/Controller/UserController.php",
 		"/var/www-store/mydb_bckp.sql",
 		"/var/www-store/module/User/src/User/Form/UserForm.php",
-		"/var/www-store/module/Stock/src/Stock/Controller/StockController.php",
 		"/var/www-store/module/Application/view/layout/layout.phtml",
 		"/var/www-store/module/Stock/src/Operation/Controller/OperationController.php",
 		"/var/www-store/config/autoload/local.php.dist",
@@ -362,12 +411,7 @@
 		"/var/www/module/Usuario/test/TestConfig.php.dist",
 		"/var/www/module/Usuario/test/phpunit.xml.dist",
 		"/var/www/module/Album/src/Album/Form/AlbumForm.php",
-		"/var/www/module/Usuario/config/module.config.php",
-		"/var/www/module/Contato/config/module.config.php",
-		"/var/www/module/Usuario/view/usuario/usuario/delete.phtml",
-		"/var/www/module/Usuario/view/usuario/usuario/edit.phtml",
-		"/var/www/module/Usuario/view/usuario/usuario/index.phtml",
-		"/var/www/module/Usuario/src/Usuario/Controller/UsuarioController.php"
+		"/var/www/module/Usuario/config/module.config.php"
 	],
 	"find":
 	{
@@ -401,6 +445,17 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"operation",
+			"updateOperation",
+			"Operation",
+			"operation",
+			"Operation",
+			"Notification",
+			"Operation",
+			"UserStock",
+			"TypeStatus",
+			"api/user",
+			"api/exchange",
 			"$StocksOfUser",
 			"$StockOfUser",
 			"resultOperation",
@@ -517,18 +572,7 @@
 			"Album",
 			"album",
 			"Album",
-			"album",
-			"Album",
-			"album",
-			"Album",
-			"album",
-			"1",
-			"Album",
-			"album",
-			"Album",
-			"album",
-			"php echo",
-			"Album"
+			"album"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -546,8 +590,152 @@
 	"groups":
 	[
 		{
+			"selected": 1,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "module/Stock/src/Cron/Controller/CronRestController.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 14469,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								891,
+								891
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "module/Stock/Module.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9036,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6435,
+								5750
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1755.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "module/Stock/src/Notification/Controller/NotificationRestController.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1359,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								584,
+								584
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "module/Stock/src/Notification/Model/Notification.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1232,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "module/Stock/src/Notification/Model/NotificationTable.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1454,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1021,
+								1021
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
 			]
 		},
 		{
@@ -617,6 +805,10 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"stocktable",
+				"module/Stock/src/Stock/Model/StockTable.php"
+			],
 			[
 				"abstractrestfulcontroller",
 				"vendor/zendframework/zendframework/library/Zend/Mvc/Controller/AbstractRestfulController.php"
@@ -1124,10 +1316,6 @@
 			[
 				"ride/module",
 				"module/Ride/Module.php"
-			],
-			[
-				"ridetablea",
-				"module/Ride/src/Ride/Model/RideTableAbstract.php"
 			]
 		],
 		"width": 0.0
