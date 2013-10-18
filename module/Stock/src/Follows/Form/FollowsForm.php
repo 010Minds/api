@@ -14,5 +14,10 @@ class FollowsForm extends Form
 			'name' => 'id',
 			'type' => 'Hidden',
 		));
+
+		$this->add(array(
+			'name' => 'permission',
+			'type' => 'Hidden',
+		));
 	}
 }

@@ -12,6 +12,7 @@ use Zend\View\Model\JsonModel;
 
 // Exceptions
 use Application\Exception\NotImplementedException;
+use Application\Exception\InvalidParametersException;
 
 class FollowsRestController extends AbstractRestfulController{
 
@@ -19,7 +20,8 @@ class FollowsRestController extends AbstractRestfulController{
 	protected $userTable;
 
 	
-	public function getList(){
+	public function getList()
+	{
 		throw new NotImplementedException("This method not exists");
 	}
 
@@ -27,7 +29,8 @@ class FollowsRestController extends AbstractRestfulController{
 	 * Método que lista os followers pegando id por request
 	 * @return array $data
 	 */
-	public function get($id){
+	public function get($id)
+	{
 		$id         = (int) $id;
 		$data       = array();
 		$request    = $this->getRequest()->getUri();
@@ -38,7 +41,7 @@ class FollowsRestController extends AbstractRestfulController{
 		if(!empty($pendingUri) && $pendingUri == 'pending'){
 			$data = $this->listPending($id);
 		}else{
-			if(empty($unfollowUri) && $unfollowUri != 'unfollow' ){
+			if(empty($unfollowUri)){
 				$data = $this->listFollowers($id);	
 			}else{
 				throw new NotImplementedException("This method not exists");
@@ -54,7 +57,8 @@ class FollowsRestController extends AbstractRestfulController{
 	 * @param int $id do user 
 	 * @return array $data
 	 */
-	public function listFollowers($id){ 
+	public function listFollowers($id)
+	{ 
 		$results       = $this->getFollowsTable()->getFollowers($id);	
 		$data          = array();
 		$followersData = array();
@@ -127,10 +131,12 @@ class FollowsRestController extends AbstractRestfulController{
 	{
 		$request     = $this->getRequest()->getUri();
 		$unfollowUri = $this->getPartsUri($request,'unfollow');
-		if(empty($unfollowUri) && $unfollowUri != 'unfollow' ){
+		if(!empty($unfollowUri) && $unfollowUri == 'unfollow' ){
+			throw new NotImplementedException("This method not exists");
+		}else{
 			//id do user
-			$data['user_id'] =  (int) $this->params()->fromRoute('uid', false);
-	        
+			$data['user_id']    =  (int) $this->params()->fromRoute('uid', false);
+			$data['permission'] = $this->publicProfile($data['id']);
 	        $form    = new FollowsForm();
 		    $follows = new Follows();
 
@@ -146,9 +152,13 @@ class FollowsRestController extends AbstractRestfulController{
 		    return new JsonModel(array(
 		        'data' => $this->getFollowsTable()->getObjFollow($id),
 		    ));
-		}else{
-			throw new NotImplementedException("This method not exists");
 		}
+	}
+
+	public function publicProfile($id)
+	{
+		$user = $this->getUserTable()->getuser($id);
+		return $user->public_profile;
 	}
 
 	/**
@@ -168,13 +178,55 @@ class FollowsRestController extends AbstractRestfulController{
 			//id do user
 			$user_id =  (int) $this->params()->fromRoute('uid', false);
 			$return  = $this->getFollowsTable()->deleteFollow($user_id,$id);
-			
-			return new JsonModel(array(
-				'data' => $return,
-			));
 		}else{
-			throw new NotImplementedException("This method not exists");
+			//throw new NotImplementedException("This method not exists");
+			$id = (int) $id;
+			$return = $this->getFollowsTable()->notAccpetedFollow($id);
 		}
+
+		if($return > 0){
+			$return = 'deleted';
+		}else{
+			throw new \Exception("Id does not exist. Please provide a valid id");
+		}
+
+		return new JsonModel(array(
+			'data' => $return,
+		));
+	}
+
+	/**
+	 * Método responsável por aceitar ou não o follow
+	 * @param int $id id da linha da tabela do banco de dados
+	 * @param int $user_id get por request id do user
+	 * @return array json_encode 
+	 */
+	public function update($id,$data)
+	{
+		//id row table
+		$id = (int) $id;
+		if($id <= 0){
+			throw new InvalidParametersException("Id does not exist. Please provide a valid id");
+		}
+
+		$data['id'] = $id;
+		$follow     = $this->getFollowsTable()->getObjFollow($id);
+		$userId     = $follow->user_id;
+		$form       = new FollowsForm();
+
+		$form->bind($follow);
+	    $form->setInputFilter($follow->getInputFilter());
+	    $form->setData($data);
+	    
+	    if ($form->isValid()) {  
+	        $retorno = $this->getFollowsTable()->acceptedFollow($form->getData());
+	    }else{
+	    	// criar exception de form invalid
+	    }
+	    
+	    return new JsonModel(array( 
+			'data' => $this->getUserTable()->getUser($userId),
+		));
 	}
 
 	public function replaceList($data)
@@ -183,12 +235,6 @@ class FollowsRestController extends AbstractRestfulController{
     }
 
     public function deleteList()
-	{
-		throw new NotImplementedException("This method not exists");
-		
-	}
-
-	public function update($id,$data)
 	{
 		throw new NotImplementedException("This method not exists");
 		

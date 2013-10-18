@@ -187,6 +187,21 @@ return array(
                                         'controller' => 'Follows\Controller\FollowsRest',
                                     ),
                                 ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'user-rest-follow-id' => array(
+                                        'type' => 'segment',
+                                        'options' => array(
+                                            'route' => '/:id[/]',
+                                            'constraints' => array(
+                                                'id' => '[0-9]+',
+                                            ),
+                                            'defaults' => array(
+                                                'controller' => 'Follows\Controller\FollowsRest',
+                                            ),
+                                        ),
+                                    ),
+                                ),
                             ),
                             'user-rest-unfollow' => array(
                                 'type'    => 'literal',
@@ -199,7 +214,7 @@ return array(
                                 ),
                                 'may_terminate' => true,
                                 'child_routes' => array(
-                                    'user-rest-follow-id' => array(
+                                    'user-rest-unfollow-id' => array(
                                         'type' => 'segment',
                                         'options' => array(
                                             'route' => '/:id[/]',

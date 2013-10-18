@@ -160,8 +160,9 @@ class FollowsTable{
 	 */
 	public function follow(Follows $follows){
 		$data = array(
-			'user_id' 	=> $follows->user_id,
-			'following'	=> $follows->id,
+			'user_id' 	 => $follows->user_id,
+			'following'	 => $follows->id,
+			'permission' => $follows->permission,
 		);
 		
 		$id = (int) $follows->id;
@@ -170,6 +171,36 @@ class FollowsTable{
 		$id = $this->tableGateway->getLastInsertValue();
 
 		return $id;
+	}
+
+	/**
+	 * Método resposável por aceitar seguidor
+	 * @param obj follows
+	 */
+	public function acceptedFollow(Follows $follows)
+	{
+		$data = array(
+			'permission' => $follows->permission ? 1 : 0,
+		);
+
+		$id = (int) $follows->id; 
+
+		return $this->tableGateway->update($data, array('id' => $id));
+	}
+
+	/**
+	 * Método resposável por não aceitar o seguidor
+	 * @param int id id da tabela
+	 */
+	public function notAccpetedFollow($id)
+	{
+		$return = $this->tableGateway->delete(array(
+			'id' => $id,
+		));
+		if(empty($return)){
+			throw new \Exception("User id does not exist. Please provide a valid id");
+		}
+		return $return;
 	}
 
 	/**
