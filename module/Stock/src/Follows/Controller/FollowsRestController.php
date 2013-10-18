@@ -130,10 +130,12 @@ class FollowsRestController extends AbstractRestfulController{
 	{
 		$request     = $this->getRequest()->getUri();
 		$unfollowUri = $this->getPartsUri($request,'unfollow');
-		if(empty($unfollowUri) && $unfollowUri != 'unfollow' ){
+		if(!empty($unfollowUri) && $unfollowUri == 'unfollow' ){
+			throw new NotImplementedException("This method not exists");
+		}else{
 			//id do user
-			$data['user_id'] =  (int) $this->params()->fromRoute('uid', false);
-	        
+			$data['user_id']    =  (int) $this->params()->fromRoute('uid', false);
+			$data['permission'] = $this->publicProfile($data['id']);
 	        $form    = new FollowsForm();
 		    $follows = new Follows();
 
@@ -149,9 +151,13 @@ class FollowsRestController extends AbstractRestfulController{
 		    return new JsonModel(array(
 		        'data' => $this->getFollowsTable()->getObjFollow($id),
 		    ));
-		}else{
-			throw new NotImplementedException("This method not exists");
 		}
+	}
+
+	public function publicProfile($id)
+	{
+		$user = $this->getUserTable()->getuser($id);
+		return $user->public_profile;
 	}
 
 	/**
