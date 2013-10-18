@@ -12,6 +12,7 @@ use Zend\View\Model\JsonModel;
 
 // Exceptions
 use Application\Exception\NotImplementedException;
+use Application\Exception\InvalidParametersException;
 
 class FollowsRestController extends AbstractRestfulController{
 
@@ -205,7 +206,7 @@ class FollowsRestController extends AbstractRestfulController{
 		//id row table
 		$id = (int) $id;
 		if($id <= 0){
-			throw new \Exception("Id does not exist. Please provide a valid id");
+			throw new InvalidParametersException("Id does not exist. Please provide a valid id");
 		}
 
 		$data['id'] = $id;
