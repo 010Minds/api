@@ -171,13 +171,21 @@ class FollowsRestController extends AbstractRestfulController{
 			//id do user
 			$user_id =  (int) $this->params()->fromRoute('uid', false);
 			$return  = $this->getFollowsTable()->deleteFollow($user_id,$id);
-			
-			return new JsonModel(array(
-				'data' => $return,
-			));
 		}else{
-			throw new NotImplementedException("This method not exists");
+			//throw new NotImplementedException("This method not exists");
+			$id = (int) $id;
+			$return = $this->getFollowsTable()->notAccpetedFollow($id);
 		}
+
+		if($return > 0){
+			$return = 'deleted';
+		}else{
+			throw new \Exception("Id does not exist. Please provide a valid id");
+		}
+
+		return new JsonModel(array(
+			'data' => $return,
+		));
 	}
 
 	/**
@@ -198,7 +206,7 @@ class FollowsRestController extends AbstractRestfulController{
 		$follow     = $this->getFollowsTable()->getObjFollow($id);
 		$userId     = $follow->user_id;
 		$form       = new FollowsForm();
-		
+
 		$form->bind($follow);
 	    $form->setInputFilter($follow->getInputFilter());
 	    $form->setData($data);

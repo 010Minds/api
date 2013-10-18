@@ -172,6 +172,10 @@ class FollowsTable{
 		return $id;
 	}
 
+	/**
+	 * Método resposável por aceitar seguidor
+	 * @param obj follows
+	 */
 	public function acceptedFollow(Follows $follows)
 	{
 		$data = array(
@@ -181,6 +185,21 @@ class FollowsTable{
 		$id = (int) $follows->id; 
 
 		return $this->tableGateway->update($data, array('id' => $id));
+	}
+
+	/**
+	 * Método resposável por não aceitar o seguidor
+	 * @param int id id da tabela
+	 */
+	public function notAccpetedFollow($id)
+	{
+		$return = $this->tableGateway->delete(array(
+			'id' => $id,
+		));
+		if(empty($return)){
+			throw new \Exception("User id does not exist. Please provide a valid id");
+		}
+		return $return;
 	}
 
 	/**
