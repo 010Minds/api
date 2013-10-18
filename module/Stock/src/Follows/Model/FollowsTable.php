@@ -160,8 +160,9 @@ class FollowsTable{
 	 */
 	public function follow(Follows $follows){
 		$data = array(
-			'user_id' 	=> $follows->user_id,
-			'following'	=> $follows->id,
+			'user_id' 	 => $follows->user_id,
+			'following'	 => $follows->id,
+			'permission' => $follows->permission,
 		);
 		
 		$id = (int) $follows->id;
