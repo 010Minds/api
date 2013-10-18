@@ -16,7 +16,21 @@ class NotificationRestController extends AbstractRestfulController
 
     public function getList()
     {
-        throw new NotImplementedException("This method not exists");
+        $userId = $this->params()->fromRoute('uid', false);
+        $results = $this->getNotificationTable()->getUserNotification($userId);
+
+        $data = array();
+        foreach ($results as $result) {
+            $result->id             = (int) $result->id;
+            $result->userId         = (int) $result->userId;
+            $result->description    = $result->description;
+
+            $data[] = $result;
+        }
+
+        return new JsonModel(array(
+            'data' => $data,
+        ));
     }
 
     public function get($id)
@@ -41,17 +55,32 @@ class NotificationRestController extends AbstractRestfulController
 
     public function delete($id)
     {
-        throw new NotImplementedException("This method not exists");
-    }
+        $userId = $this->params()->fromRoute('uid', false);
+        $id     = $this->params()->fromRoute('id', false);
 
-    // Table "Notification"
-    public function getOperationTable()
+        $this->getNotificationTable()->deleteUserNotification($userId, $id);
+
+        return new JsonModel(array(
+            'data' => '',
+        ));
+    }
+    public function deleteList()
     {
-        if(!$this->operationTable){
+        $userId = $this->params()->fromRoute('uid', false);
+        $this->getNotificationTable()->deleteUserNotification($userId);
+
+        return new JsonModel(array(
+            'data' => '',
+        ));
+    }
+    // Table "Notification"
+    public function getNotificationTable()
+    {
+        if(!$this->notificationTable){
             $sm = $this->getServiceLocator();
-            $this->operationTable = $sm->get('Operation\Model\OperationTable');
+            $this->notificationTable = $sm->get('Notification\Model\NotificationTable');
         }
-        return $this->operationTable;
+        return $this->notificationTable;
     }
 
 }

@@ -157,12 +157,15 @@ class CronRestController extends AbstractRestfulController
                         $this->getOperationTable()->updateOperation($data, $where);
 
                         // Salva notificação
-                        $notification = new Notification;
-                        $notification->userId       = $resultOperation->userId;
-                        $notification->type         = $resultOperation->type;
-                        $notification->description  = $resultSetStock->name." (".$description.")";
-                        $this->getNotificationTable()->saveNotification($notification);
+                        $arr = array(
+                            'user_id' => $resultOperation->userId,
+                            'type' => $resultOperation->type,
+                            'description' => $resultSetStock->name." (".$description.")",
+                        );
 
+                        $notification = new Notification;
+                        $notification->exchangeArray($arr);
+                        $this->getNotificationTable()->saveNotification($notification);
                     }
                     // Volume indisponível
                     else{
@@ -176,10 +179,14 @@ class CronRestController extends AbstractRestfulController
                         $this->getOperationTable()->updateOperation($data, $where);
 
                         // Salva notificação
+                        $arr = array(
+                            'user_id' => $resultOperation->userId,
+                            'type' => $resultOperation->type,
+                            'description' => $resultSetStock->name." (".$description.")",
+                        );
+
                         $notification = new Notification;
-                        $notification->userId       = $resultOperation->userId;
-                        $notification->type         = $resultOperation->type;
-                        $notification->description  = $resultSetStock->name." (".$description.")";
+                        $notification->exchangeArray($arr);
                         $this->getNotificationTable()->saveNotification($notification);
 
 // echo '  Volume status: Volume Insuficiente'."\n";
@@ -199,10 +206,14 @@ class CronRestController extends AbstractRestfulController
                     $this->getOperationTable()->updateOperation($data, $where);
 
                     // Salva notificação
+                    $arr = array(
+                        'user_id' => $resultOperation->userId,
+                        'type' => $resultOperation->type,
+                        'description' => $resultSetStock->name." (".$description.")",
+                    );
+
                     $notification = new Notification;
-                    $notification->userId       = $resultOperation->userId;
-                    $notification->type         = $resultOperation->type;
-                    $notification->description  = $resultSetStock->name." (".$description.")";
+                    $notification->exchangeArray($arr);
                     $this->getNotificationTable()->saveNotification($notification);
 
 // echo '  Saldo status: Saldo Insuficiente'."\n";
@@ -275,10 +286,14 @@ class CronRestController extends AbstractRestfulController
                         $this->getOperationTable()->updateOperation($data, $where);
 
                         // Salva notificação
+                        $arr = array(
+                            'user_id' => $resultOperation->userId,
+                            'type' => $resultOperation->type,
+                            'description' => $resultSetStock->name." (".$description.")",
+                        );
+
                         $notification = new Notification;
-                        $notification->userId       = $resultOperation->userId;
-                        $notification->type         = $resultOperation->type;
-                        $notification->description  = $resultSetStock->name." (".$description.")";
+                        $notification->exchangeArray($arr);
                         $this->getNotificationTable()->saveNotification($notification);
                     }
                     else{
@@ -293,10 +308,14 @@ class CronRestController extends AbstractRestfulController
                         $this->getOperationTable()->updateOperation($data, $where);
 
                         // Salva notificação
+                        $arr = array(
+                            'user_id' => $resultOperation->userId,
+                            'type' => $resultOperation->type,
+                            'description' => $resultSetStock->name." (".$description.")",
+                        );
+
                         $notification = new Notification;
-                        $notification->userId       = $resultOperation->userId;
-                        $notification->type         = $resultOperation->type;
-                        $notification->description  = $resultSetStock->name." (".$description.")";
+                        $notification->exchangeArray($arr);
                         $this->getNotificationTable()->saveNotification($notification);
                     }
 
@@ -313,10 +332,14 @@ class CronRestController extends AbstractRestfulController
                     $this->getOperationTable()->updateOperation($data, $where);
 
                     // Salva notificação
+                    $arr = array(
+                        'user_id' => $resultOperation->userId,
+                        'type' => $resultOperation->type,
+                        'description' => $resultSetStock->name." (".$description.")",
+                    );
+
                     $notification = new Notification;
-                    $notification->userId       = $resultOperation->userId;
-                    $notification->type         = $resultOperation->type;
-                    $notification->description  = $resultSetStock->name." (".$description.")";
+                    $notification->exchangeArray($arr);
                     $this->getNotificationTable()->saveNotification($notification);
                 }
 

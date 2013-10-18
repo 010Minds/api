@@ -14,6 +14,7 @@ return array(
             'Follows\Controller\FollowsRest'        => 'Follows\Controller\FollowsRestController',
             'Follows\Controller\FollowingRest'      => 'Follows\Controller\FollowingRestController',
             'Timeline\Controller\TimelineRest'      => 'Timeline\Controller\TimelineRestController',
+            'Notification\Controller\NotificationRest'  => 'Notification\Controller\NotificationRestController',
         ),
     ),
 
@@ -94,6 +95,19 @@ return array(
                                     ),
                                 ),
                             ),
+                            //Route Notification
+                            'user-notification-rest' => array(
+                                'type'    => 'segment',
+                                'options' => array(
+                                    'route'    => '/notification[/:id][/]',
+                                    'constraints' => array(
+                                        'id' => '[0-9]+',
+                                    ),
+                                    'defaults' => array(
+                                        'controller' => 'Notification\Controller\NotificationRest',
+                                    ),
+                                ),
+                            ), // end
                             'user-rest-profile' => array(
                                 'type'    => 'literal',
                                 'options' => array(

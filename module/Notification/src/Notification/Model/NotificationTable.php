@@ -14,14 +14,15 @@ class NotificationTable
 
 	public function fetchAll()
 	{
-		$resultSet = $this->tableGateway->select();
+/*		$resultSet = $this->tableGateway->select();
 
-        return $resultSet;
+        return $resultSet;*/
 	}
 
+	/* Busca uma notificação */
 	public function getNotification($id)
 	{
-		$id = (int) $id;
+/*		$id = (int) $id;
 		$rowset = $this->tableGateway->select(array('id' => $id));
 		$row = $rowset->current();
 
@@ -30,9 +31,23 @@ class NotificationTable
 			throw new \Exception("Could not find row $id");
 		}
 
-		return $row;
+		return $row;*/
 	}
 
+	/* Busca todas as notificações de um usuário */
+	public function getUserNotification($id)
+	{
+		$id = (int) $id;
+		$resultSet = $this->tableGateway->select(array('user_id' => $id));
+
+		if(!$resultSet){
+			throw new \Exception("Could not find row $id");
+		}
+
+		return $resultSet;
+	}
+
+	/* Insere uma notificação. */
 	public function saveNotification(Notification $notification)
 	{
 		$data = array(
@@ -64,12 +79,20 @@ class NotificationTable
 
 	public function updateNotification($data, $where)
 	{
-		$this->tableGateway->update($data, $where);
+		// $this->tableGateway->update($data, $where);
 	}
 
 
-	public function deleteNotification($id, $idUser)
+	public function deleteUserNotification($idUser, $id=0)
 	{
-		$this->tableGateway->delete(array('id'=>$id, 'user_id'=>$idUser));
+		$idUser = (int)$idUser;
+		$id 	= (int)$id;
+
+		if($id){
+			$where['id'] = $id;
+		}
+		$where['user_id'] = $idUser;
+
+		$this->tableGateway->delete($where);
 	}
 }
