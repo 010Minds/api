@@ -38,7 +38,7 @@ class FollowsRestController extends AbstractRestfulController{
 		if(!empty($pendingUri) && $pendingUri == 'pending'){
 			$data = $this->listPending($id);
 		}else{
-			if(empty($unfollowUri) && $unfollowUri != 'unfollow' ){
+			if(empty($unfollowUri)){
 				$data = $this->listFollowers($id);	
 			}else{
 				throw new NotImplementedException("This method not exists");
@@ -177,18 +177,35 @@ class FollowsRestController extends AbstractRestfulController{
 		}
 	}
 
+	/**
+	 * Método responsável por aceitar ou não o follow
+	 * @param int $id id da linha da tabela do banco de dados
+	 * @param int $user_id get por request id do user
+	 * @return array json_encode 
+	 */
+	public function update($id,$data)
+	{
+		//id row table
+		$id              = (int) $id;
+		//id do user
+		$data['user_id'] =  (int) $this->params()->fromRoute('uid', false);
+		$follow          = $this->getFollowsTable()->getObjFollow($id);
+		$form            = new FollowsForm();
+
+		$form->bind($follow);
+	    $form->setInputFilter($follow->getInputFilter());
+	    $form->setData($data);
+	    if ($form->isValid()) {
+	        $id = $this->getFollowsTable()->saveUser($form->getData());
+	    }
+	}
+
 	public function replaceList($data)
 	{
         throw new NotImplementedException("This method not exists");
     }
 
     public function deleteList()
-	{
-		throw new NotImplementedException("This method not exists");
-		
-	}
-
-	public function update($id,$data)
 	{
 		throw new NotImplementedException("This method not exists");
 		

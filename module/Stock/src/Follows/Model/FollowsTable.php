@@ -172,6 +172,11 @@ class FollowsTable{
 		return $id;
 	}
 
+	public function acceptedFollow(Follows $follows)
+	{
+
+	}
+
 	/**
 	 * Método resposável por executar unfollow (deixar de seguir)
 	 * @param int $user_id id do usuário
