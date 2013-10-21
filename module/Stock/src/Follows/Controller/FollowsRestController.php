@@ -154,7 +154,14 @@ class FollowsRestController extends AbstractRestfulController{
 		        
 		        // Salva notificação
 		        $userName = $this->getUserTable()->getUser($data['user_id']);
-		        $description = "The User ". $userName->name . ", folllowing you"; 
+		        $description = "The User ". $userName->name; 
+
+		        if($this->publicProfile($data['id']) == 1){
+		        	$description .= ", folllowing you"; 
+		        }else{
+		        	$description .= ", sent a friend request"; 
+		        }
+		        
                 $arr = array(
                     'user_id'     => $data['id'],
                     'type'        => 'pending_follower',
