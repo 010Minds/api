@@ -10,6 +10,7 @@ use Zend\View\Model\JsonModel;
 
 // Exceptions
 use Application\Exception\NotImplementedException;
+use Application\Exception\UsersFormsException;
 
 class UserRestController extends AbstractRestfulController
 {
@@ -45,36 +46,55 @@ class UserRestController extends AbstractRestfulController
 
 	public function create($data)
 	{
-	    $form = new UserForm();
-	    $user = new User(); 
+	    $form  = new UserForm();
+	    $user  = new User(); 
+	    $model = new JsonModel(array());
+	    
 	    $form->setInputFilter($user->getInputFilter());
 	    $form->setData($data);
-	    $id = 0;  
+	    
+	    $id     = 0;
+	    $return = array();
+	    
 	    if ($form->isValid()) { 
 	        $user->exchangeArray($form->getData()); 
-	        $id = $this->getUserTable()->saveUser($user);
+	        $id             = $this->getUserTable()->saveUser($user);
+	        $return['data'] = $this->getUserTable()->getUser($id);
+	    	$model->data    = $this->getUserTable()->getUser($id);
+	    }else{
+	    	$message = $form->getMessages();
+	    	$model->header = array(
+	    		'success' => false,
+	    	);
+	    	$model->errorMessage = $form->getMessages();
 	    }
-
-	    return new JsonModel(array(
-	        'data' => $this->getUserTable()->getUser($id),
-	    ));
+		return $model;
 	}
 
 	public function update($id, $data)
 	{ 
+		$model = new JsonModel(array());
+	    $form  = new UserForm();
+
 	    $data['id'] = $id;
 	    $user = $this->getUserTable()->getUser($id);
-	    $form  = new UserForm();
+	    
 	    $form->bind($user);
 	    $form->setInputFilter($user->getInputFilter());
 	    $form->setData($data);
+	    
 	    if ($form->isValid()) {
 	        $id = $this->getUserTable()->saveUser($form->getData());
+	        $model->data = $this->getUserTable()->getUser($id);
+	    }else{
+	    	$message = $form->getMessages();
+	    	$model->header = array(
+	    		'success' => false,
+	    	);
+	    	$model->errorMessage = $form->getMessages();
 	    }
 
-	    return new JsonModel(array(
-	        'data' => $this->getUserTable()->getUser($id),
-	    ));
+	    return $model;
 	}
 
 	public function delete($id)
