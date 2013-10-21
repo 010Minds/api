@@ -8,6 +8,9 @@ use Follows\Model\FollowsTable;
 use Follows\Form\FollowsForm;
 use UserStock\Model\UserStock;
 use UserStock\Model\UserStockTable;
+use Notification\Model\Notification;
+use Notification\Model\NotificationTable;
+use Notification\Model\TypeStatus as NotificationTypeStatus;
 use Zend\View\Model\JsonModel;
 
 // Exceptions
@@ -18,6 +21,7 @@ class FollowsRestController extends AbstractRestfulController{
 
 	protected $followsTable;
 	protected $userTable;
+	protected $notificationTable;
 
 	
 	public function getList()
@@ -133,20 +137,33 @@ class FollowsRestController extends AbstractRestfulController{
 		$unfollowUri = $this->getPartsUri($request,'unfollow');
 		if(!empty($unfollowUri) && $unfollowUri == 'unfollow' ){
 			throw new NotImplementedException("This method not exists");
-		}else{
+		}else{ 
 			//id do user
 			$data['user_id']    =  (int) $this->params()->fromRoute('uid', false);
 			$data['permission'] = $this->publicProfile($data['id']);
 	        $form    = new FollowsForm();
 		    $follows = new Follows();
-
-			$form->setInputFilter($follows->getInputFilter());
+		    
+		    $form->setInputFilter($follows->getInputFilter());
 		    $form->setData($data);
 		    
-		    $id = 0;
+		    $id = 0; 
 		    if ($form->isValid()) { 
 		        $follows->exchangeArray($form->getData());
 		        $id = $this->getFollowsTable()->follow($follows);
+		        
+		        // Salva notificação
+		        $userName = $this->getUserTable()->getUser($data['user_id']);
+		        $description = "The User ". $userName->name . ", folllowing you"; 
+                $arr = array(
+                    'user_id'     => $data['id'],
+                    'type'        => 'pending_follower',
+                    'description' => $description,
+                );
+
+		        $notification = new Notification;
+                $notification->exchangeArray($arr);
+                $this->getNotificationTable()->saveNotification($notification);
 		    }
 		    
 		    return new JsonModel(array(
@@ -278,4 +295,14 @@ class FollowsRestController extends AbstractRestfulController{
 		$arrayKey = array_search($chave, $vetor);
 		return $vetor[$arrayKey];
 	}
+
+	// Table "notification"
+    public function getNotificationTable()
+    {
+        if(!$this->notificationTable){
+            $sm = $this->getServiceLocator();
+            $this->notificationTable = $sm->get('Notification\Model\NotificationTable');
+        }
+        return $this->notificationTable;
+    }
 }
