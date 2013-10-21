@@ -50,7 +50,9 @@ class StockRestController extends AbstractRestfulController
 			$result->high 	 		 = (float) $result->high;
 			$result->low 	 		 = (float) $result->low;
 			$result->percent 		 = (float) $result->percent;
+            $result->country         = (float) $result->country;
 			$result->stockExchangeId = (int) $result->stockExchangeId;
+            $result->volume          = (int) $result->volume;
 
 			$exchangeData     = $this->getExchangeTable()->getExchange($result->stockExchangeId);
 			$result->exchange = $exchangeData->getArrayCopy();

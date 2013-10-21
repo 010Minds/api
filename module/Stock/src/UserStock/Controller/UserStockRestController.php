@@ -35,6 +35,7 @@ class UserStockRestController extends AbstractRestfulController
 			$result->id      = (int) $result->id;
 			$result->userId  = (int) $result->userId;
 			$result->stockId = (int) $result->stockId;
+			$result->qtd     = (int) $result->qtd;
 			$result->value   = (float) $result->value;
 
 			$stockData = $this->getStockTable()->getStock($result->stockId);

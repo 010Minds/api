@@ -64,6 +64,14 @@ class UserForm extends Form
 		));
 
 		$this->add(array(
+			'name' => 'public_profile',
+			'type' => 'Text',
+			'options' => array(
+				'label' => 'Permission',
+			),
+		));
+		
+		$this->add(array(
 			'name' => 'submit',
 			'type' => 'Submit',
 			'atributes' => array(
