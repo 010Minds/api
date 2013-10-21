@@ -25,9 +25,13 @@ class OperationRestController extends AbstractRestfulController
 
         $data = array();
         foreach ($results as $result) {
-            $result->id     = (int) $result->id;
-            $result->userId = (int) $result->userId;
-            $result->value  = (float) $result->value;
+            $result->id      = (int) $result->id;
+            $result->userId  = (int) $result->userId;
+            $result->stockId = (int) $result->stockId;
+            $result->qtd     = (int) $result->qtd;
+            $result->value   = (float) $result->value;
+            $result->type    = (int) $result->type;
+            $result->status  = (int) $result->status;
 
             $data[] = $result;
         }
