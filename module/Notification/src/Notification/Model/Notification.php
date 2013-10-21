@@ -11,8 +11,11 @@ use Zend\InputFilter\InputFilterInterface;
 */
 class TypeStatus
 {
-	const BUY  = 1;
-	const SELL = 2;
+	const BUY  			    = 1;
+	const SELL 			    = 2;
+	const PENDING_FOLLOWER  = 3;
+	const ACCEPTED_FOLLOWER = 4;
+	const REJECTED_FOLLOWER = 5;
 
 	public static function getType($type)
 	{
@@ -24,6 +27,18 @@ class TypeStatus
 
 			case 'sell':
 				$type = self::SELL;
+				break;
+
+			case 'pending_follower':
+				$type = self::PENDING_FOLLOWER;
+				break;
+
+			case 'accepted_follower':
+				$type = self::ACCEPTED_FOLLOWER;
+				break;
+
+			case 'rejected':
+				$type = self::REJECTED_FOLLOWER;
 				break;
 
 			default:
