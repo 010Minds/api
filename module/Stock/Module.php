@@ -38,8 +38,8 @@ class Module
                     'Operation'     => __DIR__ . '/src/' . 'Operation',
                     'Exchange'      => __DIR__ . '/src/' . 'Exchange',
                     'Cron'          => __DIR__ . '/src/' . 'Cron',
-                    'Follows'     => __DIR__ . '/src/' . 'Follows',
-                    'Timeline'    => __DIR__ . '/src/' . 'Timeline',
+                    'Follows'       => __DIR__ . '/src/' . 'Follows',
+                    'Timeline'      => __DIR__ . '/src/' . 'Timeline',
                 ),
             ),
         );
@@ -102,6 +102,7 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Operation());
                     return new TableGateway('operation', $dbAdapter, null, $resultSetPrototype);
                 },
+                # ----
                 'Follows\Model\FollowsTable' => function($sm){
                     $tableGateway = $sm->get('FollowsTableGateway');
                     $table = new FollowsTable($tableGateway);
@@ -113,6 +114,7 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Follows());
                     return new TableGateway('follows', $dbAdapter, null, $resultSetPrototype);
                 },
+                # ----
                 'Timeline\Model\TimelineTable' => function($sm){
                     $tableGateway = $sm->get('TimelineTableGateway');
                     $table = new TimelineTable($tableGateway);

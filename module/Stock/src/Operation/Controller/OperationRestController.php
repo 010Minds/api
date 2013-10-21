@@ -38,7 +38,6 @@ class OperationRestController extends AbstractRestfulController
 
     public function get($id)
     {
-        die('here');
         $this->response->setStatusCode(404);
 
         return new JsonModel(array(
