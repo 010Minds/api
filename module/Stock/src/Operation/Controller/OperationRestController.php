@@ -3,6 +3,7 @@ namespace Operation\Controller;
 
 use Zend\Mvc\Controller\AbstractRestfulController;
 
+use Operation\Form\OperationForm;
 use Operation\Model\Operation;
 use Operation\Model\OperationTable;
 use Zend\View\Model\JsonModel;
@@ -24,9 +25,13 @@ class OperationRestController extends AbstractRestfulController
 
         $data = array();
         foreach ($results as $result) {
-            $result->id     = (int) $result->id;
-            $result->userId = (int) $result->userId;
-            $result->value  = (float) $result->value;
+            $result->id      = (int) $result->id;
+            $result->userId  = (int) $result->userId;
+            $result->stockId = (int) $result->stockId;
+            $result->qtd     = (int) $result->qtd;
+            $result->value   = (float) $result->value;
+            $result->type    = (int) $result->type;
+            $result->status  = (int) $result->status;
 
             $data[] = $result;
         }
@@ -55,22 +60,32 @@ class OperationRestController extends AbstractRestfulController
 */
     public function create($data)
     {
-        $userId = $this->params()->fromRoute('uid', false);
+        $form      = new OperationForm();
+        $operation = new Operation();
+        $model     = new JsonModel(array());
+        
+        $userId          = $this->params()->fromRoute('uid', false);
         $data['user_id'] = $userId;
+        $data['value']   = (int) $data['value'];
 
-        // TODO: When value is 0, get value from Stock
-        if ($data['value'] == 0) {
-            $data['value'] = 1;
+        $form->setInputFilter($operation->getInputFilter());
+        $form->setData($data);
+        
+        $id = 0;
+        if($form->isValid()){
+            $operation->exchangeArray($data);
+            $id = $this->getOperationTable()->saveOperation($operation);
+            
+            $model->data = $this->getOperationTable()->get($id);
+        }else{
+            $message = $form->getMessages();
+            $model->header = array(
+                'success' => false,
+            );
+            $model->errorMessage = $form->getMessages();
         }
-
-        $operation = new Operation;
-        $operation->exchangeArray($data);
-
-        $id = $this->getOperationTable()->saveOperation($operation);
-
-        return new JsonModel(array(
-            'data' => $this->getOperationTable()->get($id),
-        ));
+        
+        return $model;
     }
 
     public function update($id,$data){
