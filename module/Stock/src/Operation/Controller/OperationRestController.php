@@ -22,7 +22,7 @@ class OperationRestController extends AbstractRestfulController
         $type   = $this->params()->fromRoute('type', false);
 
         $results = $this->getOperationTable()->getOperations($uid, $status, $type);
-var_dump($uid); exit();
+
         $data = array();
         foreach ($results as $result) {
             $result->id      = (int) $result->id;
@@ -60,11 +60,6 @@ var_dump($uid); exit();
 */
     public function create($data)
     {
-<<<<<<< HEAD
-
-        $uid = $this->params()->fromRoute('uid', false);
-        $data['user_id'] = $uid;
-=======
         $form      = new OperationForm();
         $operation = new Operation();
         $model     = new JsonModel(array());
@@ -92,7 +87,6 @@ var_dump($uid); exit();
 
         return $model;
     }
->>>>>>> f73d8311822b88d223a8acac44faeb1bfc630721
 
     public function update($id,$data){
        throw new NotImplementedException("This method not exists");
@@ -108,11 +102,8 @@ var_dump($uid); exit();
 
     public function delete($id)
     {
-<<<<<<< HEAD
+
         $uid = $this->params()->fromRoute('uid', false);
-=======
-        $userId = $this->params()->fromRoute('uid', false);
->>>>>>> f73d8311822b88d223a8acac44faeb1bfc630721
 
         $this->getOperationTable()->deleteOperation($id, $uid);
 
