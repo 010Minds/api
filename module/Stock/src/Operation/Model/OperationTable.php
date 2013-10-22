@@ -19,19 +19,36 @@ class OperationTable
         return $resultSet;
 	}*/
 
-	public function getOperations($idUser, $option, $type)
+	public function getOperations($idUser, $status, $type)
 	{
 		$idUser = (int)$idUser;
+		$status = $status;
+		$type 	= $type;
 
 		$where= array();
-		if($option){
-			$where['status'] = $option;
+
+		if($status){
+			$status = OperationStatus::getStatus($status);
+			$where['status'] = $status;
 		}
 		if($type){
+			$type = TypeStatus::getType($type);
 			$where['type'] = $type;
 		}
 		$where['user_id'] = $idUser;
 // var_dump($where); exit();
+		$resultSet = $this->tableGateway->select($where);
+
+		return $resultSet;
+	}
+
+	/*
+		Busca todas as operações filtrando pelo seu status
+	*/
+	public function getOperationsStatus($status)
+	{
+		$status = OperationStatus::getStatus($status);
+		$where['status'] = $status;
 		$resultSet = $this->tableGateway->select($where);
 
 		return $resultSet;
@@ -65,13 +82,14 @@ class OperationTable
 
 		if($id == 0){
 
-	        // add date
+	        // get date
 	        date_default_timezone_set('America/Sao_Paulo');
 	        $dataAtual = date('Y/m/d H:i:s');
 	        $data['create_date'] = $dataAtual;
+	        // status default in save
+	        $data['status'] = OperationStatus::PENDING;
 
-	        // action default in save
-	        $data['action'] = 'pending';
+	        $data['type'] = TypeStatus::getType($data['type']);
 
 			$this->tableGateway->insert($data);
 			$id = $this->tableGateway->getLastInsertValue();
@@ -85,10 +103,11 @@ class OperationTable
 
 	}
 
-/*	public function deleteOperation($id, $userId)
+	public function updateOperation($data, $where)
 	{
-		$this->tableGateway->delete(array('id'=>$id, 'user_id'=>$userId));
-	}*/
+		$this->tableGateway->update($data, $where);
+	}
+
 
 	public function deleteOperation($id, $idUser)
 	{

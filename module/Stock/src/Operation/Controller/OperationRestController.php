@@ -3,9 +3,13 @@ namespace Operation\Controller;
 
 use Zend\Mvc\Controller\AbstractRestfulController;
 
+use Operation\Form\OperationForm;
 use Operation\Model\Operation;
 use Operation\Model\OperationTable;
 use Zend\View\Model\JsonModel;
+
+// Exceptions
+use Application\Exception\NotImplementedException;
 
 class OperationRestController extends AbstractRestfulController
 {
@@ -14,17 +18,24 @@ class OperationRestController extends AbstractRestfulController
     public function getList()
     {
         $uid    = $this->params()->fromRoute('uid', false);
-        $option = $this->params()->fromRoute('option', false);
+        $status = $this->params()->fromRoute('status', false);
         $type   = $this->params()->fromRoute('type', false);
 
-        $results = $this->getOperationTable()->getOperations($uid, $option, $type);
+        $results = $this->getOperationTable()->getOperations($uid, $status, $type);
 var_dump($uid); exit();
         $data = array();
         foreach ($results as $result) {
+            $result->id      = (int) $result->id;
+            $result->userId  = (int) $result->userId;
+            $result->stockId = (int) $result->stockId;
+            $result->qtd     = (int) $result->qtd;
+            $result->value   = (float) $result->value;
+            $result->type    = (int) $result->type;
+            $result->status  = (int) $result->status;
+
             $data[] = $result;
         }
 
-        // return array('data' => $result);
         return new JsonModel(array(
             'data' => $data,
         ));
@@ -38,6 +49,7 @@ var_dump($uid); exit();
             'data' => 'not-implemented',
         ));
     }
+
 /*
     public function setIdentifierName($name)
     {
@@ -48,27 +60,59 @@ var_dump($uid); exit();
 */
     public function create($data)
     {
+<<<<<<< HEAD
 
         $uid = $this->params()->fromRoute('uid', false);
         $data['user_id'] = $uid;
+=======
+        $form      = new OperationForm();
+        $operation = new Operation();
+        $model     = new JsonModel(array());
 
-        $operation = new Operation;
-        $operation->exchangeArray($data);
+        $userId          = $this->params()->fromRoute('uid', false);
+        $data['user_id'] = $userId;
+        $data['value']   = (int) $data['value'];
 
-        $id = $this->getOperationTable()->saveOperation($operation);
+        $form->setInputFilter($operation->getInputFilter());
+        $form->setData($data);
 
-        return new JsonModel(array(
-            'data' => $this->getOperationTable()->get($id),
-        ));
+        $id = 0;
+        if($form->isValid()){
+            $operation->exchangeArray($data);
+            $id = $this->getOperationTable()->saveOperation($operation);
+
+            $model->data = $this->getOperationTable()->get($id);
+        }else{
+            $message = $form->getMessages();
+            $model->header = array(
+                'success' => false,
+            );
+            $model->errorMessage = $form->getMessages();
+        }
+
+        return $model;
     }
-/*
-    public function update($id, $data)
-    {
+>>>>>>> f73d8311822b88d223a8acac44faeb1bfc630721
+
+    public function update($id,$data){
+       throw new NotImplementedException("This method not exists");
     }
-*/
+
+    public function replaceList($data){
+        throw new NotImplementedException("This method not exists");
+    }
+
+    public function deleteList(){
+        throw new NotImplementedException("This method not exists");
+    }
+
     public function delete($id)
     {
+<<<<<<< HEAD
         $uid = $this->params()->fromRoute('uid', false);
+=======
+        $userId = $this->params()->fromRoute('uid', false);
+>>>>>>> f73d8311822b88d223a8acac44faeb1bfc630721
 
         $this->getOperationTable()->deleteOperation($id, $uid);
 

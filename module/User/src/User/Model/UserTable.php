@@ -35,33 +35,54 @@ class UserTable
 
 	public function saveUser(User $user)
 	{
+		if($user->public_profile == 'false'){
+			$user->public_profile = 0;
+		}else{
+			$user->public_profile = 1;
+		}
+
 		$data = array(
-			'mail' 		=> $user->mail,
-			'user' 		=> $user->user,
-			'password' 	=> $user->password,
-			'name' 		=> $user->name,
-			'reais'		=> $user->reais,
-			'dollars' 	=> $user->dollars,
+			'mail' 		     => $user->mail,
+			'user' 		     => $user->user,
+			'password' 	     => $user->password,
+			'name' 		     => $user->name,
+			'reais'		     => $user->reais,
+			'dollars' 	     => $user->dollars,
+			'public_profile' => $user->public_profile,
 		);
 
-		$id = (int) $user->id;
-
-		if($id == 0){
+		$id      = (int) $user->id;
+		$retorno = '';
+		if($id == 0){ 
 			$this->tableGateway->insert($data);
-			$id = $this->tableGateway->getLastInsertValue();
-		} else {
-			if($this->getUser($id)){
-				$this->tableGateway->update($data, array('id' => $id));
+			$retorno = $this->tableGateway->getLastInsertValue();
+		} else { 
+			if($this->getUser($id)){ 
+				$retorno = $this->tableGateway->update($data, array('id' => $id));
+				
+				if($retorno > 0){
+					 $retorno = $id;
+				}
 			} else {
 				throw new \Exception("User id does not exist");
 			}
 		}
 
-		return $id;
+		return $retorno;
+	}
+
+	public function updateUser($data, $where)
+	{
+		$this->tableGateway->update($data, $where);
 	}
 
 	public function deleteUser($id)
 	{
-		$this->tableGateway->delete(array('id'=>$id));
+		$return = $this->tableGateway->delete(array('id'=>$id));
+		if(empty($return)){
+			throw new \Exception("User id does not exist. Please provide a valid id");
+		}
+		return $return;
 	}
+
 }

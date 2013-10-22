@@ -1,0 +1,1 @@
+ALTER TABLE `mydb`.`operation` CHANGE COLUMN `qtd` `qtd` INT(11) NOT NULL  , CHANGE COLUMN `value` `value` FLOAT NOT NULL  ;

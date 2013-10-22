@@ -9,6 +9,7 @@ class UserStock implements InputFilterAwareInterface
 {
 
 	public $id;
+	public $userId;
 	public $stockId;
 	public $qtd;
 	public $value;
@@ -22,7 +23,7 @@ class UserStock implements InputFilterAwareInterface
 		$this->stockId 		= (!empty($data['stock_id'])) ? $data['stock_id'] : null;
 		$this->qtd 			= (!empty($data['qtd'])) ? $data['qtd'] : null;
 		$this->value 		= (!empty($data['value'])) ? $data['value'] : null;
-		$this->stock 		= (!empty($data['stock'])) ? $data['stock'] : null;
+		// $this->stock 		= (!empty($data['stock'])) ? $data['stock'] : null;
 		$this->createDate	= (!empty($data['create_date'])) ? $data['create_date'] : null;
 	}
 

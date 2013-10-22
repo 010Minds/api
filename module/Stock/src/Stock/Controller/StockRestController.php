@@ -8,6 +8,9 @@ use Stock\Model\StockTable;
 use Exchange\Model\ExchangeTable;
 use Zend\View\Model\JsonModel;
 
+// Exceptions
+use Application\Exception\NotImplementedException;
+
 /**
  * StockRestController classe que gerencia as ações
  *
@@ -29,10 +32,10 @@ class StockRestController extends AbstractRestfulController
 
 		$requestParams = $this->params()->fromRoute(); 
 		
-		if(!empty($requestParams['stock']) && $requestParams['stock'] == 'stock'){
+		if(!empty($requestParams['uid'])){ // list route /api/exchange/:id/:stock
 			$results 	   = $this->getStockTable()->getStockExchange($requestParams['uid']);
 		}
-		else if(empty($requestParams['stock'])) {
+		else if(empty($requestParams['uid'])) {// list route api/stock
 			$results       = $this->getStockTable()->fetchAll();
 		} else {
 			$this->response->setStatusCode(404);
@@ -41,8 +44,20 @@ class StockRestController extends AbstractRestfulController
 		$data          = array();
 		$exchangeData  = array();
 		foreach ($results as $result) {
-			$exchangeData = $this->getExchangeTable()->getExchange($result->stockExchangeId);
+			$result->id 	 		 = (int) $result->id;
+			$result->current 		 = (float) $result->current;
+			$result->open 	 		 = (float) $result->open;
+			$result->high 	 		 = (float) $result->high;
+			$result->low 	 		 = (float) $result->low;
+			$result->percent 		 = (float) $result->percent;
+            $result->country         = (float) $result->country;
+			$result->stockExchangeId = (int) $result->stockExchangeId;
+            $result->volume          = (int) $result->volume;
+
+			$exchangeData     = $this->getExchangeTable()->getExchange($result->stockExchangeId);
 			$result->exchange = $exchangeData->getArrayCopy();
+			$result->exchange['id'] = (int) $result->exchange['id'];
+
 			$data[] = $result;
 		}
 
@@ -60,8 +75,17 @@ class StockRestController extends AbstractRestfulController
 	public function get($id)
 	{
 		$stock = $this->getStockTable()->getStock($id);
+		$stock->id 	 		     = (int) $stock->id;
+		$stock->current 		 = (float) $stock->current;
+		$stock->open 	 		 = (float) $stock->open;
+		$stock->high 	 		 = (float) $stock->high;
+		$stock->low 	 		 = (float) $stock->low;
+		$stock->percent 		 = (float) $stock->percent;
+		$stock->stockExchangeId  = (int) $stock->stockExchangeId;
+
 		$exchangeData = $this->getExchangeTable()->getExchange($stock->stockExchangeId);
 		$stock->exchange = $exchangeData->getArrayCopy();
+		$stock->exchange['id'] = (int) $stock->exchange['id'];
 
         return new JsonModel(array(
             'data' => $stock,
@@ -108,44 +132,26 @@ class StockRestController extends AbstractRestfulController
 
 	public function create($data)
 	{
-/*	    $form = new Form();
-	    $stock = new Stock();
-	    $form->setInputFilter($stock->getInputFilter());
-	    $form->setData($data);
-	    $id = 0;
-	    if ($form->isValid()) {
-	        $stock->exchangeArray($form->getData());
-	        $id = $this->getStockTable()->saveStock($stock);
-	    }
-
-	    return new JsonModel(array(
-	        'data' => $this->getStockTable()->getStock($id),
-	    ));*/
+		throw new NotImplementedException("This method not exists");
 	}
 
-	public function update($id, $data)
+	public function update($id,$data)
 	{
-/*	    $data['id'] = $id;
-	    $stock = $this->getStockTable()->getStock($id);
-	    $form  = new StockForm();
-	    $form->bind($stock);
-	    $form->setInputFilter($stock->getInputFilter());
-	    $form->setData($data);
-	    if ($form->isValid()) {
-	        $id = $this->getStockTable()->saveStock($form->getData());
-	    }
-
-	    return new JsonModel(array(
-	        'data' => $this->getStockTable()->getStock($id),
-	    ));*/
+		throw new NotImplementedException("This method not exists");
 	}
+
+	public function replaceList($data)
+	{
+        throw new NotImplementedException("This method not exists");
+    }
 
 	public function delete($id)
 	{
-/*		$this->getStockTable()->deleteStock($id);
+		throw new NotImplementedException("This method not exists");
+	}
 
-		return new JsonModel(array(
-			'data' => 'deleted',
-		));*/
+	public function deleteList()
+    {
+		throw new NotImplementedException("This method not exists");
 	}
 }

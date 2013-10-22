@@ -8,6 +8,10 @@ use User\Form\UserForm;
 use User\Model\UserTable;
 use Zend\View\Model\JsonModel;
 
+// Exceptions
+use Application\Exception\NotImplementedException;
+use Application\Exception\UsersFormsException;
+
 class UserRestController extends AbstractRestfulController
 {
 	protected $userTable;
@@ -17,6 +21,9 @@ class UserRestController extends AbstractRestfulController
 		$results = $this->getUserTable()->fetchAll();
 		$data = array();
 		foreach ($results as $result) {
+			$result->id      = (int) $result->id;
+			$result->reais   = (float) $result->reais;
+			$result->dollars = (float) $result->dollars;
 			$data[] = $result;
 		}
 
@@ -39,46 +46,72 @@ class UserRestController extends AbstractRestfulController
 
 	public function create($data)
 	{
-	    $form = new UserForm();
-	    $user = new User();
+	    $form  = new UserForm();
+	    $user  = new User(); 
+	    $model = new JsonModel(array());
+	    
 	    $form->setInputFilter($user->getInputFilter());
 	    $form->setData($data);
-	    $id = 0;
-	    if ($form->isValid()) {
-	        $user->exchangeArray($form->getData());
-	        $id = $this->getUserTable()->saveUser($user);
+	    
+	    $id     = 0;
+	    $return = array();
+	    
+	    if ($form->isValid()) { 
+	        $user->exchangeArray($form->getData()); 
+	        $id             = $this->getUserTable()->saveUser($user);
+	        $return['data'] = $this->getUserTable()->getUser($id);
+	    	$model->data    = $this->getUserTable()->getUser($id);
+	    }else{
+	    	$message = $form->getMessages();
+	    	$model->header = array(
+	    		'success' => false,
+	    	);
+	    	$model->errorMessage = $form->getMessages();
 	    }
-
-	    return new JsonModel(array(
-	        'data' => $this->getUserTable()->getUser($id),
-	    ));
+		return $model;
 	}
 
 	public function update($id, $data)
-	{
+	{ 
+		$model = new JsonModel(array());
+	    $form  = new UserForm();
+
 	    $data['id'] = $id;
 	    $user = $this->getUserTable()->getUser($id);
-	    $form  = new UserForm();
+	    
 	    $form->bind($user);
 	    $form->setInputFilter($user->getInputFilter());
 	    $form->setData($data);
+	    
 	    if ($form->isValid()) {
 	        $id = $this->getUserTable()->saveUser($form->getData());
+	        $model->data = $this->getUserTable()->getUser($id);
+	    }else{
+	    	$message = $form->getMessages();
+	    	$model->header = array(
+	    		'success' => false,
+	    	);
+	    	$model->errorMessage = $form->getMessages();
 	    }
 
-	    return new JsonModel(array(
-	        'data' => $this->getUserTable()->getUser($id),
-	    ));
+	    return $model;
 	}
 
 	public function delete($id)
 	{
-		$this->getUserTable()->deleteUser($id);
-
 		return new JsonModel(array(
-			'data' => 'deleted',
+			'data' => $this->getUserTable()->deleteUser($id),
 		));
 	}
+
+	public function deleteList()
+	{
+		throw new NotImplementedException("This method not exists");
+	}
+
+	public function replaceList($data){
+        throw new NotImplementedException("This method not exists");
+    }
 
 	public function getUserTable()
 	{

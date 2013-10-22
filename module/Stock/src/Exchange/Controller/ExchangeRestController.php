@@ -7,6 +7,9 @@ use Exchange\Model\Exchange;
 use Exchange\Model\ExchangeTable;
 use Zend\View\Model\JsonModel;
 
+// Exceptions
+use Application\Exception\NotImplementedException;
+
 class ExchangeRestController extends AbstractRestfulController{
 
 	protected $exchangeTable;
@@ -15,6 +18,7 @@ class ExchangeRestController extends AbstractRestfulController{
 		$results = $this->getExchangeTable()->fetchAll();
 		$data    = array();
 		foreach ($results as $result) {
+			$result->id = (int) $result->id;
 			$data[] = $result;
 		}
 
@@ -26,9 +30,37 @@ class ExchangeRestController extends AbstractRestfulController{
 	public function get($id){
 		$exchange = $this->getExchangeTable()->getExchange($id);
 
+		$exchange->id = (int) $exchange->id;
+
 		return new JsonModel(array(
             'data' => $exchange,
         ));
+		
+	}
+
+	public function create($data)
+	{
+		throw new NotImplementedException("This method not exists");
+	}
+
+	public function update($id,$data)
+	{
+		throw new NotImplementedException("This method not exists");
+	}
+
+	public function delete($id)
+	{
+		throw new NotImplementedException("This method not exists");
+	}
+	
+	public function replaceList($data)
+	{
+        throw new NotImplementedException("This method not exists");
+    }
+
+    public function deleteList()
+    {
+		throw new NotImplementedException("This method not exists");
 	}
 
 	public function getExchangeTable(){

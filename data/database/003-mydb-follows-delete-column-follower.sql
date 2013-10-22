@@ -1,0 +1,1 @@
+ALTER TABLE `mydb`.`follows` DROP COLUMN `follower` ;

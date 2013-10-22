@@ -5,12 +5,13 @@ return array(
     # definir controllers
     'controllers' => array(
         'invokables' => array(
-            'Stock\Controller\Stock'             => 'Stock\Controller\StockController',
-            'Stock\Controller\StockRest'         => 'Stock\Controller\StockRestController',
-            'UserStock\Controller\UserStock'     => 'UserStock\Controller\UserStockController',
-            'UserStock\Controller\UserStockRest' => 'UserStock\Controller\UserStockRestController',
-            'Exchange\Controller\ExchangeRest'   => 'Exchange\Controller\ExchangeRestController',
-            'Operation\Controller\OperationRest' => 'Operation\Controller\OperationRestController',
+            'Stock\Controller\Stock'                    => 'Stock\Controller\StockController',
+            'Stock\Controller\StockRest'                => 'Stock\Controller\StockRestController',
+            'UserStock\Controller\UserStock'            => 'UserStock\Controller\UserStockController',
+            'Exchange\Controller\ExchangeRest'          => 'Exchange\Controller\ExchangeRestController',
+            'Operation\Controller\OperationRest'        => 'Operation\Controller\OperationRestController',
+            'Cron\Controller\CronRest'                  => 'Cron\Controller\CronRestController',
+            'Follows\Controller\FollowsRest'            => 'Follows\Controller\FollowsRestController',
         ),
     ),
 
@@ -59,83 +60,106 @@ return array(
                     ),
                 ),
             ),
-            'user-stock-rest' => array(
-                'type'    => 'segment',
-                'options' => array(
-                    'route'    => '/api/user/:uid/:my-stock[/:id][/]',
-                    'constraints' => array(
-                        'uid'     => '[0-9]+',
-                        'id'      => '[0-9]+',
-                    ),
-                    'defaults' => array(
-                        'controller' => 'UserStock\Controller\UserStockRest',
-                    ),
-                ),
-            ),
             'exchange-rest' => array(
-                'type'    => 'segment',
+                'type'    => 'literal',
                 'options' => array(
-                    'route'    => '/api/exchange[/:id][/]',
-                    'constraints' => array(
-                        'id'     => '[0-9]+',
-                    ),
+                    'route'    => '/api/exchange',
                     'defaults' => array(
                         'controller' => 'Exchange\Controller\ExchangeRest',
                     ),
                 ),
-            ),
-            'exchange-stock-rest' => array(
-                'type'    => 'segment',
-                'options' => array(
-                    'route'    => '/api/exchange/:uid/:stock[/]',
-                    'constraints' => array(
-                        'uid'     => '[0-9]+',
-                    ),
-                    'defaults' => array(
-                        'controller' => 'Stock\Controller\StockRest',
-                    ),
-                ),
-            ),
-            // Route Operation
-            'operation-rest' => array(
-                'type'    => 'segment',
-                'options' => array(
-                    'route'    => '/api/user/:uid/operation[/]',
-                    'constraints' => array(
-                        'uid' => '[0-9]+',
-                    ),
-                    'defaults' => array(
-                        'controller' => 'Operation\Controller\OperationRest',
-                    ),
-                ),
                 'may_terminate' => true,
                 'child_routes' => array(
-
-                    'operation-option' => array(
+                    'exchange-rest-uid' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => ':option[/:type]',
+                            'route' => '/:uid',
                             'constraints' => array(
-                                'type' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'option' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'uid' => '[0-9]+',
                             ),
                             'defaults' => array(
-                                'controller' => 'Operation\Controller\OperationRest',
+                                'controller' => 'Stock\Controller\StockRest',
+                            ),
+                        ),
+                        'may_terminate' => false,
+                        'child_routes' => array(
+                            'exchange-rest-stock' => array(
+                                'type'    => 'literal',
+                                'options' => array(
+                                    'route'    => '/stock',
+                                    'constraints' => array(
+                                        'uid'     => '[0-9]+',
+                                    ),
+                                    'defaults' => array(
+                                        'controller' => 'Stock\Controller\StockRest',
+                                    ),
+                                ),
                             ),
                         ),
                     ),
-
-                    'operation-id' => array(
+                    'exchange-rest-id' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => ':id[/]',
+                            'route' => '/:id',
                             'constraints' => array(
                                 'id' => '[0-9]+',
                             ),
                             'defaults' => array(
-                                'controller' => 'Operation\Controller\OperationRest',
+                                'controller' => 'Exchange\Controller\ExchangeRest',
                             ),
                         ),
+                    ),
+                ),
+            ),
+
+            // Route Cron
+            'cron-operation' => array(
+                'type'      => 'segment',
+                'options'   => array(
+                    'route'    => '/api/cron/operation[/]',
+                    'defaults' => array(
+                        'controller' => 'Cron\Controller\CronRest',
+                    ),
+                ),
+                'may_terminate' => true,
+            ),
+            /*'cron-action' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/api/cron/user/:userId/operation[/:opId][/]',
+                    'constraints' => array(
+                        'userId' => '[0-9]+',
+                        'opId' => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Cron\Controller\CronRest',
+                    ),
+                ),
+            ),*/
+
+            //Route followers
+            'followers-rest' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/api/followers/:uid[/]',
+                    'constraints' => array(
+                        'uid'     => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Follows\Controller\FollowsRest',
+                    ),
+                ),
+            ),
+            //Route following
+            'following-rest' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/api/following/:uid[/]',
+                    'constraints' => array(
+                        'uid'     => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Follows\Controller\FollowsRest',
                     ),
                 ),
             ),

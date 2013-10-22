@@ -5,6 +5,7 @@ return array(
         'Application',
         'User',
         'Stock',
+        'Notification',
     ),
 
     // These are various options for the listeners attached to the ModuleManager
