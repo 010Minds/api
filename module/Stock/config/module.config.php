@@ -100,9 +100,9 @@ return array(
             'operation-rest' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/api/user/:userId/operation[/]',
+                    'route'    => '/api/user/:uid/operation[/]',
                     'constraints' => array(
-                        'userId' => '[0-9]+',
+                        'uid' => '[0-9]+',
                     ),
                     'defaults' => array(
                         'controller' => 'Operation\Controller\OperationRest',

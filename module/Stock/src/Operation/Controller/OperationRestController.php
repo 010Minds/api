@@ -13,12 +13,12 @@ class OperationRestController extends AbstractRestfulController
 
     public function getList()
     {
-        $userId = $this->params()->fromRoute('userId', false);
+        $uid    = $this->params()->fromRoute('uid', false);
         $option = $this->params()->fromRoute('option', false);
         $type   = $this->params()->fromRoute('type', false);
-var_dump($userId); exit();
-        $results = $this->getOperationTable()->getOperations($userId, $option, $type);
 
+        $results = $this->getOperationTable()->getOperations($uid, $option, $type);
+var_dump($uid); exit();
         $data = array();
         foreach ($results as $result) {
             $data[] = $result;
@@ -49,8 +49,8 @@ var_dump($userId); exit();
     public function create($data)
     {
 
-        $userId = $this->params()->fromRoute('userId', false);
-        $data['user_id'] = $userId;
+        $uid = $this->params()->fromRoute('uid', false);
+        $data['user_id'] = $uid;
 
         $operation = new Operation;
         $operation->exchangeArray($data);
@@ -68,9 +68,9 @@ var_dump($userId); exit();
 */
     public function delete($id)
     {
-        $userId = $this->params()->fromRoute('userId', false);
+        $uid = $this->params()->fromRoute('uid', false);
 
-        $this->getOperationTable()->deleteOperation($id, $userId);
+        $this->getOperationTable()->deleteOperation($id, $uid);
 
         return new JsonModel(array(
             'data' => 'deleted', // Necessário validar se foi apagado com sucesso e retornar erro caso negativo
